@@ -45,6 +45,10 @@ public class WebAppsMaker implements EntryPoint {
 
 	private StorageControler storageControler=new StorageControler();
 	public void onModuleLoad() {
+		
+		String lang=GWTHTMLUtils.getInputValueById("gwtlang", "en");
+		Internationals.lang=lang;
+		
 		HorizontalPanel root=new HorizontalPanel();
 		VerticalPanel leftVertical=new VerticalPanel();
 		root.add(leftVertical);

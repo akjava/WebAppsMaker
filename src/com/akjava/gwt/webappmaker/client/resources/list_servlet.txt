@@ -1,0 +1,68 @@
+package ${package};
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.jdo.PersistenceManager;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+
+
+
+
+
+public class  ${className}  extends  BaseServlet{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	protected void initializeTemplate(){
+		 htmlTitle="${title}";
+		 baseTemplateHtml="${baseTemplate}";
+		 mainTemplateHtml="${mainTemplate}";
+	}
+	
+
+	@Override
+	protected String createMainHtml(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+PersistenceManager manager=PMF.get().getPersistenceManager();
+		
+		QualificationDao dao=new QualificationDao(manager);
+		
+		int page=PageMenuUtil.parsePageNumber(request, "page");
+		int pageSize=2;
+		
+		int start=(page-1)*pageSize;
+		//System.out.println(start+","+page);
+		List<Qualification> datas=dao.getDatas(start, pageSize, "cdate", false);
+		
+		StringBuffer rowHtmls=new StringBuffer();
+		Template template=VelocityUtils.createVelocityTemplate(getServletContext(),"index_shikaku_row.html");
+		
+		for(Qualification data:datas){
+			Map<String,String> map=QualificationDao.toLabellMap(data);
+			
+			String qualificationHtml=VelocityUtils.merge(template, map);
+			rowHtmls.append(qualificationHtml);
+		}
+		//return rowHtmls.toString();
+		dataMap.put("data", rowHtmls.toString());
+		
+		long count=dao.count();
+		
+		PageMenuHtmlMaker maker=new PageMenuHtmlMaker("shikaku","");
+		String pageMenuHtml=maker.createPageMenuHtml(new PagingInfoImpl(page,count,pageSize));
+		dataMap.put("pagemenu", pageMenuHtml);
+		//PageMenu pageMenu
+		
+		String dataHtml=VelocityUtils.createVelocityPage(getServletContext(), mainTemplateHtml, dataMap);
+		return dataHtml;
+	}
+}
