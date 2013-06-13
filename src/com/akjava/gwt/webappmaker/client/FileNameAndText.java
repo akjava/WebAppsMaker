@@ -19,8 +19,8 @@ public void setText(String text) {
 	this.text = text;
 }
 
-public Anchor createDownloadLink(){
-	return new HTML5Download().generateTextDownloadLink(text, name, name);
+public Anchor createDownloadLink(String linkText){
+	return new HTML5Download().generateTextDownloadLink(text, name, linkText);
 }
 
 }

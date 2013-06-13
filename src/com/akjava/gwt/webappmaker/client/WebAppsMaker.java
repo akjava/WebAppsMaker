@@ -1,23 +1,35 @@
 package com.akjava.gwt.webappmaker.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.akjava.gwt.lib.client.GWTHTMLUtils;
-import com.akjava.gwt.lib.client.widget.TabInputableTextArea;
+import com.akjava.gwt.lib.client.LogUtils;
+import com.akjava.gwt.lib.client.StorageControler;
+import com.akjava.gwt.lib.client.StorageException;
 import com.akjava.gwt.lib.client.widget.PasteValueReceiveArea;
+import com.akjava.gwt.lib.client.widget.TabInputableTextArea;
+import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToMainServletDataFunction;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormDataDto;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -27,7 +39,11 @@ public class WebAppsMaker implements EntryPoint {
 	private TabInputableTextArea input;
 	private TextArea output;
 	private TextBox packageBox;
+	private CellList<FileNameAndText> cellList;
+	private TextArea fileTextArea;
+	private VerticalPanel downloadLinks;
 
+	private StorageControler storageControler=new StorageControler();
 	public void onModuleLoad() {
 		HorizontalPanel root=new HorizontalPanel();
 		VerticalPanel leftVertical=new VerticalPanel();
@@ -56,7 +72,8 @@ public class WebAppsMaker implements EntryPoint {
 		 leftVertical.add(hpanel);
 		 packageBox = new TextBox();
 		 packageBox.setWidth("100px");
-		 packageBox.setText("com.akjava.gae.app1.");
+		 packageBox.setText(storageControler.getValue("packageValue", "com.akjava.gae.app1."));
+		
 		 hpanel.add(new Label("package"));
 		 hpanel.add(packageBox);
 		 
@@ -80,15 +97,68 @@ public class WebAppsMaker implements EntryPoint {
 		 
 		 VerticalPanel centerVertical=new VerticalPanel();
 		 root.add(centerVertical);
+		 
+		 ScrollPanel scroll=new ScrollPanel();
+		 scroll.setSize("400px", "800px");
+		
+		 FileNameAndTextCell cell=new FileNameAndTextCell();
+		 cellList = new CellList<FileNameAndText>(cell);
+		 scroll.setWidget(cellList);
+		 centerVertical.add(scroll);
+		 
+		 final SingleSelectionModel<FileNameAndText> selectionModel = 
+				    new SingleSelectionModel<FileNameAndText>();
+		 cellList.setSelectionModel(selectionModel);
+		 selectionModel.addSelectionChangeHandler(new Handler() {
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				FileNameAndText select=selectionModel.getSelectedObject();
+				fileTextArea.setText(select.getText());
+				downloadLinks.clear();
+				downloadLinks.add(select.createDownloadLink("Download"));
+			}
+		});
+		 VerticalPanel rightVertical=new VerticalPanel();
+		 root.add(rightVertical);
+		 downloadLinks = new VerticalPanel();
+		 rightVertical.add(downloadLinks);
+		 fileTextArea = new TextArea();
+		 fileTextArea.setReadOnly(true);
+		 fileTextArea.setSize("600px", "800px");
+		 rightVertical.add(fileTextArea);
+		 
+	}
+	public String getPackage(){
+		return packageBox.getText();
 	}
 
 	protected void doConvert() {
 		List<FormData> datas=FormDataDto.linesToFormData(input.getText());
+		//debug text
 		String out="";
 		for(FormData data:datas){
 			out+=data.toString();
 			out+="\n";
 		}
 		output.setText(out);
+		
+		List<FileNameAndText> files=new ArrayList<FileNameAndText>();
+		
+		for(FormData fdata:datas){
+			List<ServletData> sdata=new FormDataToMainServletDataFunction(getPackage()).apply(fdata);
+			List<FileNameAndText> mainServletFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToServletFileFunction());
+			Iterables.addAll(files, mainServletFiles);
+			//TODO get admin
+			
+		}
+		//TODO create template
+		
+		cellList.setRowData(0, files);
+		try {
+			storageControler.setValue("packageValue",packageBox.getText());
+		} catch (StorageException e) {
+			LogUtils.log(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }

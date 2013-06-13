@@ -26,6 +26,7 @@ public enum ServletDataToServletWebXmlFunction implements Function<ServletData,S
 	
 }
 
+
 public static class FormDataToMainServletDataFunction implements Function<FormData,List<ServletData>>{
 	private String basePackage;
 	public FormDataToMainServletDataFunction(String basePackage){
@@ -74,7 +75,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 	public FileNameAndText apply(ServletData data) {
 		FileNameAndText file=new FileNameAndText();
 		file.setName(data.getServletClassName()+".java");
-		
+		file.setText("hello world");
 		return file;
 	}
 	
