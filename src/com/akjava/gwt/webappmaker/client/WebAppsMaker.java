@@ -44,6 +44,7 @@ public class WebAppsMaker implements EntryPoint {
 	private VerticalPanel downloadLinks;
 
 	private StorageControler storageControler=new StorageControler();
+	private SingleSelectionModel<FileNameAndText> selectionModel;
 	public void onModuleLoad() {
 		
 		String lang=GWTHTMLUtils.getInputValueById("gwtlang", "en");
@@ -110,16 +111,20 @@ public class WebAppsMaker implements EntryPoint {
 		 scroll.setWidget(cellList);
 		 centerVertical.add(scroll);
 		 
-		 final SingleSelectionModel<FileNameAndText> selectionModel = 
-				    new SingleSelectionModel<FileNameAndText>();
+		 selectionModel = new SingleSelectionModel<FileNameAndText>();
 		 cellList.setSelectionModel(selectionModel);
 		 selectionModel.addSelectionChangeHandler(new Handler() {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
 				FileNameAndText select=selectionModel.getSelectedObject();
+				if(select!=null){
 				fileTextArea.setText(select.getText());
 				downloadLinks.clear();
 				downloadLinks.add(select.createDownloadLink("Download"));
+				}else{
+					fileTextArea.setText("");
+					downloadLinks.clear();
+				}
 			}
 		});
 		 VerticalPanel rightVertical=new VerticalPanel();
@@ -137,6 +142,7 @@ public class WebAppsMaker implements EntryPoint {
 	}
 
 	protected void doConvert() {
+		cellList.getSelectionModel().setSelected(selectionModel.getSelectedObject(), false);
 		List<FormData> datas=FormDataDto.linesToFormData(input.getText());
 		//debug text
 		String out="";
