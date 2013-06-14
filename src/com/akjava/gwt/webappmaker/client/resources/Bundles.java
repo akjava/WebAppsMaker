@@ -14,4 +14,8 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	
 	TextResource japanese();
 	TextResource english();
+	
+	
+	TextResource tools();
+	TextResource tolabelmap_boolean();
 }

@@ -1,7 +1,9 @@
 package com.akjava.gwt.webappmaker.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.akjava.gwt.lib.client.GWTHTMLUtils;
 import com.akjava.gwt.lib.client.LogUtils;
@@ -10,8 +12,13 @@ import com.akjava.gwt.lib.client.StorageException;
 import com.akjava.gwt.lib.client.widget.PasteValueReceiveArea;
 import com.akjava.gwt.lib.client.widget.TabInputableTextArea;
 import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToMainServletDataFunction;
+import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormDataDto;
+import com.akjava.lib.common.functions.MapToAdvancedTemplatedTextFunction;
+import com.akjava.lib.common.utils.TemplateUtils;
+import com.akjava.lib.common.utils.ValuesUtils;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.core.client.EntryPoint;
@@ -84,6 +91,7 @@ public class WebAppsMaker implements EntryPoint {
 		 
 		 leftVertical.add(new Label("Csv(tab only)"));
 		 input = new TabInputableTextArea();
+		 input.setText(storageControler.getValue("inputCsv", ""));
 		 //GWTHTMLUtils.setPlaceHolder(input, "className,package,servletName,path");
 		 input.setSize("600px","200px");
 		 leftVertical.add(input);
@@ -141,6 +149,8 @@ public class WebAppsMaker implements EntryPoint {
 		return packageBox.getText();
 	}
 
+	
+	
 	protected void doConvert() {
 		cellList.getSelectionModel().setSelected(selectionModel.getSelectedObject(), false);
 		List<FormData> datas=FormDataDto.linesToFormData(input.getText());
@@ -153,19 +163,41 @@ public class WebAppsMaker implements EntryPoint {
 		output.setText(out);
 		
 		List<FileNameAndText> files=new ArrayList<FileNameAndText>();
+		List<ServletData> sdatas=Lists.newArrayList();
+		
+		
 		
 		for(FormData fdata:datas){
+			//Tools.java
+			ToolsGenerator toolsGenerator=new ToolsGenerator(fdata,ValuesUtils.chomp(packageBox.getText()));
+			files.add(toolsGenerator.createFileNameAndText());
+			
+			
 			List<ServletData> sdata=new FormDataToMainServletDataFunction(getPackage()).apply(fdata);
+			Iterables.addAll(sdatas, sdata);
+			
 			List<FileNameAndText> mainServletFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToServletFileFunction());
 			Iterables.addAll(files, mainServletFiles);
 			//TODO get admin
 			
 		}
 		//TODO create template
+		//web.xml
+		String template=Bundles.INSTANCE.servlet().getText();
+		List<ServletWebXmlData> xmlDatas=Lists.transform(sdatas, ServletDataDto.getServletDataToServletWebXmlFunction());
+		List<Map<String,String>> xmlTextMaps=Lists.transform(xmlDatas, ServletWebXmlDataDto.getServletWebXmlDataToMapFunction());
+		List<String> webXmls=Lists.transform(xmlTextMaps, new MapToAdvancedTemplatedTextFunction(template));
+		String webXmlTemplate=Bundles.INSTANCE.web().getText();
+		
+		Map<String,String> map=new HashMap<String, String>();
+		map.put("welcome", "index.html");
+		map.put("servlets", Joiner.on("\n").join(webXmls));
+		files.add(new FileNameAndText("web.xml",TemplateUtils.createAdvancedText(webXmlTemplate, map)));
 		
 		cellList.setRowData(0, files);
 		try {
 			storageControler.setValue("packageValue",packageBox.getText());
+			storageControler.setValue("inputCsv", input.getText());
 		} catch (StorageException e) {
 			LogUtils.log(e.getMessage());
 			e.printStackTrace();

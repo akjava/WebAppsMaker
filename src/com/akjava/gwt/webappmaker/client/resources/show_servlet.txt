@@ -1,0 +1,94 @@
+package ${package};
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.jdo.PersistenceManager;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.akjava.lib.common.utils.TemplateUtils;
+import com.akjava.servlet.AbstractSimpleTemplateServlet;
+import com.akjava.servlet.SimpleTemplateUtils;
+import com.akjava.servlet.page.PageMenuHtmlMaker;
+import com.akjava.servlet.page.PageMenuUtil;
+import com.akjava.servlet.page.PagingInfoImpl;
+import ${basePackage}*;
+
+
+
+public class  ${className}  extends  AbstractSimpleTemplateServlet{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+@Override
+	protected String initializeHtmlTitle() {
+		return "${title}";
+	}
+
+	@Override
+	protected String initializeBaseTemplateHtmlName() {
+		return "${baseTemplate}";
+	}
+
+	@Override
+	protected String initializeMainTemplateHtmlName() {
+		return "${mainTemplate}";
+	}
+	
+//TODO move to common
+	private String getLastDir(String url){
+		int anchor=url.indexOf("#");
+		if(anchor!=-1){
+			url=url.substring(0,anchor);
+		}
+		int query=url.indexOf("?");
+		if(query!=-1){
+			url=url.substring(0,query);
+		}
+		String paths[]=url.split("/");
+		return paths[paths.length-1];
+	}
+	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String url=request.getRequestURI();
+		
+		String id=getLastDir(url);
+		//System.out.println(url+",id");
+		if(id.isEmpty()){
+			response.sendRedirect("${indexPath}");
+			return null;
+		}
+		try{
+		${dataClassName}Entity q=null;
+		try {
+			q = new ${dataClassName}EntityDao(PMF.get().getPersistenceManager()).getData(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(q!=null){
+			Map<String,String> map=${dataClassName}Tools.toLabelMap(q);
+			htmlTitle+=map.get("id");
+			
+			for(String key:map.keySet()){
+				dataMap.put(key, map.get(key));
+			}
+		}else{
+			//TODO show error;
+			System.out.println("null ");
+		}
+		
+		
+		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);
+		return dataHtml;
+		}catch (javax.jdo.JDOObjectNotFoundException e) {
+			response.sendError(505, "Not Found,removed or System erro");
+			return null;
+		}
+	}
+}

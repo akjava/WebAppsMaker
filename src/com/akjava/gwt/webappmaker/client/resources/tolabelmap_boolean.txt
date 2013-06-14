@@ -1,0 +1,10 @@
+	if (map.get("${key}") != null) {
+			if(map.get("${key}").toLowercase().equals("true")){
+				map.put("${key}","${true_value}");
+				}
+			else{
+				map.put("${key}","${false_value}");
+				}
+		} else {
+			map.put("${key}","${false_value}");
+		}

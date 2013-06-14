@@ -1,5 +1,6 @@
+<servlet>
 <servlet-name>${name}</servlet-name>
-<servlet-class>${classfull}</servlet-class>
+<servlet-class>${fullClassName}</servlet-class>
 </servlet>
 <servlet-mapping>
 <servlet-name>${name}</servlet-name>

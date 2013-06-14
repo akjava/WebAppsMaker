@@ -14,7 +14,7 @@ import com.google.gwt.user.client.Window;
 public class ServletDataDto {
 private ServletDataDto(){}
 
-public ServletDataToServletWebXmlFunction getServletDataToServletWebXmlFunction(){
+public static ServletDataToServletWebXmlFunction getServletDataToServletWebXmlFunction(){
 	return ServletDataToServletWebXmlFunction.INSTANCE;
 }
 public enum ServletDataToServletWebXmlFunction implements Function<ServletData,ServletWebXmlData>{
@@ -24,7 +24,7 @@ public enum ServletDataToServletWebXmlFunction implements Function<ServletData,S
 		String lower=data.getDataClassName().toLowerCase();
 		ServletWebXmlData xdata=new ServletWebXmlData();
 		xdata.setFullClassName(data.getBasePackage()+data.getLastPackage()+"."+data.getServletClassName());
-		xdata.setPath("/"+lower+"/"+data.getPath());
+		xdata.setPath(data.getPath());
 		xdata.setName(data.getDataClassName()+data.getServletType());
 		return xdata;
 	}
@@ -40,7 +40,7 @@ public static class FormDataToMainServletDataFunction implements Function<FormDa
 	@Override
 	public List<ServletData> apply(FormData fdata) {
 		List<ServletData> datas=Lists.newArrayList();
-		datas.add(new ServletData(basePackage,"main",ServletData.TYPE_LIST,fdata,"/"));
+		datas.add(new ServletData(basePackage,"main",ServletData.TYPE_LIST,fdata,"/index.html"));
 		datas.add(new ServletData(basePackage,"main",ServletData.TYPE_SHOW,fdata,"/show"));
 		
 		return datas;
@@ -103,6 +103,15 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		map.put("mainRowTemplate", mainTemplate.toLowerCase()+"_row"+".html");
 		map.put("dataClassName", data.getDataClassName());
 		map.put("path",data.getPath());
+		
+		String path=data.getPath();
+		if(!path.endsWith("/")){
+			int last=path.lastIndexOf("/");
+			if(last!=-1){
+				String indexPath=path.substring(0,last+1);
+				map.put("indexPath", indexPath);
+			}
+		}
 		
 		String text=TemplateUtils.createAdvancedText(javaTemplate, map);
 		file.setText(text);
