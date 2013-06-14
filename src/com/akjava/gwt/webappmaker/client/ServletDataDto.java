@@ -92,6 +92,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		}
 		Map<String,String> map=new HashMap<String,String>();
 		map.put("className", data.getServletClassName());
+		map.put("basePackage", data.getBasePackage());
 		map.put("package", data.getBasePackage()+data.getLastPackage());
 		
 		map.put("baseTemplate", data.getLastPackage()+"Base.html");

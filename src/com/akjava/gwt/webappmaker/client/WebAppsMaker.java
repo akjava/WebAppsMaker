@@ -76,7 +76,7 @@ public class WebAppsMaker implements EntryPoint {
 		 hpanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 		 leftVertical.add(hpanel);
 		 packageBox = new TextBox();
-		 packageBox.setWidth("100px");
+		 packageBox.setWidth("200px");
 		 packageBox.setText(storageControler.getValue("packageValue", "com.akjava.gae.app1."));
 		
 		 hpanel.add(new Label("package"));
