@@ -31,7 +31,7 @@ public ServletData(String baseString,String lastPackage,String serlvetType,FormD
 	this.lastPackage=lastPackage;
 	this.servletType=serlvetType;
 	this.formData=formData;
-	this.path=path;
+	this.path="/"+formData.getClassName().toLowerCase()+path;
 }
 public String getBasePackage() {
 	return basePackage;

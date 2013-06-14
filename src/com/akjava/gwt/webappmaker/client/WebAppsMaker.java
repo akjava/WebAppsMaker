@@ -104,7 +104,7 @@ public class WebAppsMaker implements EntryPoint {
 		 root.add(centerVertical);
 		 
 		 ScrollPanel scroll=new ScrollPanel();
-		 scroll.setSize("400px", "800px");
+		 scroll.setSize("300px", "800px");
 		
 		 FileNameAndTextCell cell=new FileNameAndTextCell();
 		 cellList = new CellList<FileNameAndText>(cell);
@@ -133,7 +133,7 @@ public class WebAppsMaker implements EntryPoint {
 		 rightVertical.add(downloadLinks);
 		 fileTextArea = new TextArea();
 		 fileTextArea.setReadOnly(true);
-		 fileTextArea.setSize("600px", "800px");
+		 fileTextArea.setSize("800px", "800px");
 		 rightVertical.add(fileTextArea);
 		 
 	}

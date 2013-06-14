@@ -99,6 +99,10 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		map.put("mainTemplate", mainTemplate.toLowerCase()+".html");
 		map.put("title", data.getFormData().getName()+" "+Internationals.getMessage(data.getServletType().toLowerCase()));
 		
+		map.put("mainRowTemplate", mainTemplate.toLowerCase()+"_row"+".html");
+		map.put("dataClassName", data.getDataClassName());
+		map.put("path",data.getPath());
+		
 		String text=TemplateUtils.createAdvancedText(javaTemplate, map);
 		file.setText(text);
 		

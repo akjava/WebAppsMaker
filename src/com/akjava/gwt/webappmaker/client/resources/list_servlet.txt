@@ -16,53 +16,64 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
-public class  ${className}  extends  BaseServlet{
+public class  ${className}  extends  AbstractSimpleTemplateServlet{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected void initializeTemplate(){
-		 htmlTitle="${title}";
-		 baseTemplateHtml="${baseTemplate}";
-		 mainTemplateHtml="${mainTemplate}";
+	@Override
+	protected String getHtmlTitle() {
+		return "${title}";
 	}
+
+	@Override
+	protected String getBaseTemplateHtmlName() {
+		return "${baseTemplate}";
+	}
+
+	@Override
+	protected String getMainTemplateHtmlName() {
+		return "${mainTemplate}";
+	}
+	
+
 	
 
 	@Override
 	protected String createMainHtml(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-PersistenceManager manager=PMF.get().getPersistenceManager();
+			PersistenceManager manager=PMF.get().getPersistenceManager();
 		
-		QualificationDao dao=new QualificationDao(manager);
+		${dataClassName}Dao dao=new ${dataClassName}Dao(manager);
 		
 		int page=PageMenuUtil.parsePageNumber(request, "page");
 		int pageSize=2;
 		
 		int start=(page-1)*pageSize;
-		//System.out.println(start+","+page);
-		List<Qualification> datas=dao.getDatas(start, pageSize, "cdate", false);
+		
+		List<${dataClassName}> datas=dao.getDatas(start, pageSize, "id", false);
 		
 		StringBuffer rowHtmls=new StringBuffer();
-		Template template=VelocityUtils.createVelocityTemplate(getServletContext(),"index_shikaku_row.html");
+		String template=SimpleTemplateUtils.loadTextFromFile(getServletContext(),"${mainRowTemplate}");
 		
-		for(Qualification data:datas){
-			Map<String,String> map=QualificationDao.toLabellMap(data);
+		for(${dataClassName} data:datas){
+			Map<String,String> map=${dataClassName}Dao.toLabellMap(data);
 			
-			String qualificationHtml=VelocityUtils.merge(template, map);
-			rowHtmls.append(qualificationHtml);
+			String html=TemplateUtils.createAdvancedText(template, map);
+			rowHtmls.append(html);
 		}
-		//return rowHtmls.toString();
+		
 		dataMap.put("data", rowHtmls.toString());
 		
 		long count=dao.count();
 		
-		PageMenuHtmlMaker maker=new PageMenuHtmlMaker("shikaku","");
+		PageMenuHtmlMaker maker=new PageMenuHtmlMaker("${path}","");
 		String pageMenuHtml=maker.createPageMenuHtml(new PagingInfoImpl(page,count,pageSize));
 		dataMap.put("pagemenu", pageMenuHtml);
-		//PageMenu pageMenu
 		
-		String dataHtml=VelocityUtils.createVelocityPage(getServletContext(), mainTemplateHtml, dataMap);
+		
+		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtml, dataMap);
 		return dataHtml;
 	}
 }
