@@ -32,6 +32,8 @@ Map<String,String> map=new HashMap<String, String>();
 map.put("package", packageString);
 map.put("dataClassName",formData.getClassName());
 
+map.put("dateFormat", Internationals.getMessage("dateformat"));//base date format for label
+
 //create toLabelMap
 if(formData.getFormFieldDatas()!=null){
 List<String> toLabelMapTexts=Lists.newArrayList(
