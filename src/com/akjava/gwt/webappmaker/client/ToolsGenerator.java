@@ -15,6 +15,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.gwt.core.shared.GWT;
 
 
 public class ToolsGenerator {
@@ -110,6 +111,14 @@ public enum FormFieldDataToToLabelMapFunction implements Function<FormFieldData,
 			}
 			//true
 			//false
+			return TemplateUtils.createAdvancedText(template, map);
+			
+		}//special date
+		else if(fdata.getKey().equals("cdate") || fdata.getKey().equals("mdate")){
+			Map<String,String> map=new HashMap<String, String>();
+			map.put("key", fdata.getKey());
+			
+			String template=Bundles.INSTANCE.tolabelmap_cmdate().getText();
 			return TemplateUtils.createAdvancedText(template, map);
 		}
 		return "";

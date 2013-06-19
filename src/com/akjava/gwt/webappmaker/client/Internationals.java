@@ -30,7 +30,7 @@ public static  String getMessage(String key){
 	if(lang.equals("ja")){
 		String v= japanese.get(key);
 		if(v==null){
-			return english.get(v);
+			return english.get(key);
 		}else{
 			return v;
 		}

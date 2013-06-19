@@ -18,4 +18,5 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	
 	TextResource tools();
 	TextResource tolabelmap_boolean();
+	TextResource tolabelmap_cmdate();
 }
