@@ -11,6 +11,9 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource list_servlet();
 	TextResource show_servlet();
 	
+	TextResource list_html();
+	TextResource list_row_html();
+	TextResource show_html();
 	
 	TextResource japanese();
 	TextResource english();

@@ -180,8 +180,16 @@ public class WebAppsMaker implements EntryPoint {
 			Iterables.addAll(files, mainServletFiles);
 			//TODO get admin
 			
+			List<List<FileNameAndText>> templateFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToTemplateFileFunction());
+			for(List<FileNameAndText> templates:templateFiles){
+				Iterables.addAll(files, templates);
+			}
+			//TODO create template
 		}
-		//TODO create template
+		
+		
+		
+		
 		//web.xml
 		String template=Bundles.INSTANCE.servlet().getText();
 		List<ServletWebXmlData> xmlDatas=Lists.transform(sdatas, ServletDataDto.getServletDataToServletWebXmlFunction());

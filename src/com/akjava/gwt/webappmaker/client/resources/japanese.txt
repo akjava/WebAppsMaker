@@ -1,2 +1,5 @@
 list	一覧
 show	表示
+add	追加
+edit	編集
+delete	削除

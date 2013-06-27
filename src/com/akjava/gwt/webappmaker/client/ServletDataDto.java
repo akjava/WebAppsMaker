@@ -1,13 +1,17 @@
 package com.akjava.gwt.webappmaker.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
+import com.akjava.lib.common.form.FormFieldDataDto;
+import com.akjava.lib.common.functions.HtmlFunctions;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gwt.user.client.Window;
 
@@ -117,6 +121,64 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		file.setText(text);
 		
 		return file;
+	}
+	
+	
+}
+
+public static class ServletDataToTemplateFileFunction implements Function<ServletData,List<FileNameAndText>>{
+
+	@Override
+	public List<FileNameAndText> apply(ServletData data) {
+		List<FileNameAndText> files=new ArrayList<FileNameAndText>();
+		String type=data.getServletType();
+		
+		FileNameAndText file=new FileNameAndText();
+		file.setName(data.getDataClassName().toLowerCase()+"_"+type.toLowerCase()+".html");
+		
+		String htmlTemplate=null;
+		
+		if(type.equals(ServletData.TYPE_LIST)){
+			htmlTemplate=Bundles.INSTANCE.list_html().getText();
+			
+			FileNameAndText file2=new FileNameAndText();
+			file2.setName(data.getDataClassName().toLowerCase()+"_"+type.toLowerCase()+"_row.html");
+			files.add(file2);
+			file2.setText(Bundles.INSTANCE.list_row_html().getText());
+		}else if(type.equals(ServletData.TYPE_SHOW)){
+			htmlTemplate=Bundles.INSTANCE.show_servlet().getText();
+		}
+		
+		if(htmlTemplate==null){
+			Window.alert("invalid type:"+data.getServletType());
+		}
+		file.setText(htmlTemplate);
+		files.add(file);
+		
+		
+		Map<String,String> map=new HashMap<String,String>();
+		//headers
+		List<String> ths=Lists.transform(Lists.transform(data.getFormData().getFormFieldDatas(), FormFieldDataDto.getFormFieldToNameFunction())
+				, HtmlFunctions.getStringToTHFunction());
+		map.put("headers", Joiner.on("\n").join(ths));
+		//columns
+		List<String> tds=Lists.transform(
+				Lists.transform(
+				Lists.transform(data.getFormData().getFormFieldDatas(), FormFieldDataDto.getFormFieldToKeyFunction())
+				,new HtmlFunctions.StringToPreFixAndSuffix("${","}"))
+				, HtmlFunctions.getStringToTDFunction());
+		map.put("columns", Joiner.on("\n").join(tds));
+		
+		map.put("add_title", Internationals.getMessage("add"));
+		map.put("edit_title", Internationals.getMessage("edit"));
+		map.put("delete_title", Internationals.getMessage("delete"));
+		
+		for(FileNameAndText fileText:files){
+			String text=TemplateUtils.createAdvancedText(fileText.getText(), map);
+			fileText.setText(text);
+		}
+		
+		return files;
 	}
 	
 	

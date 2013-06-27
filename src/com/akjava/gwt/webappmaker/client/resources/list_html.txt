@@ -1,0 +1,16 @@
+<div>
+<div>
+<table class="table">
+<tr>
+${headers}
+</tr>
+${data}
+</table>
+<blockquote>
+<p>
+${pagemenu}
+</p>
+</blockquote>
+</div>
+<p><a href='add'><button class='btn btn-success'>${add_title}</button></a></p>
+</div>
