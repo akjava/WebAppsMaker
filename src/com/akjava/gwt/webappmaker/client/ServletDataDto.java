@@ -146,7 +146,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			files.add(file2);
 			file2.setText(Bundles.INSTANCE.list_row_html().getText());
 		}else if(type.equals(ServletData.TYPE_SHOW)){
-			htmlTemplate=Bundles.INSTANCE.show_servlet().getText();
+			htmlTemplate=Bundles.INSTANCE.show_html().getText();
 		}
 		
 		if(htmlTemplate==null){
@@ -158,16 +158,27 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		
 		Map<String,String> map=new HashMap<String,String>();
 		//headers
-		List<String> ths=Lists.transform(Lists.transform(data.getFormData().getFormFieldDatas(), FormFieldDataDto.getFormFieldToNameFunction())
+		List<String> names=Lists.transform(data.getFormData().getFormFieldDatas(), FormFieldDataDto.getFormFieldToNameFunction());
+		List<String> ths=Lists.transform(names
 				, HtmlFunctions.getStringToTHFunction());
 		map.put("headers", Joiner.on("\n").join(ths));
 		//columns
+		List<String> keys=Lists.transform(data.getFormData().getFormFieldDatas(), FormFieldDataDto.getFormFieldToKeyFunction());
 		List<String> tds=Lists.transform(
 				Lists.transform(
-				Lists.transform(data.getFormData().getFormFieldDatas(), FormFieldDataDto.getFormFieldToKeyFunction())
+				keys
 				,new HtmlFunctions.StringToPreFixAndSuffix("${","}"))
 				, HtmlFunctions.getStringToTDFunction());
 		map.put("columns", Joiner.on("\n").join(tds));
+		
+		
+		//name trtd for show
+		List<List<String>> vs=new ArrayList<List<String>>();
+		vs.add(names);
+		vs.add(tds);
+		map.put("name_key_trtd",
+		HtmlFunctions.getStringToTRTDFunction().apply(vs)
+		);
 		
 		map.put("show_title", Internationals.getMessage("show"));
 		map.put("add_title", Internationals.getMessage("add"));
