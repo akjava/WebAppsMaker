@@ -2,7 +2,10 @@
 <div>
 <table class="table">
 <tr>
+<th></th>
 ${headers}
+<th></th>
+<th></th>
 </tr>
 ${data}
 </table>
