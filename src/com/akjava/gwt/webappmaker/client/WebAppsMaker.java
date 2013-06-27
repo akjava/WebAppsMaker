@@ -178,13 +178,17 @@ public class WebAppsMaker implements EntryPoint {
 			
 			List<FileNameAndText> mainServletFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToServletFileFunction());
 			Iterables.addAll(files, mainServletFiles);
-			//TODO get admin
+			
 			
 			List<List<FileNameAndText>> templateFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToTemplateFileFunction());
 			for(List<FileNameAndText> templates:templateFiles){
 				Iterables.addAll(files, templates);
 			}
-			//TODO create template
+			//TODO list always contain add link,however usually not need it.
+			//TODO option allow add,edit delete
+			
+			//TODO get admin
+			//admin use another mainbase
 		}
 		
 		
