@@ -32,7 +32,7 @@ public enum ServletDataToServletWebXmlFunction implements Function<ServletData,S
 		
 		String head="";
 		if(!data.getLastPackage().equals("main")){
-			head="/"+data.getLastPackage()+"/";
+			head="/"+data.getLastPackage();
 		}
 		xdata.setPath(head+data.getPath());
 		
