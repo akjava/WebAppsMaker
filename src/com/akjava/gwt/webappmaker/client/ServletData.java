@@ -1,6 +1,7 @@
 package com.akjava.gwt.webappmaker.client;
 
 import com.akjava.lib.common.form.FormData;
+import com.akjava.lib.common.utils.ValuesUtils;
 
 public class ServletData {
 private String basePackage;
@@ -62,6 +63,10 @@ public String getDataClassName(){
 	return formData.getClassName();
 }
 public String getServletClassName(){
-	return this.getDataClassName()+this.getServletType()+"Servlet";
+	if(lastPackage.equals("main")){
+		return this.getDataClassName()+this.getServletType()+"Servlet";
+	}else{
+		return ValuesUtils.toUpperCamel(lastPackage)+this.getDataClassName()+this.getServletType()+"Servlet";	
+	}
 }
 }

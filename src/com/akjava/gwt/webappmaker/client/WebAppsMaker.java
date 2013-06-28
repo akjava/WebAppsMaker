@@ -11,6 +11,7 @@ import com.akjava.gwt.lib.client.StorageControler;
 import com.akjava.gwt.lib.client.StorageException;
 import com.akjava.gwt.lib.client.widget.PasteValueReceiveArea;
 import com.akjava.gwt.lib.client.widget.TabInputableTextArea;
+import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToAdminServletDataFunction;
 import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToMainServletDataFunction;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
@@ -186,11 +187,24 @@ public class WebAppsMaker implements EntryPoint {
 			}
 			//TODO list always contain add link,however usually not need it.
 			//TODO option allow add,edit delete
-			
-			//TODO get admin
-			//admin use another mainbase
+				
 		}
 		
+		
+		//admin use another mainbase
+		for(FormData fdata:datas){
+			List<ServletData> sdata=new FormDataToAdminServletDataFunction(getPackage()).apply(fdata);
+			Iterables.addAll(sdatas, sdata);
+			
+			List<FileNameAndText> mainServletFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToServletFileFunction());
+			Iterables.addAll(files, mainServletFiles);
+			
+			
+			List<List<FileNameAndText>> templateFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToTemplateFileFunction());
+			for(List<FileNameAndText> templates:templateFiles){
+				Iterables.addAll(files, templates);
+			}
+		}
 		
 		
 		

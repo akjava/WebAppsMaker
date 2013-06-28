@@ -10,6 +10,7 @@ import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormFieldDataDto;
 import com.akjava.lib.common.functions.HtmlFunctions;
 import com.akjava.lib.common.utils.TemplateUtils;
+import com.akjava.lib.common.utils.ValuesUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -89,6 +90,22 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			javaTemplate=Bundles.INSTANCE.list_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_SHOW)){
 			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+		}else if(data.getServletType().equals(ServletData.TYPE_ADD)){
+			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+		}else if(data.getServletType().equals(ServletData.TYPE_ADD_CONFIRM)){
+			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+		}else if(data.getServletType().equals(ServletData.TYPE_ADD_EXEC)){
+			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+		}else if(data.getServletType().equals(ServletData.TYPE_EDIT)){
+			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_CONFIRM)){
+			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_EXEC)){
+			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+		}else if(data.getServletType().equals(ServletData.TYPE_DELETE_CONFIRM)){
+			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+		}else if(data.getServletType().equals(ServletData.TYPE_DELETE_EXEC)){
+			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
 		}
 		
 		if(javaTemplate==null){
@@ -134,7 +151,11 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		String type=data.getServletType();
 		
 		FileNameAndText file=new FileNameAndText();
-		file.setName(data.getDataClassName().toLowerCase()+"_"+type.toLowerCase()+".html");
+		String head="";
+		if(!data.getLastPackage().equals("main")){
+			head=data.getLastPackage()+"_";
+		}
+		file.setName(head+data.getDataClassName().toLowerCase()+"_"+ValuesUtils.upperCamelToUnderbar(type)+".html");
 		
 		String htmlTemplate=null;
 		
@@ -142,10 +163,26 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			htmlTemplate=Bundles.INSTANCE.list_html().getText();
 			
 			FileNameAndText file2=new FileNameAndText();
-			file2.setName(data.getDataClassName().toLowerCase()+"_"+type.toLowerCase()+"_row.html");
+			file2.setName(head+data.getDataClassName().toLowerCase()+"_"+type.toLowerCase()+"_row.html");
 			files.add(file2);
 			file2.setText(Bundles.INSTANCE.list_row_html().getText());
 		}else if(type.equals(ServletData.TYPE_SHOW)){
+			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+		}else if(type.equals(ServletData.TYPE_ADD)){
+			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+		}else if(type.equals(ServletData.TYPE_ADD_CONFIRM)){
+			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+		}else if(type.equals(ServletData.TYPE_ADD_EXEC)){
+			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+		}else if(type.equals(ServletData.TYPE_EDIT)){
+			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+		}else if(type.equals(ServletData.TYPE_EDIT_CONFIRM)){
+			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+		}else if(type.equals(ServletData.TYPE_EDIT_EXEC)){
+			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+		}else if(type.equals(ServletData.TYPE_DELETE_CONFIRM)){
+			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+		}else if(type.equals(ServletData.TYPE_DELETE_EXEC)){
 			htmlTemplate=Bundles.INSTANCE.show_html().getText();
 		}
 		
