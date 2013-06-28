@@ -117,6 +117,7 @@ public class WebAppsMaker implements EntryPoint {
 		
 		 FileNameAndTextCell cell=new FileNameAndTextCell();
 		 cellList = new CellList<FileNameAndText>(cell);
+		 cellList.setPageSize(100);
 		 scroll.setWidget(cellList);
 		 centerVertical.add(scroll);
 		 

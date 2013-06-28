@@ -26,14 +26,28 @@ public enum ServletDataToServletWebXmlFunction implements Function<ServletData,S
 	INSTANCE;
 	@Override
 	public ServletWebXmlData apply(ServletData data) {
-		String lower=data.getDataClassName().toLowerCase();
+		
 		ServletWebXmlData xdata=new ServletWebXmlData();
 		xdata.setFullClassName(data.getBasePackage()+data.getLastPackage()+"."+data.getServletClassName());
-		xdata.setPath(data.getPath());
-		xdata.setName(data.getDataClassName()+data.getServletType());
+		
+		String head="";
+		if(!data.getLastPackage().equals("main")){
+			head="/"+data.getLastPackage()+"/";
+		}
+		xdata.setPath(head+data.getPath());
+		
+		xdata.setName(getName(data.getLastPackage(),data.getDataClassName(),data.getServletType()));
 		return xdata;
 	}
 	
+}
+
+public static String getName(String lastPackage,String dataName,String type){
+	if(lastPackage.equals("main")){
+		return dataName+type;
+	}else{
+		return ValuesUtils.toUpperCamel(lastPackage)+dataName+type;
+	}
 }
 
 
