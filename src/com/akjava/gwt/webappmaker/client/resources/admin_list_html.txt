@@ -1,7 +1,11 @@
+<div>
+<div>
 <table class="table">
 <tr>
 <th></th>
 ${headers}
+<th></th>
+<th></th>
 </tr>
 ${data}
 </table>
@@ -10,3 +14,6 @@ ${data}
 ${pagemenu}
 </p>
 </blockquote>
+</div>
+<p><a href='add'><button class='btn btn-success'>${add_title}</button></a></p>
+</div>

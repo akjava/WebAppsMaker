@@ -174,14 +174,29 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		String htmlTemplate=null;
 		
 		if(type.equals(ServletData.TYPE_LIST)){
+			if(data.getLastPackage().equals("admin")){
+			htmlTemplate=Bundles.INSTANCE.admin_list_html().getText();	
+			}else{
 			htmlTemplate=Bundles.INSTANCE.list_html().getText();
+			}
 			
 			FileNameAndText file2=new FileNameAndText();
 			file2.setName(head+data.getDataClassName().toLowerCase()+"_"+type.toLowerCase()+"_row.html");
 			files.add(file2);
+			if(data.getLastPackage().equals("admin")){
+				file2.setText(Bundles.INSTANCE.admin_list_row_html().getText());	
+			}else{
 			file2.setText(Bundles.INSTANCE.list_row_html().getText());
-		}else if(type.equals(ServletData.TYPE_SHOW)){
-			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+			}
+			
+			} else if (type.equals(ServletData.TYPE_SHOW)) {
+				if (data.getLastPackage().equals("admin")) {
+					//TODO admin
+					htmlTemplate = Bundles.INSTANCE.show_html().getText();
+				} else {
+					htmlTemplate = Bundles.INSTANCE.show_html().getText();
+				}
+
 		}else if(type.equals(ServletData.TYPE_ADD)){
 			htmlTemplate=Bundles.INSTANCE.show_html().getText();
 		}else if(type.equals(ServletData.TYPE_ADD_CONFIRM)){

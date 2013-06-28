@@ -3,10 +3,5 @@
 <a href="show?id=${id}"><button class='btn btn-info'>${show_title}</button></a>
 </td>
 ${columns}
-<td>
-<a href="edit?id=${id}"><button class='btn btn-warning'>${edit_title}</button></a>
-</td>
-<td>
-<a href="delete?id=${id}"><button class='btn btn-danger'>${delete_title}</button></a>
-</td>
+
 </tr>
