@@ -41,24 +41,14 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		return "${mainTemplate}";
 	}
 	
-//TODO move to common
-	private String getLastDir(String url){
-		int anchor=url.indexOf("#");
-		if(anchor!=-1){
-			url=url.substring(0,anchor);
-		}
-		int query=url.indexOf("?");
-		if(query!=-1){
-			url=url.substring(0,query);
-		}
-		String paths[]=url.split("/");
-		return paths[paths.length-1];
-	}
+
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		String url=request.getRequestURI();
 		
-		String id=getLastDir(url);
-		//System.out.println(url+",id");
+		String id=request.getParameter("id");
+		if(id==null){
+			id="";
+		}
+		
 		if(id.isEmpty()){
 			response.sendRedirect("${indexPath}");
 			return null;

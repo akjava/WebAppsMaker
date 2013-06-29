@@ -146,10 +146,11 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		if(!data.getLastPackage().equals("main")){
 			phead="/"+data.getLastPackage();
 		}
+		String fullpath=phead+data.getPath();
+		map.put("path",fullpath);
 		
-		map.put("path",phead+data.getPath());
 		
-		String path=data.getPath();
+		String path=fullpath;
 		if(!path.endsWith("/")){
 			int last=path.lastIndexOf("/");
 			if(last!=-1){
