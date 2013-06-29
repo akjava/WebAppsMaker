@@ -75,7 +75,7 @@ public static class FormDataToAdminServletDataFunction implements Function<FormD
 	public List<ServletData> apply(FormData fdata) {
 		List<ServletData> datas=Lists.newArrayList();
 		
-		datas.add(new ServletData(basePackage,"admin",ServletData.TYPE_LIST,fdata,"/"));
+		datas.add(new ServletData(basePackage,"admin",ServletData.TYPE_LIST,fdata,"/index.html"));
 		datas.add(new ServletData(basePackage,"admin",ServletData.TYPE_SHOW,fdata,"/show"));
 		
 		datas.add(new ServletData(basePackage,"admin",ServletData.TYPE_ADD,fdata,"/add"));
@@ -87,7 +87,7 @@ public static class FormDataToAdminServletDataFunction implements Function<FormD
 		datas.add(new ServletData(basePackage,"admin",ServletData.TYPE_EDIT_EXEC,fdata,"/edit_exec"));
 		
 		
-		datas.add(new ServletData(basePackage,"admin",ServletData.TYPE_DELETE_CONFIRM,fdata,"/delete_confirm"));
+		datas.add(new ServletData(basePackage,"admin",ServletData.TYPE_DELETE_CONFIRM,fdata,"/delete"));//confirm but link is delete
 		datas.add(new ServletData(basePackage,"admin",ServletData.TYPE_DELETE_EXEC,fdata,"/delete_exec"));
 		return datas;
 	}	
