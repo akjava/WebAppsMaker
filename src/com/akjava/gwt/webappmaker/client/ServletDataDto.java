@@ -141,7 +141,13 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		
 		map.put("mainRowTemplate", mainTemplate.toLowerCase()+"_row"+".html");
 		map.put("dataClassName", data.getDataClassName());
-		map.put("path",data.getPath());
+		
+		String phead="";
+		if(!data.getLastPackage().equals("main")){
+			phead="/"+data.getLastPackage();
+		}
+		
+		map.put("path",phead+data.getPath());
 		
 		String path=data.getPath();
 		if(!path.endsWith("/")){
