@@ -29,17 +29,17 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 	private static final long serialVersionUID = 1L;
 	
 	@Override
-	protected String getHtmlTitle() {
+	protected String initializeHtmlTitle() {
 		return "${title}";
 	}
 
 	@Override
-	protected String getBaseTemplateHtmlName() {
+	protected String initializeBaseTemplateHtmlName() {
 		return "${baseTemplate}";
 	}
 
 	@Override
-	protected String getMainTemplateHtmlName() {
+	protected String initializeMainTemplateHtmlName() {
 		return "${mainTemplate}";
 	}
 	
