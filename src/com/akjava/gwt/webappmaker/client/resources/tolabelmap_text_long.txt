@@ -1,0 +1,6 @@
+	if (map.get("${key}") != null) {
+			String value=Modifiers.getLineToBrModifier().apply(map.get("${key}"));
+			map.put("${key}",value);
+		} else {
+			map.put("${key}","");
+		}

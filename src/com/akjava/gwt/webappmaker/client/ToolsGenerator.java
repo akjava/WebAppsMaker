@@ -120,6 +120,12 @@ public enum FormFieldDataToToLabelMapFunction implements Function<FormFieldData,
 			
 			String template=Bundles.INSTANCE.tolabelmap_cmdate().getText();
 			return TemplateUtils.createAdvancedText(template, map);
+		}else if(fdata.getType()==FormFieldData.TYPE_TEXT_LONG){
+			Map<String,String> map=new HashMap<String, String>();
+			map.put("key", fdata.getKey());
+			
+			String template=Bundles.INSTANCE.tolabelmap_text_long().getText();
+			return TemplateUtils.createAdvancedText(template, map);
 		}
 		return "";
 	}
