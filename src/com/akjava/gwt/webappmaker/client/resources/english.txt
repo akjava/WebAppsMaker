@@ -4,3 +4,5 @@ dateformat	EEE, d MMM yyyy HH:mm:ss z
 add	Add
 edit	Edit
 delete	Delete
+top	TOP
+admintop	Admin Top

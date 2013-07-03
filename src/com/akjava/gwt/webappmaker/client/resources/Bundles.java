@@ -11,6 +11,8 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource list_servlet();
 	TextResource show_servlet();
 	
+	TextResource top_servlet();
+	
 	TextResource list_html();
 	TextResource list_row_html();
 	TextResource show_html();
@@ -18,6 +20,11 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource admin_list_html();
 	TextResource admin_list_row_html();
 
+	
+	
+	
+	TextResource top_links_html();
+	TextResource top_links_sub_html();
 	
 	TextResource japanese();
 	TextResource english();

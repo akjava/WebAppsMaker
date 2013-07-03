@@ -1,0 +1,1 @@
+<p><a href='${path}'><button class='btn btn-info btn-large'>${title} &raquo;</button></a></p>

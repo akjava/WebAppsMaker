@@ -20,6 +20,7 @@ import com.akjava.lib.common.functions.MapToAdvancedTemplatedTextFunction;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.lib.common.utils.ValuesUtils;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.core.client.EntryPoint;
@@ -207,11 +208,36 @@ public class WebAppsMaker implements EntryPoint {
 			}
 		}
 		
+		//Top
+		files.add(FileNameAndTextGenerator.generateTopServlet(getPackage()));
+		//template
+		files.add(FileNameAndTextGenerator.generateTopTemplate(datas));
 		
+		//AdminTop
+		files.add(FileNameAndTextGenerator.generateAdminTopServlet(getPackage()));
+		//template
+		files.add(FileNameAndTextGenerator.generateAdminTopTemplate(datas));
 		
 		//web.xml
 		String template=Bundles.INSTANCE.servlet().getText();
-		List<ServletWebXmlData> xmlDatas=Lists.transform(sdatas, ServletDataDto.getServletDataToServletWebXmlFunction());
+		
+		//create list for add
+		List<ServletWebXmlData> xmlDatas=Lists.newArrayList(Collections2.transform(sdatas, ServletDataDto.getServletDataToServletWebXmlFunction()));
+		
+		//add top
+		ServletWebXmlData topData=new ServletWebXmlData();
+		topData.setName("Top");
+		topData.setFullClassName(getPackage()+"main.TopServlet");
+		topData.setPath("/index.html");
+		xmlDatas.add(topData);
+		
+		//add admin top
+		ServletWebXmlData adminTopData=new ServletWebXmlData();
+		adminTopData.setName("AdminTop");
+		adminTopData.setFullClassName(getPackage()+"admin.AdminTopServlet");
+		adminTopData.setPath("/admin/index.html");
+		xmlDatas.add(adminTopData);
+		
 		List<Map<String,String>> xmlTextMaps=Lists.transform(xmlDatas, ServletWebXmlDataDto.getServletWebXmlDataToMapFunction());
 		List<String> webXmls=Lists.transform(xmlTextMaps, new MapToAdvancedTemplatedTextFunction(template));
 		String webXmlTemplate=Bundles.INSTANCE.web().getText();

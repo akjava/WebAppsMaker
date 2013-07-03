@@ -6,4 +6,3 @@
 <servlet-name>${name}</servlet-name>
 <url-pattern>${path}</url-pattern>
 </servlet-mapping>
-

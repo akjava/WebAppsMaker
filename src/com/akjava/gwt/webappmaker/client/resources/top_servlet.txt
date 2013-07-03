@@ -1,0 +1,40 @@
+package ${package};
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.akjava.servlet.AbstractSimpleTemplateServlet;
+import com.akjava.servlet.SimpleTemplateUtils;
+
+
+
+public class  ${className}  extends  AbstractSimpleTemplateServlet{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Override
+	protected String initializeHtmlTitle() {
+		return "${title}";
+	}
+
+	@Override
+	protected String initializeBaseTemplateHtmlName() {
+		return "${baseTemplate}";
+	}
+
+	@Override
+	protected String initializeMainTemplateHtmlName() {
+		return "${mainTemplate}";
+	}
+	
+
+	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);
+		return dataHtml;
+	}
+}

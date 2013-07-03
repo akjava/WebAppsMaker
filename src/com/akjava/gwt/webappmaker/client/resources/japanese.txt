@@ -3,3 +3,5 @@ show	表示
 add	追加
 edit	編集
 delete	削除
+top	トップ
+admintop	管理画面トップ
