@@ -1,0 +1,1 @@
+		<li><a href="${path}"><i class="icon-th-list icon-white"></i>${title}</a></li>

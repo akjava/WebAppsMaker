@@ -218,6 +218,13 @@ public class WebAppsMaker implements EntryPoint {
 		//template
 		files.add(FileNameAndTextGenerator.generateAdminTopTemplate(datas));
 		
+		
+		//mainBase
+		files.add(FileNameAndTextGenerator.generateMainBase(datas));
+		//adminBase
+		files.add(FileNameAndTextGenerator.generateAdminBase(datas));
+		
+		
 		//web.xml
 		String template=Bundles.INSTANCE.servlet().getText();
 		

@@ -26,6 +26,12 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource top_links_html();
 	TextResource top_links_sub_html();
 	
+	TextResource main_base_html();
+	TextResource main_base_sub_html();
+	TextResource admin_base_html();
+	TextResource admin_base_sub_html();
+	
+	
 	TextResource japanese();
 	TextResource english();
 	

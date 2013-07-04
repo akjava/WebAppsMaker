@@ -37,6 +37,82 @@ public class FileNameAndTextGenerator {
 		return file;
 	}
 	
+	public static FileNameAndText generateMainBase(List<FormData> formdatas){
+		FileNameAndText file=new FileNameAndText();
+		
+		file.setName("mainBase.html");
+		String base=Bundles.INSTANCE.main_base_html().getText();
+		String sub=Bundles.INSTANCE.main_base_sub_html().getText();
+		
+		Map<String,String> baseMap=new HashMap<String, String>();
+		
+		baseMap.put("top_path", "/");
+		baseMap.put("top_title", Internationals.getMessage("top"));
+		
+		String datas="";
+		for(FormData fdata:formdatas){
+			String path="/"+fdata.getClassName().toLowerCase()+"/";
+			String title=fdata.getName();
+			
+			Map<String,String> subMap=new HashMap<String, String>();
+			subMap.put("path",path);
+			subMap.put("title",title);
+			datas+=TemplateUtils.createAdvancedText(sub, subMap);
+			
+		}
+		
+		baseMap.put("top_links",datas);
+		String text=TemplateUtils.createAdvancedText(base, baseMap);
+		file.setText(text);
+		
+		return file;
+	}
+	
+	public static FileNameAndText generateAdminBase(List<FormData> formdatas){
+		FileNameAndText file=new FileNameAndText();
+		
+		file.setName("adminBase.html");
+		String base=Bundles.INSTANCE.admin_base_html().getText();
+		String sub=Bundles.INSTANCE.admin_base_sub_html().getText();
+		
+		Map<String,String> baseMap=new HashMap<String, String>();
+		
+		baseMap.put("top_path", "/admin/");
+		baseMap.put("top_title", Internationals.getMessage("admintop"));
+		
+		String datas="";
+		for(FormData fdata:formdatas){
+			String path="/admin/"+fdata.getClassName().toLowerCase()+"/";
+			String title=Internationals.getMessage("admin")+" "+ fdata.getName();
+			
+			Map<String,String> subMap=new HashMap<String, String>();
+			subMap.put("path",path);
+			subMap.put("title",title);
+			datas+=TemplateUtils.createAdvancedText(sub, subMap);
+		}
+		
+		Map<String,String> subMap2=new HashMap<String, String>();
+		subMap2.put("path","/");
+		subMap2.put("title",Internationals.getMessage("top"));
+		datas+=TemplateUtils.createAdvancedText(sub, subMap2);
+		
+		for(FormData fdata:formdatas){
+			String path="/"+fdata.getClassName().toLowerCase()+"/";
+			String title=fdata.getName();
+			
+			Map<String,String> subMap=new HashMap<String, String>();
+			subMap.put("path",path);
+			subMap.put("title",title);
+			datas+=TemplateUtils.createAdvancedText(sub, subMap);
+		}
+		
+		baseMap.put("top_links",datas);
+		String text=TemplateUtils.createAdvancedText(base, baseMap);
+		file.setText(text);
+		
+		return file;
+	}
+	
 	public static FileNameAndText generateAdminTopTemplate(List<FormData> formdatas){
 		FileNameAndText file=new FileNameAndText();
 		

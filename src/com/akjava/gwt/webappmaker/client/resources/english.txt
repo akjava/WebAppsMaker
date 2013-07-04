@@ -6,3 +6,4 @@ edit	Edit
 delete	Delete
 top	TOP
 admintop	Admin Top
+admin	Admin
