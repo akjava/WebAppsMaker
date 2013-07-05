@@ -35,16 +35,50 @@ map.put("dataClassName",formData.getClassName());
 
 map.put("dateFormat", Internationals.getMessage("dateformat"));//base date format for label
 
-//create toLabelMap
+
 if(formData.getFormFieldDatas()!=null){
-List<String> toLabelMapTexts=Lists.newArrayList(
+	
+
+	//create toLabelValue	
+	List<String> toIsMultiValueText=Lists.newArrayList(
+	Iterables.filter(
+		     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToIsMultipleParameterpFunction()),
+		     getNotEmpty()
+		  )
+		  );
+
+	map.put("isMultipleParameter",joiner.join(toIsMultiValueText));
+	
+
+//create toLabelMap
+	List<String> toLabelMapTexts=Lists.newArrayList(
+			Iterables.filter(
+				     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToToLabelMapFunction()),
+				     getNotEmpty()
+				  )
+				  );
+
+			map.put("toLabelMap",joiner.join(toLabelMapTexts));
+	
+//create toLabelValue	
+List<String> toLabelValueTexts=Lists.newArrayList(
 Iterables.filter(
-	     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToToLabelMapFunction()),
-	     new NotEmpty()
+	     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToToLabelValueFunction()),
+	     getNotEmpty()
 	  )
 	  );
-Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToToLabelMapFunction());
-map.put("toLabelMap",joiner.join(toLabelMapTexts));
+
+map.put("toLabelValue",joiner.join(toLabelValueTexts));
+
+//create toLabelValue	
+List<String> toGetKeyListsTexts=Lists.newArrayList(
+Iterables.filter(
+	     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToGetKeyListsFunction()),
+	     getNotEmpty()
+	  )
+	  );
+
+map.put("getKeyLists",joiner.join(toGetKeyListsTexts));
 }
 
 
@@ -54,9 +88,12 @@ map.put("toLabelMap",joiner.join(toLabelMapTexts));
 return TemplateUtils.createAdvancedText(base, map);
 }
 
+public NotEmpty getNotEmpty(){
+	return NotEmpty.INSTANCE;
+}
 //TODO create StringPredicates
-public class NotEmpty implements Predicate<String>{
-
+public enum NotEmpty implements Predicate<String>{
+	INSTANCE;
 	@Override
 	public boolean apply(String value) {
 		return value!=null && !value.isEmpty();
@@ -86,10 +123,60 @@ public enum ServletDataToToolsGeneratorFunction implements Function<ServletData,
 }
 */
 
+
+public FormFieldDataToIsMultipleParameterpFunction getFormFieldDataToIsMultipleParameterpFunction(){
+	return FormFieldDataToIsMultipleParameterpFunction.INSTANCE;
+}
+public enum FormFieldDataToIsMultipleParameterpFunction implements Function<FormFieldData,String>{
+	INSTANCE
+	;
+	public static String template="if(key.equals(${key}){\n" +
+			"return true;\n"+
+			"}" +
+			"\n";
+	@Override
+	public String apply(FormFieldData fdata) {
+		if(fdata.getType()==FormFieldData.TYPE_SELECT_MULTI){
+		return TemplateUtils.createText(template, fdata.getKey());
+		}else{
+			return null;
+		}
+	}
+}
+
+public FormFieldDataToGetKeyListsFunction getFormFieldDataToGetKeyListsFunction(){
+	return FormFieldDataToGetKeyListsFunction.INSTANCE;
+}
+public enum FormFieldDataToGetKeyListsFunction implements Function<FormFieldData,String>{
+	INSTANCE
+	;
+	public static String template="\tlist.add(\"${value}\");";
+	@Override
+	public String apply(FormFieldData fdata) {
+		return TemplateUtils.createText(template, fdata.getKey());
+	}
+}
+
 public FormFieldDataToToLabelMapFunction getFormFieldDataToToLabelMapFunction(){
 	return FormFieldDataToToLabelMapFunction.INSTANCE;
 }
 public enum FormFieldDataToToLabelMapFunction implements Function<FormFieldData,String>{
+	INSTANCE
+	;
+	public static String template="\tmap.put(\"${value}\", toLabelValue(\"${value}\",map.get(\"${value}\")));";
+	
+	@Override
+	public String apply(FormFieldData fdata) {
+		return TemplateUtils.createText(template, fdata.getKey());
+	}
+}
+
+
+
+public FormFieldDataToToLabelValueFunction getFormFieldDataToToLabelValueFunction(){
+	return FormFieldDataToToLabelValueFunction.INSTANCE;
+}
+public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldData,String>{
 	INSTANCE
 	;
 	@Override

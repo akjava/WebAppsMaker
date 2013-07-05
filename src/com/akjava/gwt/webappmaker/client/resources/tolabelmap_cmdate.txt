@@ -1,10 +1,14 @@
-	if (map.get("${key}") != null) {
+if (key.equals("${key}")) {
+	if (value != null) {
 			long t=0;
 			try{
 			t=Long.parseLong(map.get("${key}"));
 			}catch(Exception e){}
+			if(t==0){
+			return "";
 			String date=dateFormat.format(new Date(t));
-			map.put("${key}",date);
+			return date;
 		} else {
-			map.put("${key}","");
+			return "";
 		}
+	}

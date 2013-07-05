@@ -22,4 +22,60 @@ public static Map<String,String> toLabelMap(${dataClassName}Entity entity){
 	return map;
 }
 
+public static List<String> getKeyLists(){
+		List<String> list=new ArrayList<String>();
+${getKeyLists}
+		return list;
+	}
+	
+		public static boolean isMultipleParameter(String key){
+		${isMultipleParameter}
+		return false;
+	}
+		public static String multiValueToSingle(HttpServletRequest request,String key){
+		String[] values=request.getParameterValues(key);
+		if(values==null){
+			return null;
+		}
+		return Joiner.on("\t").join(request.getParameterValues(key));
+	}
+		public static Map<String,String> requestToMap(HttpServletRequest request){
+		Map<String,String> map=new HashMap<String, String>();
+		for(String key:getKeyLists()){
+			String value=null;
+			if(isMultipleParameter(key)){
+				value=multiValueToSingle(request,key);
+			}else{
+				value=request.getParameter(key);
+			}
+			if(value!=null){
+				value=MessageModifier.modifyValue(key, value);
+				map.put(key,value );
+			}
+		}
+		return map;
+	}
+	
+	public static String toValueValue(String key,String value){
+		return HTMLUtils.sanitizeQuot(value);
+	}
+	
+	public static String toLabelValue(String key,String value){
+			${toLabelValue}
+		return value;
+	}
+	
+	public static Map<String,String> toValueAndLabelMap(MessageEntity entity){
+		Map<String,String> values=new HashMap<String, String>();
+		
+		Map<String,String> valueMap=MessageEntityDto.entityToMap(entity);
+		for(String key:valueMap.keySet()){
+			String raw=valueMap.get(key);
+			values.put("label_"+key, toLabelValue(key, raw));
+			values.put("value_"+key, toValueValue(key,raw));
+		}
+		
+		return values;
+	}
+
 }
