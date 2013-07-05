@@ -1,0 +1,11 @@
+package ${package};
+
+import com.akjava.lib.common.form.Modifiers;
+
+public class ${dataClassName}Modifier {
+	//usually called from request
+	public static String modifyValue(String key,String value){		
+${modifyValue}
+		return value;
+	}
+}

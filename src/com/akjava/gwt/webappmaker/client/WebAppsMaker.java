@@ -174,6 +174,9 @@ public class WebAppsMaker implements EntryPoint {
 			//Tools.java
 			ToolsGenerator toolsGenerator=new ToolsGenerator(fdata,ValuesUtils.chomp(packageBox.getText()));
 			files.add(toolsGenerator.createFileNameAndText());
+			//Modifier.java
+			ModifierGenerator modifierGenerator=new ModifierGenerator(fdata,ValuesUtils.chomp(packageBox.getText()));
+			files.add(modifierGenerator.createFileNameAndText());
 			
 			
 			List<ServletData> sdata=new FormDataToMainServletDataFunction(getPackage()).apply(fdata);

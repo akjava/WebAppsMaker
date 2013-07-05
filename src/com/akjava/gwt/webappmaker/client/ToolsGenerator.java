@@ -98,7 +98,6 @@ public enum NotEmpty implements Predicate<String>{
 	public boolean apply(String value) {
 		return value!=null && !value.isEmpty();
 	}
-	
 }
 
 
@@ -130,7 +129,7 @@ public FormFieldDataToIsMultipleParameterpFunction getFormFieldDataToIsMultipleP
 public enum FormFieldDataToIsMultipleParameterpFunction implements Function<FormFieldData,String>{
 	INSTANCE
 	;
-	public static String template="if(key.equals(${key}){\n" +
+	public static String template="if(key.equals(\"${key}\"){\n" +
 			"return true;\n"+
 			"}" +
 			"\n";
