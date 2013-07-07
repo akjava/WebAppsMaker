@@ -54,7 +54,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		${dataClassName}EntityDao dao=new ${dataClassName}EntityDao(manager);
 		
 		int page=PageMenuUtil.parsePageNumber(request, "page");
-		int pageSize=2;
+		int pageSize=5;
 		
 		int start=(page-1)*pageSize;
 		
