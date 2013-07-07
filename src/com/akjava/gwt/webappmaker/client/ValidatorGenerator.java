@@ -10,6 +10,7 @@ import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormFieldData;
 import com.akjava.lib.common.form.FormFieldDataPredicates;
 import com.akjava.lib.common.form.Validator;
+import com.akjava.lib.common.form.ValidatorTools;
 import com.akjava.lib.common.predicates.StringPredicates;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.google.common.base.Function;
@@ -55,6 +56,14 @@ public class ValidatorGenerator {
 			map.put("createEditKeyLabelMap",joiner.join(createEditKeyLabelMapText));
 			
 			//createDataValidator
+			
+			List<String> createDataValidatorText=Lists.newArrayList(
+					Iterables.filter(
+						     Iterables.transform(formData.getFormFieldDatas(),getCreateDataValidatorFunction()),
+						     StringPredicates.getNotEmpty()
+						  )
+						  );
+			map.put("createDataValidator",joiner.join(createDataValidatorText));
 		}
 		return TemplateUtils.createAdvancedText(base, map);
 	}
@@ -76,7 +85,10 @@ public class ValidatorGenerator {
 		}
 	}
 	
-	public enum CreateDataValidator implements Function<FormFieldData,String>{
+	public CreateDataValidatorFunction getCreateDataValidatorFunction(){
+		return CreateDataValidatorFunction.INSTANCE;
+	}
+	public enum CreateDataValidatorFunction implements Function<FormFieldData,String>{
 		INSTANCE
 		;
 		public static String template="validators.put(\"${key}\", ValidatorTools.getValidator(\"${validator}\"));";
@@ -94,6 +106,18 @@ public class ValidatorGenerator {
 			map.put("validator",validator.toString());
 			validatorTexts.add(TemplateUtils.createText(template, map));
 			}
+			if(fdata.getType()==FormFieldData.TYPE_TEXT_SHORT){
+			if(!ValidatorTools.hasLimitValidator(fdata.getValidators())){
+				map.put("validator","max(512)");
+				validatorTexts.add(TemplateUtils.createText(template,map));
+			}
+			}
+			else if(fdata.getType()==FormFieldData.TYPE_TEXT_LONG){
+				if(!ValidatorTools.hasLimitValidator(fdata.getValidators())){
+					map.put("validator","maxb(1m)");
+					validatorTexts.add(TemplateUtils.createText(template,map));
+				}
+				}
 			
 			return joiner.join(validatorTexts);
 		}
