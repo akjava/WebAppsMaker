@@ -1,0 +1,115 @@
+package com.akjava.gwt.webappmaker.client;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.akjava.gwt.webappmaker.client.resources.Bundles;
+import com.akjava.lib.common.form.FormData;
+import com.akjava.lib.common.form.FormFieldData;
+import com.akjava.lib.common.form.FormFieldDataPredicates;
+import com.akjava.lib.common.form.Validator;
+import com.akjava.lib.common.predicates.StringPredicates;
+import com.akjava.lib.common.utils.TemplateUtils;
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
+public class ValidatorGenerator {
+	private FormData formData;
+	private String packageString;
+	public ValidatorGenerator(FormData formData,String packageString){
+		this.formData=formData;
+		this.packageString=packageString;
+	}
+	public static Joiner joiner=Joiner.on("\n").skipNulls();
+	public String generate(){
+
+		String base=Bundles.INSTANCE.validator().getText();
+
+		Map<String,String> map=new HashMap<String, String>();
+		map.put("package", packageString);
+		map.put("dataClassName",formData.getClassName());
+		
+		if(formData.getFormFieldDatas()!=null){
+			
+			Iterable<FormFieldData> notAutoDatas=Iterables.filter(formData.getFormFieldDatas(),FormFieldDataPredicates.getNotAutoCreate());
+			
+			//createAddKeyLabelMap
+			List<String> createAddKeyLabelMapText=Lists.newArrayList(
+					Iterables.filter(
+						     Iterables.transform(notAutoDatas,getKeyLabelMapFunction()),
+						     StringPredicates.getNotEmpty()
+						  )
+						  );
+			map.put("createAddKeyLabelMap",joiner.join(createAddKeyLabelMapText));
+			//createEditKeyLabelMap
+			List<String> createEditKeyLabelMapText=Lists.newArrayList(
+					Iterables.filter(
+						     Iterables.transform(formData.getFormFieldDatas(),getKeyLabelMapFunction()),
+						     StringPredicates.getNotEmpty()
+						  )
+						  );
+			map.put("createEditKeyLabelMap",joiner.join(createEditKeyLabelMapText));
+			
+			//createDataValidator
+		}
+		return TemplateUtils.createAdvancedText(base, map);
+	}
+	
+	
+	public KeyLabelMapFunction getKeyLabelMapFunction(){
+		return KeyLabelMapFunction.INSTANCE;
+	}
+	public enum KeyLabelMapFunction implements Function<FormFieldData,String>{
+		INSTANCE
+		;
+		public static String template="keyLabelMap.put(\"${key}\", \"${name}\");";
+		@Override
+		public String apply(FormFieldData fdata) {
+			Map<String,String> map=new HashMap<String, String>();
+			map.put("key", fdata.getKey());
+			map.put("name",fdata.getName());
+			return TemplateUtils.createText(template, map);
+		}
+	}
+	
+	public enum CreateDataValidator implements Function<FormFieldData,String>{
+		INSTANCE
+		;
+		public static String template="validators.put(\"${key}\", ${validator});";
+		@Override
+		public String apply(FormFieldData fdata) {
+			if(fdata.getValidators()==null || fdata.getValidators().size()==0){
+				return null;
+			}
+			
+			List<String> validatorTexts=new ArrayList<String>();
+			Map<String,String> map=new HashMap<String, String>();
+			map.put("key", fdata.getKey());
+			
+			for(Validator validator:fdata.getValidators()){
+			map.put("validator",validator.getName());
+			validatorTexts.add(TemplateUtils.createText(template, map));
+			}
+			
+			return joiner.join(validatorTexts);
+		}
+	}
+	
+	
+
+	
+	
+	public FileNameAndText createFileNameAndText(){
+		String generatorText=this.generate();
+		FileNameAndText ftext=new FileNameAndText();
+		ftext.setName(formData.getClassName()+"Validator.java");
+		ftext.setText(generatorText);
+		return ftext;
+	}
+	
+
+}

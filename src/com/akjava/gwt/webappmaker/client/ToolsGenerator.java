@@ -7,15 +7,13 @@ import java.util.Map;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormFieldData;
+import com.akjava.lib.common.predicates.StringPredicates;
 import com.akjava.lib.common.tag.LabelAndValue;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.gwt.core.shared.GWT;
 
 
 public class ToolsGenerator {
@@ -43,7 +41,7 @@ if(formData.getFormFieldDatas()!=null){
 	List<String> toIsMultiValueText=Lists.newArrayList(
 	Iterables.filter(
 		     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToIsMultipleParameterpFunction()),
-		     getNotEmpty()
+		     StringPredicates.getNotEmpty()
 		  )
 		  );
 
@@ -54,7 +52,7 @@ if(formData.getFormFieldDatas()!=null){
 	List<String> toLabelMapTexts=Lists.newArrayList(
 			Iterables.filter(
 				     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToToLabelMapFunction()),
-				     getNotEmpty()
+				     StringPredicates.getNotEmpty()
 				  )
 				  );
 
@@ -64,7 +62,7 @@ if(formData.getFormFieldDatas()!=null){
 List<String> toLabelValueTexts=Lists.newArrayList(
 Iterables.filter(
 	     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToToLabelValueFunction()),
-	     getNotEmpty()
+	     StringPredicates.getNotEmpty()
 	  )
 	  );
 
@@ -74,7 +72,7 @@ map.put("toLabelValue",joiner.join(toLabelValueTexts));
 List<String> toGetKeyListsTexts=Lists.newArrayList(
 Iterables.filter(
 	     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToGetKeyListsFunction()),
-	     getNotEmpty()
+	     StringPredicates.getNotEmpty()
 	  )
 	  );
 
@@ -88,17 +86,6 @@ map.put("getKeyLists",joiner.join(toGetKeyListsTexts));
 return TemplateUtils.createAdvancedText(base, map);
 }
 
-public NotEmpty getNotEmpty(){
-	return NotEmpty.INSTANCE;
-}
-//TODO create StringPredicates
-public enum NotEmpty implements Predicate<String>{
-	INSTANCE;
-	@Override
-	public boolean apply(String value) {
-		return value!=null && !value.isEmpty();
-	}
-}
 
 
 public FileNameAndText createFileNameAndText(){

@@ -37,6 +37,7 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	
 	
 	TextResource modifier();
+	TextResource validator();
 	
 	TextResource tools();
 	TextResource tolabelmap_boolean();

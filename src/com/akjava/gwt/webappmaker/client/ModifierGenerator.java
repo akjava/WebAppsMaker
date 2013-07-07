@@ -9,10 +9,10 @@ import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormFieldData;
 import com.akjava.lib.common.form.Modifier;
 import com.akjava.lib.common.form.Modifiers;
+import com.akjava.lib.common.predicates.StringPredicates;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -37,7 +37,7 @@ public class ModifierGenerator {
 			List<String> toIsMultiValueText=Lists.newArrayList(
 					Iterables.filter(
 						     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToModifyValueFunction()),
-						     getNotEmpty()
+						     StringPredicates.getNotEmpty()
 						  )
 						  );
 
@@ -107,15 +107,5 @@ public class ModifierGenerator {
 		return ftext;
 	}
 	
-	public NotEmpty getNotEmpty(){
-		return NotEmpty.INSTANCE;
-	}
-	//TODO create StringPredicates
-	public enum NotEmpty implements Predicate<String>{
-		INSTANCE;
-		@Override
-		public boolean apply(String value) {
-			return value!=null && !value.isEmpty();
-		}
-	}
+
 }
