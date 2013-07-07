@@ -44,42 +44,36 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		
-		String id=request.getParameter("id");
-		if(id==null){
-			id="";
+		String key=request.getParameter("${firstKey}");
+		if(key==null){
+			key="";
 		}
-		
-		if(id.isEmpty()){
-			response.sendRedirect("${indexPath}");
+		if(key.isEmpty()){
+			response.sendError(500, "empty ${firstKey}");
 			return null;
 		}
-		try{
-		${dataClassName}Entity q=null;
+		
+		${dataClassName}Entity entity=null;
 		try {
-			Long keyValue=Long.parseLong(id);//TODO switch by type
-			q = new ${dataClassName}EntityDao(PMF.get().getPersistenceManager()).getData(keyValue);
+			Long keyValue=Long.parseLong(key);
+			entity = new ${dataClassName}EntityDao(PMF.get().getPersistenceManager()).getData(keyValue);
+		}catch (javax.jdo.JDOObjectNotFoundException e) {
+			response.sendError(500, "${firstKey}:"+key+" not found");
+			return null;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(q!=null){
-			Map<String,String> map=${dataClassName}Tools.toLabelMap(q);
-			htmlTitle+=map.get("id");
-			
-			for(String key:map.keySet()){
-				dataMap.put(key, map.get(key));
-			}
-		}else{
-			//TODO show error;
-			System.out.println("null ");
+			response.sendError(500, "internal server error "+e.getMessage());
+			return null;
 		}
 		
+		if(entity!=null){
+			dataMap=Tools.toValueAndLabelMap(entity);
+		}else{
+			//maybe never happen
+			response.sendError(500, "internal server error2");
+			return null;
+		}
 		
 		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);
 		return dataHtml;
-		}catch (javax.jdo.JDOObjectNotFoundException e) {
-			response.sendError(505, "Not Found,removed or System erro");
-			return null;
-		}
 	}
 }
