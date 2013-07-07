@@ -126,6 +126,14 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			Window.alert("invalid type:"+data.getServletType());
 		}
 		Map<String,String> map=new HashMap<String,String>();
+		
+		if(data.getLastPackage().equals("main")){
+			map.put("useCache","true");
+		}else{
+			map.put("useCache","false");
+		}
+		
+		
 		map.put("className", data.getServletClassName());
 		map.put("basePackage", data.getBasePackage());
 		map.put("package", data.getBasePackage()+data.getLastPackage());
