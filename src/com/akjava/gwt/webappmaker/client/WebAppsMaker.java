@@ -213,7 +213,7 @@ public class WebAppsMaker implements EntryPoint {
 				Iterables.addAll(files, templates);
 			}
 		}
-		
+		//sharedutils.java
 		files.add(FileNameAndTextGenerator.generateSharedUtils(getPackage()));
 		
 		//Top
