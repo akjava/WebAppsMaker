@@ -79,7 +79,7 @@ public class ValidatorGenerator {
 	public enum CreateDataValidator implements Function<FormFieldData,String>{
 		INSTANCE
 		;
-		public static String template="validators.put(\"${key}\", ${validator});";
+		public static String template="validators.put(\"${key}\", ValidatorTools.getValidator(\"${validator}\"));";
 		@Override
 		public String apply(FormFieldData fdata) {
 			if(fdata.getValidators()==null || fdata.getValidators().size()==0){
@@ -91,7 +91,7 @@ public class ValidatorGenerator {
 			map.put("key", fdata.getKey());
 			
 			for(Validator validator:fdata.getValidators()){
-			map.put("validator",validator.getName());
+			map.put("validator",validator.toString());
 			validatorTexts.add(TemplateUtils.createText(template, map));
 			}
 			
