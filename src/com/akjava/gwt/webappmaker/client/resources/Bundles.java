@@ -36,6 +36,8 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource english();
 	
 	
+	TextResource sharedutils();
+	
 	TextResource modifier();
 	TextResource validator();
 	

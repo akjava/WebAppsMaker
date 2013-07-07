@@ -214,6 +214,8 @@ public class WebAppsMaker implements EntryPoint {
 			}
 		}
 		
+		files.add(FileNameAndTextGenerator.generateSharedUtils(getPackage()));
+		
 		//Top
 		files.add(FileNameAndTextGenerator.generateTopServlet(getPackage()));
 		//template

@@ -139,6 +139,25 @@ public class FileNameAndTextGenerator {
 		return file;
 	}
 	
+	public static FileNameAndText generateSharedUtils(String basePackage){
+		FileNameAndText file=new FileNameAndText();
+		
+		file.setName("SharedUtils"+".java");
+		String javaTemplate=Bundles.INSTANCE.sharedutils().getText();
+		
+		Map<String,String> map=new HashMap<String,String>();
+		
+		map.put("basePackage", basePackage);
+		map.put("package", basePackage+"main");
+		
+		
+		
+		String text=TemplateUtils.createAdvancedText(javaTemplate, map);
+		file.setText(text);
+		
+		return file;
+	}
+	
 	public static FileNameAndText generateTopServlet(String basePackage){
 		FileNameAndText file=new FileNameAndText();
 		String className="TopServlet";
