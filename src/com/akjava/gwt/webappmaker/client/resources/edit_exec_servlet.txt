@@ -1,0 +1,98 @@
+package  ${package};
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.akjava.servlet.AbstractSimpleTemplateServlet;
+import com.akjava.servlet.SimpleTemplateUtils;
+import ${basePackage}*;
+
+
+
+public class  ${className}  extends  AbstractSimpleTemplateServlet{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Override
+	protected String initializeHtmlTitle() {
+		return "${title}";
+	}
+
+	@Override
+	protected String initializeBaseTemplateHtmlName() {
+		return "${baseTemplate}";
+	}
+
+	@Override
+	protected String initializeMainTemplateHtmlName() {
+		return "${mainTemplate}";
+	}
+	@Override
+	protected boolean initializeUseCache() {
+		return ${useCache};
+	}
+
+	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		Map<String,String> errorMap=new HashMap<String, String>();
+		dataMap=${dataClassName}Tools.requestToMap(request);
+		${dataClassName}Validator.validateValue(
+				${dataClassName}Validator.createAddKeyLabelMap(),
+				${dataClassName}Validator.createDataValidator(),dataMap, errorMap, request);
+		
+		boolean hasError=!errorMap.isEmpty();
+		
+		if(hasError){
+			for(String key:errorMap.keySet()){
+				dataMap.put(key, errorMap.get(key));
+			}
+			dataMap.put("visible_error", "block");
+			dataMap.put("visible_submit", "hidden");
+		}else{
+			dataMap.put("visible_error", "none");
+			dataMap.put("visible_submit", "visible");
+		
+			
+			String id=request.getParameter("${firstKey});
+			if(id==null){
+				id="";
+			}
+			${dataClassName}Entity entity=null;
+			${dataClassName}EntityDao dao=new ${dataClassName}EntityDao(PMF.get().getPersistenceManager());
+			try {
+				Long keyValue=Long.parseLong(id);
+				entity = dao.getData(keyValue);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			if(entity==null){
+				response.sendError(500, "${firstKey}:"+id+"is not found");
+				return null;
+			}
+			
+			//copy edited value which not null
+			Map<String,String> map=${dataClassName}Tools.requestToMap(request);//need row datamap is modified
+			${dataClassName}EntityDto.copyToEntity(entity, map);
+			
+			//update auto
+			
+			try{
+				dao.updateData(entity);
+				}catch(Exception e){
+					response.sendError(500, "System error:"+e.getMessage());
+					return null;
+				}
+		}
+		
+		
+		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);
+		return dataHtml;
+	}
+}

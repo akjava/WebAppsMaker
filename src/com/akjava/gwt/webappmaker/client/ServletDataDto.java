@@ -115,15 +115,15 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD_EXEC)){
 			javaTemplate=Bundles.INSTANCE.add_exec_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT)){
-			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+			javaTemplate=Bundles.INSTANCE.edit_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_CONFIRM)){
-			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+			javaTemplate=Bundles.INSTANCE.edit_confirm_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_EXEC)){
-			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+			javaTemplate=Bundles.INSTANCE.edit_exec_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_DELETE_CONFIRM)){
-			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+			javaTemplate=Bundles.INSTANCE.delete_confirm_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_DELETE_EXEC)){
-			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+			javaTemplate=Bundles.INSTANCE.delete_exec_servlet().getText();
 		}
 		
 		if(javaTemplate==null){

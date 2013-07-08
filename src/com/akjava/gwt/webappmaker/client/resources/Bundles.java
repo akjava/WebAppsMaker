@@ -13,6 +13,11 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource add_servlet();
 	TextResource add_confirm_servlet();
 	TextResource add_exec_servlet();
+	TextResource edit_servlet();
+	TextResource edit_confirm_servlet();
+	TextResource edit_exec_servlet();
+	TextResource delete_confirm_servlet();
+	TextResource delete_exec_servlet();
 	
 	TextResource top_servlet();
 	
