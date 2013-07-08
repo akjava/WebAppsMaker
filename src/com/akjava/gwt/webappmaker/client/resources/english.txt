@@ -7,3 +7,5 @@ delete	Delete
 top	TOP
 admintop	Admin Top
 admin	Admin
+reset	Reset
+add_confirm	Confirm Add

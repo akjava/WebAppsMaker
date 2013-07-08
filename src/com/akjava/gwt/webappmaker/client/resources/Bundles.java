@@ -10,12 +10,18 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource web();
 	TextResource list_servlet();
 	TextResource show_servlet();
+	TextResource add_servlet();
+	TextResource add_confirm_servlet();
+	TextResource add_exec_servlet();
 	
 	TextResource top_servlet();
 	
 	TextResource list_html();
 	TextResource list_row_html();
 	TextResource show_html();
+	
+	TextResource add_html();
+	
 	
 	TextResource admin_list_html();
 	TextResource admin_list_row_html();

@@ -7,12 +7,16 @@ import java.util.Map;
 
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
+import com.akjava.lib.common.form.FormFieldData;
 import com.akjava.lib.common.form.FormFieldDataDto;
+import com.akjava.lib.common.form.FormFieldDataPredicates;
 import com.akjava.lib.common.functions.HtmlFunctions;
+import com.akjava.lib.common.tag.Tag;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.lib.common.utils.ValuesUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.user.client.Window;
 
@@ -105,11 +109,11 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		}else if(data.getServletType().equals(ServletData.TYPE_SHOW)){
 			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD)){
-			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+			javaTemplate=Bundles.INSTANCE.add_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD_CONFIRM)){
-			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+			javaTemplate=Bundles.INSTANCE.add_confirm_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD_EXEC)){
-			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+			javaTemplate=Bundles.INSTANCE.add_exec_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT)){
 			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_CONFIRM)){
@@ -182,6 +186,8 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 
 	@Override
 	public List<FileNameAndText> apply(ServletData data) {
+		Map<String,String> map=new HashMap<String,String>();
+		
 		List<FileNameAndText> files=new ArrayList<FileNameAndText>();
 		String type=data.getServletType();
 		
@@ -194,7 +200,12 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		
 		String htmlTemplate=null;
 		
+		
+		
 		if(type.equals(ServletData.TYPE_LIST)){
+			
+			
+			
 			if(data.getLastPackage().equals("admin")){
 			htmlTemplate=Bundles.INSTANCE.admin_list_html().getText();	
 			}else{
@@ -219,7 +230,26 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 				}
 
 		}else if(type.equals(ServletData.TYPE_ADD)){
-			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+			htmlTemplate=Bundles.INSTANCE.add_html().getText();
+			//create first td
+			Iterable<FormFieldData> datas=Iterables.filter(data.getFormData().getFormFieldDatas(), FormFieldDataPredicates.getNotAutoCreate());
+			Iterable<String> names=Iterables.transform(datas, FormFieldDataDto.getFormFieldToNameFunction());
+			//create second td
+			Iterable<Tag> inputTags=Iterables.transform(datas,FormFieldDataDto.getFormFieldToInputTagFunction());
+			Iterable<String> tagString=Iterables.transform(inputTags, new TagToString());
+			
+			//create tr
+			List<List<String>> vs=new ArrayList<List<String>>();
+			vs.add(Lists.newArrayList(names));
+			vs.add(Lists.newArrayList(tagString));
+			
+			map.put("add_input_trtd",
+			HtmlFunctions.getStringToTRTDFunction().apply(vs)
+			);
+			
+			
+			map.put("add_confirm_title", Internationals.getMessage("add_confirm"));
+			
 		}else if(type.equals(ServletData.TYPE_ADD_CONFIRM)){
 			htmlTemplate=Bundles.INSTANCE.show_html().getText();
 		}else if(type.equals(ServletData.TYPE_ADD_EXEC)){
@@ -243,9 +273,10 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		files.add(file);
 		
 		
-		Map<String,String> map=new HashMap<String,String>();
+		
 		//headers
 		List<String> names=Lists.transform(data.getFormData().getFormFieldDatas(), FormFieldDataDto.getFormFieldToNameFunction());
+		
 		List<String> ths=Lists.transform(names
 				, HtmlFunctions.getStringToTHFunction());
 		map.put("headers", Joiner.on("\n").join(ths));
@@ -271,6 +302,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		map.put("add_title", Internationals.getMessage("add"));
 		map.put("edit_title", Internationals.getMessage("edit"));
 		map.put("delete_title", Internationals.getMessage("delete"));
+		map.put("reset_title", Internationals.getMessage("reset"));
 		
 		for(FileNameAndText fileText:files){
 			String text=TemplateUtils.createAdvancedText(fileText.getText(), map);
@@ -280,6 +312,19 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		return files;
 	}
 	
+	
+	
+}
+
+public static class TagToString implements Function<Tag,String>{
+
+	@Override
+	public String apply(Tag tag) {
+		if(tag.getName().equals("input") && tag.getAttbibutes().get("type").equals("text")){
+			tag.setAttribute("length", "40");
+		}
+		return tag.toString();
+	}
 	
 }
 

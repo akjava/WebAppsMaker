@@ -6,3 +6,5 @@ delete	削除
 top	トップ
 admintop	管理画面トップ
 admin	管理
+reset	リセット
+add_confirm	追加確認
