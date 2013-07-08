@@ -291,10 +291,11 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			HtmlFunctions.getStringToTRTDFunction().apply(vs)
 			);
 			
-			map.put("has_error_message", Internationals.getMessage("add_exec"));
+			map.put("has_error_message", Internationals.getMessage("has_error"));
 			map.put("add_exec_title", Internationals.getMessage("add_exec"));
 		}else if(type.equals(ServletData.TYPE_ADD_EXEC)){
-			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+			htmlTemplate=Bundles.INSTANCE.add_exec_html().getText();
+			map.put("has_error_message", Internationals.getMessage("has_error"));
 			map.put("add_complete_title", Internationals.getMessage("add_complete"));
 			map.put("list_title", data.getFormData().getName()+" "+Internationals.getMessage("list"));
 			
