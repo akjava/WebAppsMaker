@@ -9,3 +9,6 @@ admintop	Admin Top
 admin	Admin
 reset	Reset
 add_confirm	Confirm Add
+add_exec	Exec Add
+has_error	There are input errors
+add_complete	complete add
