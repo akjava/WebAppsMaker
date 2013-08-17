@@ -57,4 +57,7 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource tolabelmap_boolean();
 	TextResource tolabelmap_cmdate();
 	TextResource tolabelmap_text_long();
+	
+	TextResource createoptionvalue_check();
+	TextResource createoptionvalue_single_select();
 }

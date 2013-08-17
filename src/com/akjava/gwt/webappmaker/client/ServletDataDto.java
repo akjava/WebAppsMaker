@@ -1,6 +1,7 @@
 package com.akjava.gwt.webappmaker.client;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +14,13 @@ import com.akjava.lib.common.form.FormFieldDataDto.FormFieldToHiddenTagWithValue
 import com.akjava.lib.common.form.FormFieldDataPredicates;
 import com.akjava.lib.common.functions.HtmlFunctions;
 import com.akjava.lib.common.functions.StringFunctions.RowListStringJoinFunction;
+import com.akjava.lib.common.tag.LabelAndValue;
 import com.akjava.lib.common.tag.Tag;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.lib.common.utils.ValuesUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.user.client.Window;
@@ -99,10 +102,40 @@ public static class FormDataToAdminServletDataFunction implements Function<FormD
 	}	
 }
 
+
+
+public static class FormDataToOptionValueFunction implements Function<FormFieldData,String>{
+
+	@Override
+	public String apply(FormFieldData data) {
+		String result=null;
+		//switch by type
+		if(data.getType()==FormFieldData.TYPE_CHECK){
+			result=TemplateUtils.createText(Bundles.INSTANCE.createoptionvalue_check().getText(), data.getKey());
+		}else if(data.getType()==FormFieldData.TYPE_SELECT_SINGLE || data.getType()==FormFieldData.TYPE_SELECT_MULTI){
+			
+			Map<String,String> map=new HashMap<String, String>();
+			map.put("key", data.getKey());
+			List<String> optionValues=new ArrayList<String>();
+			for(LabelAndValue lv:data.getOptionValues()){
+				optionValues.add("\""+lv.getValue()+"\"");
+			}
+			map.put("option_value", Joiner.on(",").join(optionValues));
+			result=TemplateUtils.createText(Bundles.INSTANCE.createoptionvalue_single_select().getText(),map);
+		}
+		return result;
+	}
+
+	
+	
+}
+
 public static class ServletDataToServletFileFunction implements Function<ServletData,FileNameAndText>{
 
 	@Override
 	public FileNameAndText apply(ServletData data) {
+		Map<String,String> map=new HashMap<String,String>();
+		
 		FileNameAndText file=new FileNameAndText();
 		file.setName(data.getServletClassName()+".java");
 		String javaTemplate=null;
@@ -118,10 +151,17 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			javaTemplate=Bundles.INSTANCE.add_exec_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT)){
 			javaTemplate=Bundles.INSTANCE.edit_servlet().getText();
+			
+			Collection<String> methods=Collections2.transform(data.getFormData().getFormFieldDatas(), new FormDataToOptionValueFunction());
+			String methodText=Joiner.on("\n").skipNulls().join(methods);
+			
+			map.put("createOptionValues", methodText);
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_CONFIRM)){
 			javaTemplate=Bundles.INSTANCE.edit_confirm_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_EXEC)){
 			javaTemplate=Bundles.INSTANCE.edit_exec_servlet().getText();
+			
+			//createOptionValues
 		}else if(data.getServletType().equals(ServletData.TYPE_DELETE_CONFIRM)){
 			javaTemplate=Bundles.INSTANCE.delete_confirm_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_DELETE_EXEC)){
@@ -131,7 +171,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		if(javaTemplate==null){
 			Window.alert("invalid type:"+data.getServletType());
 		}
-		Map<String,String> map=new HashMap<String,String>();
+		
 		
 		if(data.getLastPackage().equals("main")){
 			map.put("useCache","true");

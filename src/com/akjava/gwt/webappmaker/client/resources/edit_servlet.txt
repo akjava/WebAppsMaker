@@ -38,6 +38,10 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 	}
 
 
+	private void createOptionValues(Map<String,String> map){
+	${createOptionValues}
+	}
+
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		String id=request.getParameter("${firstKey}");
 		if(id==null){
@@ -54,12 +58,12 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 			Long keyValue=Long.parseLong(id);//TODO switch by type
 			entity = new ${dataClassName}EntityDao(PMF.get().getPersistenceManager()).getData(keyValue);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(entity!=null){
 			dataMap=${dataClassName}Tools.toValueAndLabelMap(entity);
 			//TODO option for multiple items radio or multi-list
+			createOptionValues(dataMap);
 		}else{
 			response.sendError(500, "${firstKey} not found");
 			return null;
