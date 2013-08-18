@@ -15,3 +15,6 @@ add_complete	Complete add
 edit_confirm	Confirm Edit
 edit_exec	Exec Edit
 edit_complete	Complete edit
+delete_confirm	Confirm Delete
+delete_exec	Exec Delete
+delete_complete	Complete delete

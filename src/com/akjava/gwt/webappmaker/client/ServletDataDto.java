@@ -411,9 +411,15 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			map.put("edit_complete_title", Internationals.getMessage("edit_complete"));
 			map.put("list_title", data.getFormData().getName()+" "+Internationals.getMessage("list"));
 		}else if(type.equals(ServletData.TYPE_DELETE_CONFIRM)){
-			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+			htmlTemplate=Bundles.INSTANCE.delete_confirm_html().getText();
+			map.put("has_error_message", Internationals.getMessage("has_error"));
+			map.put("delete_exec_title", Internationals.getMessage("delete_exec"));
 		}else if(type.equals(ServletData.TYPE_DELETE_EXEC)){
-			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+			
+			htmlTemplate=Bundles.INSTANCE.delete_exec_html().getText();
+			map.put("has_error_message", Internationals.getMessage("has_error"));
+			map.put("delete_complete_title", Internationals.getMessage("delete_complete"));
+			map.put("list_title", data.getFormData().getName()+" "+Internationals.getMessage("list"));
 		}
 		
 		if(htmlTemplate==null){

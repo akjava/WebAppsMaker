@@ -33,6 +33,9 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource edit_confirm_html();
 	TextResource edit_exec_html();
 	
+	TextResource delete_confirm_html();
+	TextResource delete_exec_html();
+	
 	TextResource admin_list_html();
 	TextResource admin_list_row_html();
 
