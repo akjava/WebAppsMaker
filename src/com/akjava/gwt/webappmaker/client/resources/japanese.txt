@@ -11,3 +11,4 @@ add_confirm	追加確認
 add_exec	追加実行
 has_error	入力項目にエラーがあります
 add_complete	追加完了しました
+edit_confirm	編集確認

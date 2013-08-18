@@ -340,7 +340,28 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			map.put("list_title", data.getFormData().getName()+" "+Internationals.getMessage("list"));
 			
 		}else if(type.equals(ServletData.TYPE_EDIT)){
-			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+			htmlTemplate=Bundles.INSTANCE.edit_html().getText();
+			
+			
+			//create first td
+			Iterable<FormFieldData> datas=Iterables.filter(data.getFormData().getFormFieldDatas(), FormFieldDataPredicates.getNotAutoCreate());
+			Iterable<String> names=Iterables.transform(datas, FormFieldDataDto.getFormFieldToNameFunction());
+			//create second td
+			Iterable<Tag> inputTags=Iterables.transform(datas,FormFieldDataDto.getFormFieldToInputTemplateTagFunction());
+			Iterable<String> tagString=Iterables.transform(inputTags, new TagToString());
+			
+			//create tr
+			List<List<String>> vs=new ArrayList<List<String>>();
+			vs.add(Lists.newArrayList(names));
+			vs.add(Lists.newArrayList(tagString));
+			
+			map.put("edit_input_trtd",
+			HtmlFunctions.getStringToTRTDFunction().apply(vs)
+			);
+			
+			
+			map.put("edit_confirm_title", Internationals.getMessage("edit_confirm"));
+			
 		}else if(type.equals(ServletData.TYPE_EDIT_CONFIRM)){
 			htmlTemplate=Bundles.INSTANCE.show_html().getText();
 		}else if(type.equals(ServletData.TYPE_EDIT_EXEC)){

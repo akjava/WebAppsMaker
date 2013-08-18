@@ -1,0 +1,10 @@
+<form method="post" action="edit_confirm">
+<table class="table">
+
+${edit_input_trtd}
+
+</table>
+<p>
+<button type="submit" class='btn btn-success'>${edit_confirm_title}</button><button type="reset" class='btn btn-warning'>${reset_title}</button>
+</p>
+</form>
