@@ -314,7 +314,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			
 			//create line2(valuetemplate) of second td 
 			Iterable<String> keyParams=
-					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${","}"));
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${label_","}"));
 			
 			//join line1 & line2 to right td
 			List<List<String>> tds=new ArrayList<List<String>>();
@@ -386,7 +386,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			
 			//create line2(valuetemplate) of second td 
 			Iterable<String> keyParams=
-					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${","}"));
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${label_","}"));
 			
 			//join line1 & line2 to right td
 			List<List<String>> tds=new ArrayList<List<String>>();
@@ -435,7 +435,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		List<String> tds=Lists.transform(
 				Lists.transform(
 				keys
-				,new HtmlFunctions.StringToPreFixAndSuffix("${","}"))
+				,new HtmlFunctions.StringToPreFixAndSuffix("${label_","}"))
 				, HtmlFunctions.getStringToTDFunction());
 		map.put("columns", Joiner.on("\n").join(tds));
 		
