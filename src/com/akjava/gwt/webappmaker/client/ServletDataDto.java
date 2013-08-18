@@ -344,7 +344,9 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			
 			
 			//create first td
-			Iterable<FormFieldData> datas=Iterables.filter(data.getFormData().getFormFieldDatas(), FormFieldDataPredicates.getNotAutoCreate());
+			//Iterable<FormFieldData> datas=Iterables.filter(data.getFormData().getFormFieldDatas(), FormFieldDataPredicates.getNotAutoCreate());
+			//need all data
+			Iterable<FormFieldData> datas=data.getFormData().getFormFieldDatas();
 			Iterable<String> names=Iterables.transform(datas, FormFieldDataDto.getFormFieldToNameFunction());
 			//create second td
 			Iterable<Tag> inputTags=Iterables.transform(datas,FormFieldDataDto.getFormFieldToInputTemplateTagFunction());
@@ -363,9 +365,51 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			map.put("edit_confirm_title", Internationals.getMessage("edit_confirm"));
 			
 		}else if(type.equals(ServletData.TYPE_EDIT_CONFIRM)){
-			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+			
+
+			htmlTemplate=Bundles.INSTANCE.edit_confirm_html().getText();
+			
+			Iterable<FormFieldData> datas=data.getFormData().getFormFieldDatas();
+			
+			//create label first td
+			Iterable<String> names=Iterables.transform(datas, FormFieldDataDto.getFormFieldToNameFunction());
+			
+			Iterable<String> keys=Iterables.transform(datas, FormFieldDataDto.getFormFieldToKeyFunction());
+			//create line1(hidden) of second td
+			
+			Map<String,String> hmap=new HashMap<String, String>();
+			for(String key:keys){
+				hmap.put(key, "${value_"+key+"}");
+			}
+			Iterable<Tag> inputTags=Iterables.transform(datas,new FormFieldToHiddenTagWithValueFunction(hmap));
+			Iterable<String> tagString=Iterables.transform(inputTags, new TagToString());
+			
+			//create line2(valuetemplate) of second td 
+			Iterable<String> keyParams=
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${","}"));
+			
+			//join line1 & line2 to right td
+			List<List<String>> tds=new ArrayList<List<String>>();
+			tds.add(Lists.newArrayList(tagString));
+			tds.add(Lists.newArrayList(keyParams));
+			List<String> rightTds=new RowListStringJoinFunction("\n").apply(tds);
+			
+			//create tr td
+			List<List<String>> vs=new ArrayList<List<String>>();
+			vs.add(Lists.newArrayList(names));
+			vs.add(Lists.newArrayList(rightTds));
+			
+			map.put("confirm_input_trtd",
+			HtmlFunctions.getStringToTRTDFunction().apply(vs)
+			);
+			
+			map.put("has_error_message", Internationals.getMessage("has_error"));
+			map.put("edit_exec_title", Internationals.getMessage("edit_exec"));
 		}else if(type.equals(ServletData.TYPE_EDIT_EXEC)){
-			htmlTemplate=Bundles.INSTANCE.show_html().getText();
+			htmlTemplate=Bundles.INSTANCE.edit_exec_html().getText();
+			map.put("has_error_message", Internationals.getMessage("has_error"));
+			map.put("edit_complete_title", Internationals.getMessage("edit_complete"));
+			map.put("list_title", data.getFormData().getName()+" "+Internationals.getMessage("list"));
 		}else if(type.equals(ServletData.TYPE_DELETE_CONFIRM)){
 			htmlTemplate=Bundles.INSTANCE.show_html().getText();
 		}else if(type.equals(ServletData.TYPE_DELETE_EXEC)){

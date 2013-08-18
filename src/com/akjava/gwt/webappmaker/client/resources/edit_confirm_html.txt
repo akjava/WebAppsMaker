@@ -1,0 +1,15 @@
+<div>
+<div style='display: ${visible_error};background: pink'>
+<p>${has_error_message}</p>
+<p>${error_message}</p>
+</div>
+
+<form method="post" action="edit_exec">
+<table class="table">
+
+${confirm_input_trtd}
+
+</table>
+<button type="submit" style="visibility: ${visible_submit};" class="btn btn-success">${edit_exec_title}</button>
+</form>
+</div>

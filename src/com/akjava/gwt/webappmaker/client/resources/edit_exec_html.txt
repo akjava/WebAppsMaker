@@ -1,0 +1,12 @@
+<div>
+<div style='display: ${visible_error};background: pink'>
+<p>${has_error_message}</p>
+<p>${error_message}</p>
+</div>
+
+<div style='visibility: ${visible_submit}' class='hero-unit'>
+${edit_complete_title}
+</div>
+
+<p><a href='index.html'><button class='btn btn-success'>${list_title}</button></a></p>
+</div>

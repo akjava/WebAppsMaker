@@ -11,5 +11,7 @@ reset	Reset
 add_confirm	Confirm Add
 add_exec	Exec Add
 has_error	There are input errors
-add_complete	complete add
+add_complete	Complete add
 edit_confirm	Confirm Edit
+edit_exec	Exec Edit
+edit_complete	Complete edit
