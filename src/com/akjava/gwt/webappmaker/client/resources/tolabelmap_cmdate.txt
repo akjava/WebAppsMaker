@@ -5,7 +5,8 @@ if (key.equals("${key}")) {
 			t=Long.parseLong(map.get("${key}"));
 			}catch(Exception e){}
 			if(t==0){
-			return "";
+				return "";
+			}
 			String date=dateFormat.format(new Date(t));
 			return date;
 		} else {

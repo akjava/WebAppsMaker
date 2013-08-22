@@ -30,9 +30,12 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SubmitButton;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -54,6 +57,8 @@ public class WebAppsMaker implements EntryPoint {
 
 	private StorageControler storageControler=new StorageControler();
 	private SingleSelectionModel<FileNameAndText> selectionModel;
+	private VerticalPanel downloadLinkContainer=new VerticalPanel();
+	private TextArea jdoCsv;
 	public void onModuleLoad() {
 		
 		String lang=GWTHTMLUtils.getInputValueById("gwtlang", "en");
@@ -103,7 +108,11 @@ public class WebAppsMaker implements EntryPoint {
 				doConvert();
 			}
 		});
-		 leftVertical.add(convert);
+		 
+		 HorizontalPanel left=new HorizontalPanel();
+		 leftVertical.add(left);
+		 left.add(convert);
+		 left.add(downloadLinkContainer);
 		 
 		 output=new TextArea();
 		 output.setSize("600px","200px");
@@ -146,6 +155,11 @@ public class WebAppsMaker implements EntryPoint {
 		 fileTextArea.setReadOnly(true);
 		 fileTextArea.setSize("800px", "800px");
 		 rightVertical.add(fileTextArea);
+		 
+		 jdoCsv = new TextArea();
+		 jdoCsv.setSize("600px","200px");
+		 jdoCsv.setReadOnly(true);
+		 leftVertical.add(jdoCsv);
 		 
 	}
 	public String getPackage(){
@@ -270,5 +284,27 @@ public class WebAppsMaker implements EntryPoint {
 			LogUtils.log(e.getMessage());
 			e.printStackTrace();
 		}
+		
+		//create submit
+		downloadLinkContainer.clear();
+		FormPanel form=new FormPanel();
+		
+		form.setAction("/tozip");
+		form.setMethod(FormPanel.METHOD_POST);
+		VerticalPanel container=new VerticalPanel();
+		form.add(container);
+		container.add(new Hidden("filenumber", ""+files.size()));
+		for(int i=0;i<files.size();i++){
+			int number=i+1;
+			FileNameAndText file=files.get(i);
+			container.add(new Hidden("path"+number, DirectoryDetector.detectDirectory(packageBox.getText(), file)));
+			container.add(new Hidden("text"+number, file.getText()));
+		}
+		
+		container.add(new SubmitButton("Download"));
+		downloadLinkContainer.add(form);
+		
+		String text=JDOCsvConverter.convert(datas.get(0).getFormFieldDatas());
+		jdoCsv.setText(text);
 	}
 }

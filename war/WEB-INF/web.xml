@@ -6,7 +6,14 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
-  
+    <servlet>
+<servlet-name>ToZip</servlet-name>
+<servlet-class>com.akjava.gwt.webappmaker.server.ZipGenerateServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>ToZip</servlet-name>
+<url-pattern>/tozip</url-pattern>
+</servlet-mapping>
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>WebAppsMaker.html</welcome-file>
