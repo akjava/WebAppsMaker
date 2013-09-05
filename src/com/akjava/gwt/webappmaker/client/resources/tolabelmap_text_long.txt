@@ -1,7 +1,7 @@
-	if (${key}.equals(key)) {
+	if ("${key}".equals(key)) {
 			if(value==null){
 			return "";
 			}else{
-			return Modifiers.getLineToBrModifier().apply(value);
+			return Modifiers.getLineToBreModifier().apply(value);
 			}
 		}

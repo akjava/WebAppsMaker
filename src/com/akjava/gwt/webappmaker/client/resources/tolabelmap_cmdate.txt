@@ -2,7 +2,7 @@ if (key.equals("${key}")) {
 	if (value != null) {
 			long t=0;
 			try{
-			t=Long.parseLong(map.get("${key}"));
+			t=Long.parseLong(value);
 			}catch(Exception e){}
 			if(t==0){
 				return "";

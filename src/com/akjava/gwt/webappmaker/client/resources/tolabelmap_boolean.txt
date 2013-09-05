@@ -1,8 +1,8 @@
 	if ("${key}".equals(key)) {
 			if(value==null){
-				return "${false_value}"
+				return "${false_value}";
 				}
-			if(value.toLowercase().equals("true")){
+			if(value.toLowerCase().equals("true")){
 				return "${true_value}";
 				}
 			else{
