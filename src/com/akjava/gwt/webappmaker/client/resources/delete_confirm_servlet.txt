@@ -42,7 +42,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		if(id==null){
 			id="";
 		}
-		if(key.isEmpty()){
+		if(id.isEmpty()){
 			response.sendError(500, "empty ${firstKey}");
 			return null;
 		}
