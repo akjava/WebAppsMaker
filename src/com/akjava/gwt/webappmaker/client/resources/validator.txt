@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import com.akjava.lib.common.form.StaticValidators;
 import com.akjava.lib.common.form.Validator;
 import com.akjava.lib.common.form.Validators;
+import com.akjava.lib.common.form.ValidatorTools;
+import com.akjava.lib.common.form.ValidatorTools.ValidatorNotFoundException;
+
 import com.akjava.lib.common.utils.HTMLUtils;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.google.common.collect.LinkedHashMultimap;
@@ -96,9 +99,11 @@ public static void validateValue(Map<String,String> keyLabelMap,LinkedHashMultim
 
 public static LinkedHashMultimap<String, Validator> createDataValidator(){
 	LinkedHashMultimap<String, Validator> validators=LinkedHashMultimap.create();
-	
+	try{
 	${createDataValidator}
-	
+	}catch(Exception e){
+	e.printStackTrace();
+	}
 	return validators;
 }
 
