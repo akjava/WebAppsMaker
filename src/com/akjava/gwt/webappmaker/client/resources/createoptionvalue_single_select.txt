@@ -1,14 +1,14 @@
 String[] option_value_${key}={${option_value}};
 String value_${key}=map.get("${key}");
-List<String> multipleValue=Lists.as(xxx.split(":"));//or ,
+List<String> multipleValue_${key}=Lists.newArrayList(value_${key}.split(":"));//or ,
 //TODO manually after
-int opIndex=0;
+int opIndex_${key}=0;
 for(String option:option_value_${key}){
-	String mkey="selected_${key}"+opIndex;
-	if(multipleValue.contains(option)){
+	String mkey="selected_${key}"+opIndex_${key};
+	if(multipleValue_${key}.contains(option)){
 	map.put(mkey,"selected");
 	}else{
 	map.put(mkey,"");
 	}
-	opIndex++;
+	opIndex_${key}++;
 }
