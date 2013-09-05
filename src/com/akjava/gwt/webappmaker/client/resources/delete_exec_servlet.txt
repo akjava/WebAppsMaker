@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import com.akjava.servlet.SimpleTemplateUtils;
 import com.akjava.servlet.AbstractSimpleTemplateServlet;
 import ${basePackage}*;
 
