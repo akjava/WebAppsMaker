@@ -116,9 +116,9 @@ public FormFieldDataToIsMultipleParameterpFunction getFormFieldDataToIsMultipleP
 public enum FormFieldDataToIsMultipleParameterpFunction implements Function<FormFieldData,String>{
 	INSTANCE
 	;
-	public static String template="if(key.equals(\"${key}\"){\n" +
-			"return true;\n"+
-			"}" +
+	public static String template="if(key.equals(\"${value}\")){\n" +
+			"\t\treturn true;\n"+
+			"\t}" +
 			"\n";
 	@Override
 	public String apply(FormFieldData fdata) {
