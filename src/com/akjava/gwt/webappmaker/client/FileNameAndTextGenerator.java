@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.akjava.gwt.lib.client.ValueUtils;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.utils.TemplateUtils;
+import com.akjava.lib.common.utils.ValuesUtils;
 import com.google.gwt.user.client.Window;
 
 public class FileNameAndTextGenerator {
@@ -148,7 +150,7 @@ public class FileNameAndTextGenerator {
 		Map<String,String> map=new HashMap<String,String>();
 		
 		map.put("basePackage", basePackage);
-		map.put("package", basePackage+"main");
+		map.put("package", ValuesUtils.chomp(basePackage));
 		
 		
 		
