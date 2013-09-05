@@ -20,7 +20,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-@Override
+
 	@Override
 	protected String initializeHtmlTitle() {
 		return "${title}";
@@ -42,7 +42,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		Map<String,String> errorMap=new HashMap<String, String>();
-		dataMap=MessageTools.requestToMap(request);
+		dataMap=${dataClassName}Tools.requestToMap(request);
 		${dataClassName}Validator.validateValue(
 				${dataClassName}Validator.createAddKeyLabelMap(),
 				${dataClassName}Validator.createDataValidator(),dataMap, errorMap, request);
