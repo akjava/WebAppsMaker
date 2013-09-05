@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.servlet.AbstractSimpleTemplateServlet;
 import com.akjava.servlet.SimpleTemplateUtils;
-import com.akjava.servlet.page.PageMenuHtmlMaker;
-import com.akjava.servlet.page.PageMenuUtil;
-import com.akjava.servlet.page.PagingInfoImpl;
+
 import ${basePackage}*;
 
 

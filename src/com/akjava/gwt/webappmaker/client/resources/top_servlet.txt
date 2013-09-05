@@ -37,4 +37,9 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);
 		return dataHtml;
 	}
+	
+		@Override
+	protected boolean initializeUseCache() {
+		return ${useCache};
+	}
 }
