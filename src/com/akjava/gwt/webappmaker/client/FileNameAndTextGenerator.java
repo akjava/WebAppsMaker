@@ -177,7 +177,7 @@ public class FileNameAndTextGenerator {
 		map.put("mainTemplate", "main_top.html");
 		map.put("title", Internationals.getMessage("top"));
 		map.put("path","/index.html");
-		
+		map.put("useCache","true");
 		String text=TemplateUtils.createAdvancedText(javaTemplate, map);
 		file.setText(text);
 		
@@ -201,6 +201,8 @@ public class FileNameAndTextGenerator {
 		map.put("mainTemplate", "admin_top.html");
 		map.put("title", Internationals.getMessage("admintop"));
 		map.put("path","/admin/index.html");
+		map.put("useCache","false");
+		
 		
 		String text=TemplateUtils.createAdvancedText(javaTemplate, map);
 		file.setText(text);

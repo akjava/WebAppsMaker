@@ -32,14 +32,14 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		return "${mainTemplate}";
 	}
 	
+	@Override
+	protected boolean initializeUseCache() {
+		return ${useCache};
+	}
 
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);
 		return dataHtml;
 	}
 	
-		@Override
-	protected boolean initializeUseCache() {
-		return ${useCache};
-	}
 }
