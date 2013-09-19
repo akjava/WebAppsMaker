@@ -1,6 +1,6 @@
 <tr>
 <td>
-<a href="show?id=${id}"><button class='btn btn-info'>${show_title}</button></a>
+<a href="show?id=${value_id}"><button class='btn btn-info'>${show_title}</button></a>
 </td>
 ${columns}
 
