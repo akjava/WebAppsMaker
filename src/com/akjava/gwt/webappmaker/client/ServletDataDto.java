@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.akjava.gwt.lib.client.ValueUtils;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormFieldData;
@@ -189,7 +190,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		if(!data.getLastPackage().equals("main")){
 			head=data.getLastPackage()+"_";
 		}
-		String mainTemplate=head+data.getDataClassName()+"_"+data.getServletType();
+		String mainTemplate=head+data.getDataClassName()+"_"+ValuesUtils.toUpperCamel(data.getServletType());
 		map.put("mainTemplate", mainTemplate.toLowerCase()+".html");
 		
 		map.put("title", data.getFormData().getName()+" "+Internationals.getMessage(ValuesUtils.upperCamelToUnderbar(data.getServletType()).toLowerCase()));
