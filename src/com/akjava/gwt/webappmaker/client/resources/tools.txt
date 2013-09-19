@@ -81,6 +81,7 @@ ${getKeyLists}
 			String raw=valueMap.get(key);
 			values.put("label_"+key, toLabelValue(key, raw));
 			values.put("value_"+key, toValueValue(key,raw));
+			values.put(key,raw);//need raw some case?because value is encoded for html
 		}
 		
 		return values;
