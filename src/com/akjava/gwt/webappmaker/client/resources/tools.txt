@@ -20,11 +20,15 @@ import javax.servlet.http.HttpServletRequest;
 
 public class  ${dataClassName}Tools  {
 public static SimpleDateFormat dateFormat=new SimpleDateFormat("${dateFormat}");
+
+
+/** not use
 public static Map<String,String> toLabelMap(${dataClassName}Entity entity){
 	Map<String,String> map=${dataClassName}EntityDto.entityToMap(entity);
 	${toLabelMap}
 	return map;
 }
+*/
 
 public static List<String> getKeyLists(){
 		List<String> list=new ArrayList<String>();
@@ -63,7 +67,7 @@ ${getKeyLists}
 	public static String toValueValue(String key,String value){
 		return HTMLUtils.sanitizeQuot(value);
 	}
-	
+	//same name
 	public static String toLabelValue(String key,String value){
 			${toLabelValue}
 		return value;

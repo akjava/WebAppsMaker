@@ -1,0 +1,6 @@
+	if ("${key}".equals(key)) {
+			if(value==null||value.isEmpty()){
+				return "";
+				}
+${each_value}
+		}

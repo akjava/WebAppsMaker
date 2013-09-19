@@ -72,7 +72,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		String template=SimpleTemplateUtils.loadTextFromFile(getServletContext(),"${mainRowTemplate}");
 		
 		for(${dataClassName}Entity data:datas){
-			Map<String,String> map=${dataClassName}Tools.toLabelMap(data);
+			Map<String,String> map=${dataClassName}Tools.toValueAndLabelMap(data);
 			
 			String html=TemplateUtils.createAdvancedText(template, map);
 			rowHtmls.append(html);

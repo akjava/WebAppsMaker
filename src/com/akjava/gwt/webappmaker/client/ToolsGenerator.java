@@ -200,6 +200,23 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 			
 			String template=Bundles.INSTANCE.tolabelmap_text_long().getText();
 			return TemplateUtils.createAdvancedText(template, map);
+		}else if(fdata.getType()==FormFieldData.TYPE_SELECT_SINGLE||fdata.getType()==FormFieldData.TYPE_SELECT_MULTI){
+			Map<String,String> map=new HashMap<String, String>();
+			map.put("key", fdata.getKey());
+			
+			String each_value="";
+			String each_template="\tif(value.equals(\"${value}\")){return \"${label}\";}\n";
+			for(LabelAndValue lv:fdata.getOptionValues()){
+				Map<String,String> tmp=new HashMap<String, String>();
+				tmp.put("value", lv.getValue());
+				tmp.put("label",lv.getLabel());
+				each_value+=TemplateUtils.createAdvancedText(each_template, tmp);	
+			}
+			map.put("each_value", each_value);
+			
+			
+			String template=Bundles.INSTANCE.tolabelmap_list().getText();
+			return TemplateUtils.createAdvancedText(template, map);
 		}
 		return "";
 	}
