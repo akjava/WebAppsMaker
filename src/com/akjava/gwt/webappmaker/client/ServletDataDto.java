@@ -190,7 +190,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		if(!data.getLastPackage().equals("main")){
 			head=data.getLastPackage()+"_";
 		}
-		String mainTemplate=head+data.getDataClassName()+"_"+ValuesUtils.toUpperCamel(data.getServletType());
+		String mainTemplate=head+data.getDataClassName()+"_"+ValuesUtils.upperCamelToUnderbar(data.getServletType());
 		map.put("mainTemplate", mainTemplate.toLowerCase()+".html");
 		
 		map.put("title", data.getFormData().getName()+" "+Internationals.getMessage(ValuesUtils.upperCamelToUnderbar(data.getServletType()).toLowerCase()));
