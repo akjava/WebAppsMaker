@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class  ${dataClassName}Tools  {
 public static SimpleDateFormat dateFormat=new SimpleDateFormat("${dateFormat}");
-
+public static String MULTI_VALUE_SEPARATOR="\t";
 
 /** not use
 public static Map<String,String> toLabelMap(${dataClassName}Entity entity){
@@ -45,7 +45,7 @@ ${getKeyLists}
 		if(values==null){
 			return null;
 		}
-		return Joiner.on("\t").join(request.getParameterValues(key));
+		return Joiner.on(MULTI_VALUE_SEPARATOR).join(request.getParameterValues(key));
 	}
 		public static Map<String,String> requestToMap(HttpServletRequest request){
 		Map<String,String> map=new HashMap<String, String>();

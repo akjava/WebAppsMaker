@@ -62,7 +62,8 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	
 	TextResource tools();
 	TextResource tolabelmap_boolean();
-	TextResource tolabelmap_list();
+	TextResource tolabelmap_single();
+	TextResource tolabelmap_multi();
 	TextResource tolabelmap_cmdate();
 	TextResource tolabelmap_text_long();
 	

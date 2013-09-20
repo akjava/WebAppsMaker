@@ -1,6 +1,6 @@
 String[] option_value_${key}={${option_value}};
 String value_${key}=map.get("${key}");
-List<String> multipleValue_${key}=Lists.newArrayList(value_${key}.split(":"));//or ,
+List<String> multipleValue_${key}=Lists.newArrayList(value_${key}.split("\t"));
 //TODO manually after
 int opIndex_${key}=0;
 for(String option:option_value_${key}){

@@ -1,0 +1,8 @@
+	if ("${key}".equals(key)) {
+			if(value==null||value.isEmpty()){
+				return "";
+				}
+List<String> labels=new ArrayList<String>();
+String[] selections=value.split(MULTI_VALUE_SEPARATOR);				
+${each_value}
+		}
