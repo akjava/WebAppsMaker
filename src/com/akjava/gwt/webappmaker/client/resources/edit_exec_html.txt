@@ -1,7 +1,7 @@
 <div>
 <div style='display: ${visible_error};background: pink'>
 <p>${has_error_message}</p>
-<p>${error_message}</p>
+<p>${error_messages}</p>
 </div>
 
 <div style='visibility: ${visible_submit}' class='hero-unit'>
