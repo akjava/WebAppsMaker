@@ -335,9 +335,23 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			
 			map.put("has_error_message", Internationals.getMessage("has_error"));
 			map.put("add_exec_title", Internationals.getMessage("add_exec"));
+			
+			
+			
+			Iterable<String> errorParams=
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}<br/>"));
+			map.put("error_messages", Joiner.on("\n").join(errorParams));
 		}else if(type.equals(ServletData.TYPE_ADD_EXEC)){
 			htmlTemplate=Bundles.INSTANCE.add_exec_html().getText();
+			//handle erros
 			map.put("has_error_message", Internationals.getMessage("has_error"));
+			Iterable<FormFieldData> datas=Iterables.filter(data.getFormData().getFormFieldDatas(), FormFieldDataPredicates.getNotAutoCreate());
+			Iterable<String> keys=Iterables.transform(datas, FormFieldDataDto.getFormFieldToKeyFunction());
+			Iterable<String> errorParams=
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}<br/>"));
+			map.put("error_messages", Joiner.on("\n").join(errorParams));
+			
+			
 			map.put("add_complete_title", Internationals.getMessage("add_complete"));
 			map.put("list_title", data.getFormData().getName()+" "+Internationals.getMessage("list"));
 			
@@ -406,10 +420,21 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			);
 			
 			map.put("has_error_message", Internationals.getMessage("has_error"));
+			Iterable<String> errorParams=
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}<br/>"));
+			map.put("error_messages", Joiner.on("\n").join(errorParams));
+			
 			map.put("edit_exec_title", Internationals.getMessage("edit_exec"));
 		}else if(type.equals(ServletData.TYPE_EDIT_EXEC)){
 			htmlTemplate=Bundles.INSTANCE.edit_exec_html().getText();
+			
+			Iterable<FormFieldData> datas=data.getFormData().getFormFieldDatas();
+			Iterable<String> keys=Iterables.transform(datas, FormFieldDataDto.getFormFieldToKeyFunction());
 			map.put("has_error_message", Internationals.getMessage("has_error"));
+			Iterable<String> errorParams=
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}<br/>"));
+			map.put("error_messages", Joiner.on("\n").join(errorParams));
+			
 			map.put("edit_complete_title", Internationals.getMessage("edit_complete"));
 			map.put("list_title", data.getFormData().getName()+" "+Internationals.getMessage("list"));
 		}else if(type.equals(ServletData.TYPE_DELETE_CONFIRM)){
