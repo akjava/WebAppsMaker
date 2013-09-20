@@ -16,6 +16,7 @@ import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToMainServletDat
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormDataDto;
+import com.akjava.lib.common.form.FormFieldData;
 import com.akjava.lib.common.functions.MapToAdvancedTemplatedTextFunction;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.lib.common.utils.ValuesUtils;
@@ -194,6 +195,7 @@ public class WebAppsMaker implements EntryPoint {
 			//Validator.java
 			ValidatorGenerator validatorGenerator=new ValidatorGenerator(fdata,ValuesUtils.chomp(packageBox.getText()));
 			files.add(validatorGenerator.createFileNameAndText());
+			
 			
 			
 			List<ServletData> sdata=new FormDataToMainServletDataFunction(getPackage()).apply(fdata);
