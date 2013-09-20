@@ -2,7 +2,7 @@
 			if(value==null){
 				return "${false_value}";
 				}
-			if(value.toLowerCase().equals("on")){//true must be never happen
+			if(value.toLowerCase().equals("on")||alue.toLowerCase().equals("true")){
 				return "${true_value}";
 				}
 			else{

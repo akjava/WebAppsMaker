@@ -1,6 +1,6 @@
 String value_${value}=map.get("${value}");
-if(value_${value}!=null){
-	map.put("${value}_checkd",value_${value});
+if(value_${value}!=null &&!value_${value}.isEmpty() && !value_${value}.equals("false")){
+	map.put("checked_${value}","checked");
 }else{
-	map.put("${value}_checkd","");
+	map.put("checked_${value}","");
 }
