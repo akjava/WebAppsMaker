@@ -339,7 +339,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			
 			
 			Iterable<String> errorParams=
-					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}<br/>"));
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}"));
 			map.put("error_messages", Joiner.on("\n").join(errorParams));
 		}else if(type.equals(ServletData.TYPE_ADD_EXEC)){
 			htmlTemplate=Bundles.INSTANCE.add_exec_html().getText();
@@ -348,7 +348,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			Iterable<FormFieldData> datas=Iterables.filter(data.getFormData().getFormFieldDatas(), FormFieldDataPredicates.getNotAutoCreate());
 			Iterable<String> keys=Iterables.transform(datas, FormFieldDataDto.getFormFieldToKeyFunction());
 			Iterable<String> errorParams=
-					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}<br/>"));
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}"));
 			map.put("error_messages", Joiner.on("\n").join(errorParams));
 			
 			
@@ -421,7 +421,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			
 			map.put("has_error_message", Internationals.getMessage("has_error"));
 			Iterable<String> errorParams=
-					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}<br/>"));
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}"));
 			map.put("error_messages", Joiner.on("\n").join(errorParams));
 			
 			map.put("edit_exec_title", Internationals.getMessage("edit_exec"));
@@ -432,7 +432,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			Iterable<String> keys=Iterables.transform(datas, FormFieldDataDto.getFormFieldToKeyFunction());
 			map.put("has_error_message", Internationals.getMessage("has_error"));
 			Iterable<String> errorParams=
-					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}<br/>"));
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}"));
 			map.put("error_messages", Joiner.on("\n").join(errorParams));
 			
 			map.put("edit_complete_title", Internationals.getMessage("edit_complete"));

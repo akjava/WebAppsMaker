@@ -83,7 +83,7 @@ public static void validateValue(Map<String,String> keyLabelMap,LinkedHashMultim
 			for(Validator validator:validators.get(key)){
 				if(!validator.validate(value)){
 					//FUTURE convert multimap,so this means mulitiple works only noempty
-					errorMap.put("error_"+key, TemplateUtils.createText(errorTextMap.get(validator.getName()), keyLabelMap.get(key)));
+					errorMap.put("error_"+key, TemplateUtils.createText(errorTextMap.get(validator.getName()), keyLabelMap.get(key))+"<br/>");
 				}
 			}
 			
