@@ -29,7 +29,6 @@ public class JDOCsvConverter {
 		}else if(type.equals("create_date")||type.equals("modified_date")){
 			return "Long,";
 		}else{
-			System.out.println("'"+type+"'");
 			return "String,";
 		}
 	}
