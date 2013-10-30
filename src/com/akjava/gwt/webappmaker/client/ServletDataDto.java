@@ -333,7 +333,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			HtmlFunctions.getStringToTRTDFunction().apply(vs)
 			);
 			
-			map.put("has_error_message", Internationals.getMessage("has_error"));
+			//map.put("has_error_message", Internationals.getMessage("has_error"));
 			map.put("add_exec_title", Internationals.getMessage("add_exec"));
 			
 			
@@ -344,7 +344,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		}else if(type.equals(ServletData.TYPE_ADD_EXEC)){
 			htmlTemplate=Bundles.INSTANCE.add_exec_html().getText();
 			//handle erros
-			map.put("has_error_message", Internationals.getMessage("has_error"));
+			//map.put("has_error_message", Internationals.getMessage("has_error"));
 			Iterable<FormFieldData> datas=Iterables.filter(data.getFormData().getFormFieldDatas(), FormFieldDataPredicates.getNotAutoCreate());
 			Iterable<String> keys=Iterables.transform(datas, FormFieldDataDto.getFormFieldToKeyFunction());
 			Iterable<String> errorParams=
@@ -419,7 +419,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			HtmlFunctions.getStringToTRTDFunction().apply(vs)
 			);
 			
-			map.put("has_error_message", Internationals.getMessage("has_error"));
+			//map.put("has_error_message", Internationals.getMessage("has_error"));
 			Iterable<String> errorParams=
 					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}"));
 			map.put("error_messages", Joiner.on("\n").join(errorParams));
@@ -430,7 +430,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			
 			Iterable<FormFieldData> datas=data.getFormData().getFormFieldDatas();
 			Iterable<String> keys=Iterables.transform(datas, FormFieldDataDto.getFormFieldToKeyFunction());
-			map.put("has_error_message", Internationals.getMessage("has_error"));
+			//map.put("has_error_message", Internationals.getMessage("has_error"));
 			Iterable<String> errorParams=
 					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${error_","}"));
 			map.put("error_messages", Joiner.on("\n").join(errorParams));
@@ -440,12 +440,12 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		}else if(type.equals(ServletData.TYPE_DELETE_CONFIRM)){
 			htmlTemplate=Bundles.INSTANCE.delete_confirm_html().getText();
 			map.put("firstKey", data.getFormData().getFormFieldDatas().get(0).getKey());
-			map.put("has_error_message", Internationals.getMessage("has_error"));
+			//map.put("has_error_message", Internationals.getMessage("has_error"));
 			map.put("delete_exec_title", Internationals.getMessage("delete_exec"));
 		}else if(type.equals(ServletData.TYPE_DELETE_EXEC)){
 			
 			htmlTemplate=Bundles.INSTANCE.delete_exec_html().getText();
-			map.put("has_error_message", Internationals.getMessage("has_error"));
+			//map.put("has_error_message", Internationals.getMessage("has_error"));
 			map.put("delete_complete_title", Internationals.getMessage("delete_complete"));
 			map.put("list_title", data.getFormData().getName()+" "+Internationals.getMessage("list"));
 		}
