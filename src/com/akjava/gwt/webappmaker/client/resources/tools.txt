@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class  ${dataClassName}Tools  {
 public static SimpleDateFormat dateFormat=new SimpleDateFormat("${dateFormat}");
 public static String MULTI_VALUE_SEPARATOR="\t";
-
+public static final String MESSAGE_HAS_ERROR="${message_has_error}";
 /** not use
 public static Map<String,String> toLabelMap(${dataClassName}Entity entity){
 	Map<String,String> map=${dataClassName}EntityDto.entityToMap(entity);

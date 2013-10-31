@@ -50,7 +50,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		boolean hasError=!errorMap.isEmpty();
 		
 		if(hasError){
-			dataMap.put("has_error_message",Internationals.getMessage("has_error"));
+			dataMap.put("has_error_message",${dataClassName}Tools.MESSAGE_HAS_ERROR);
 			for(String key:errorMap.keySet()){
 				dataMap.put(key, errorMap.get(key));
 			}

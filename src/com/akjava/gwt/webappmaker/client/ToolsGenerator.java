@@ -32,7 +32,7 @@ map.put("package", packageString);
 map.put("dataClassName",formData.getClassName());
 
 map.put("dateFormat", Internationals.getMessage("dateformat"));//base date format for label
-
+map.put("message_has_error",Internationals.getMessage("has_error"));
 
 if(formData.getFormFieldDatas()!=null){
 	
