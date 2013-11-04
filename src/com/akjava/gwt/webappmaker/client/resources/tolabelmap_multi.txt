@@ -4,5 +4,9 @@
 				}
 List<String> labels=new ArrayList<String>();
 String[] selections=value.split(MULTI_VALUE_SEPARATOR);				
-${each_value}
+
+for(String select:selections){
+${each_value}	}
+	
+	return Joiner.on(MULTI_VALUE_SEPARATOR).join(labels);
 		}

@@ -222,7 +222,7 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 			map.put("key", fdata.getKey());
 			
 			String each_value="";
-			String each_template="\tselect.equals(\"${value}\")){labels.add(\"${label}\");\n";
+			String each_template="\tif(select.equals(\"${value}\")){labels.add(\"${label}\");}\n";
 			for(LabelAndValue lv:fdata.getOptionValues()){
 				Map<String,String> tmp=new HashMap<String, String>();
 				tmp.put("value", lv.getValue());

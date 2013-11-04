@@ -2,7 +2,7 @@
 			if(value==null){
 				return "${false_value}";
 				}
-			if(value.toLowerCase().equals("on")||alue.toLowerCase().equals("true")){
+			if(value.toLowerCase().equals("on")||value.toLowerCase().equals("true")){
 				return "${true_value}";
 				}
 			else{
