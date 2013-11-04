@@ -14,6 +14,15 @@ import com.akjava.gwt.lib.client.widget.TabInputableTextArea;
 import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToAdminServletDataFunction;
 import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToMainServletDataFunction;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
+import com.akjava.gwt.webtestmaker.client.InvalidCsvException;
+import com.akjava.gwt.webtestmaker.client.TestCommand;
+import com.akjava.gwt.webtestmaker.client.WebTestUtils;
+import com.akjava.gwt.webtestmaker.client.command.CompareTextCommand;
+import com.akjava.gwt.webtestmaker.client.command.CompareTitleCommand;
+import com.akjava.gwt.webtestmaker.client.command.OpenUrlCommand;
+import com.akjava.gwt.webtestmaker.client.command.SetInputValueCommand;
+import com.akjava.gwt.webtestmaker.client.command.SubmitCommand;
+import com.akjava.gwt.webtestmaker.client.command.TestInfoCommand;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormDataDto;
 import com.akjava.lib.common.form.FormFieldData;
@@ -25,6 +34,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -278,6 +288,18 @@ public class WebAppsMaker implements EntryPoint {
 		map.put("servlets", Joiner.on("\n").join(webXmls));
 		files.add(new FileNameAndText("web.xml",TemplateUtils.createAdvancedText(webXmlTemplate, map)));
 		
+		
+		try{
+			for(FormData data:datas){
+				LogUtils.log("test:"+data.getClassName().toLowerCase());
+				String xmlText=createTestXmlFile(data);
+				files.add(new FileNameAndText("test_"+data.getClassName()+".xml", xmlText));
+			}
+			}catch (Exception e) {
+				LogUtils.log(e.getMessage());
+			}
+		
+		
 		cellList.setRowData(0, files);
 		try {
 			storageControler.setValue("packageValue",packageBox.getText());
@@ -286,6 +308,8 @@ public class WebAppsMaker implements EntryPoint {
 			LogUtils.log(e.getMessage());
 			e.printStackTrace();
 		}
+		//create
+		
 		
 		//create submit
 		downloadLinkContainer.clear();
@@ -308,5 +332,40 @@ public class WebAppsMaker implements EntryPoint {
 		
 		String text=JDOCsvConverter.convert(datas.get(0).getFormFieldDatas());
 		jdoCsv.setText(text);
+	}
+	
+	private String createTestXmlFile(FormData data) throws InvalidCsvException{
+		
+		//TODO get base host info
+			String baseUrl="http://localhost:8888/"+data.getClassName().toLowerCase();
+			List<List<TestCommand>> testCommands=createStandardWebTest(data.getClassName().toLowerCase(),baseUrl,data);
+			
+		
+		String xmlText=WebTestUtils.testToXmlText(WebTestUtils.testToTag(testCommands, baseUrl));
+		return xmlText;
+	}
+	private List<List<TestCommand>> createStandardWebTest(String keyName,String baseUrl,
+			FormData formData) {
+		List<FormFieldData> formFieldDatas=formData.getFormFieldDatas();
+		List<List<TestCommand>> testCommandsList=new ArrayList<List<TestCommand>>();
+		//add test
+		List<TestCommand> testCommands=new ArrayList<TestCommand>();
+		testCommandsList.add(testCommands);
+		testCommands.add(new TestInfoCommand(keyName+"_add test",""));
+		testCommands.add(new OpenUrlCommand(ServletDataDto.URL_ADD));
+		//create inputs from formFieldDatas,use type filter & use function for convert
+		//TODO think how to international
+		
+		testCommands.add(new SubmitCommand());
+		testCommands.add(new CompareTitleCommand(formData.getName()+" 追加確認"));
+		testCommands.add(new CompareTextCommand("エラーがあります",true));
+		
+		testCommands.add(new SubmitCommand());
+		testCommands.add(new CompareTitleCommand(formData.getName()+" 追加実行"));
+		testCommands.add(new CompareTextCommand("追加完了"));
+		//show test
+		//edit test
+		//delete test
+		return testCommandsList;
 	}
 }

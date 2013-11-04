@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="C:/java/lib/guava-gwt-14.0.1.jar"/>
 	<classpathentry kind="lib" path="C:/java/lib/jsr305.jar"/>
 	<classpathentry kind="lib" path="lib/akjavahtml5gwt_121208.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/WebTestMaker"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -27,6 +27,10 @@ import com.google.common.collect.Lists;
 import com.google.gwt.user.client.Window;
 
 public class ServletDataDto {
+//TODO move better place
+public static final String URL_ADD="add";
+public static final String URL_ADD_CONFIRM="add_confirm";
+public static final String URL_ADD_EXEC="add_exec";
 private ServletDataDto(){}
 
 public static ServletDataToServletWebXmlFunction getServletDataToServletWebXmlFunction(){
