@@ -22,6 +22,7 @@
   <inherits name="com.akjava.gwt.html5.Html5widget"/>
   
   <inherits name='com.akjava.gwt.webtestmaker.LibWebTestMaker'/>
+  <inherits name='com.akjava.gwt.jdomaker.LibGWTJDOMaker'/>
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.akjava.gwt.webappmaker.client.WebAppsMaker'/>

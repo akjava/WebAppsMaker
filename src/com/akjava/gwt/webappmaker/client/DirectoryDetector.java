@@ -45,6 +45,18 @@ public class DirectoryDetector {
 		if(name.endsWith("SharedUtils.java")){
 			return true;
 		}
+		if(name.endsWith("PMF.java")){
+			return true;
+		}
+		if(name.endsWith("Entity.java")){
+			return true;
+		}
+		if(name.endsWith("EntityDao.java")){
+			return true;
+		}
+		if(name.endsWith("EntityDto.java")){
+			return true;
+		}
 		return false;
 	}
 }

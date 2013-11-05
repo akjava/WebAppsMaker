@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
 import com.akjava.gwt.html5.client.file.ui.FileNameAndTextCell;
+import com.akjava.gwt.jdomaker.client.JDOBuilder;
 import com.akjava.gwt.lib.client.GWTHTMLUtils;
 import com.akjava.gwt.lib.client.LogUtils;
 import com.akjava.gwt.lib.client.StorageControler;
@@ -176,13 +177,18 @@ public class WebAppsMaker implements EntryPoint {
 		 leftVertical.add(jdoCsv);
 		 
 	}
-	public String getPackage(){
-		return packageBox.getText();
+	public String getFixedPackage(){
+		String packageText=packageBox.getText();
+		if(packageText.endsWith(".")){
+			packageText=ValuesUtils.chomp(packageText);
+		}
+		return packageText;
 	}
 
 	
 	
 	protected void doConvert() {
+		String packageValue=getFixedPackage();
 		cellList.getSelectionModel().setSelected(selectionModel.getSelectedObject(), false);
 		List<FormData> datas=FormDataDto.linesToFormData(input.getText());
 		//debug text
@@ -196,22 +202,34 @@ public class WebAppsMaker implements EntryPoint {
 		List<FileNameAndText> files=new ArrayList<FileNameAndText>();
 		List<ServletData> sdatas=Lists.newArrayList();
 		
+		//create jdo classes
+		FileNameAndText pmfFile=new FileNameAndText("PMF.java",JDOBuilder.generatePackageLine(packageValue)+com.akjava.gwt.jdomaker.client.resources.Bundles.INSTANCE.pmf().getText());
+		files.add(pmfFile);
 		
+		for(FormData data:datas){
+		String text=JDOCsvConverter.convert(data.getFormFieldDatas());
+		JDOBuilder jdoBuilder=new JDOBuilder();
+		//TODO support more settings
+		List<FileNameAndText> jdoFiles=jdoBuilder.createJdoFilesByCsv(new JDOBuilder.Settings().className(data.getClassName()+"Entity").packageValue(packageValue), text);
+		for(FileNameAndText file:jdoFiles){
+			files.add(file);
+		}
+		}
 		
 		for(FormData fdata:datas){
 			//Tools.java
-			ToolsGenerator toolsGenerator=new ToolsGenerator(fdata,ValuesUtils.chomp(packageBox.getText()));
+			ToolsGenerator toolsGenerator=new ToolsGenerator(fdata,packageValue);
 			files.add(toolsGenerator.createFileNameAndText());
 			//Modifier.java
-			ModifierGenerator modifierGenerator=new ModifierGenerator(fdata,ValuesUtils.chomp(packageBox.getText()));
+			ModifierGenerator modifierGenerator=new ModifierGenerator(fdata,packageValue);
 			files.add(modifierGenerator.createFileNameAndText());
 			//Validator.java
-			ValidatorGenerator validatorGenerator=new ValidatorGenerator(fdata,ValuesUtils.chomp(packageBox.getText()));
+			ValidatorGenerator validatorGenerator=new ValidatorGenerator(fdata,packageValue);
 			files.add(validatorGenerator.createFileNameAndText());
 			
 			
 			
-			List<ServletData> sdata=new FormDataToMainServletDataFunction(getPackage()).apply(fdata);
+			List<ServletData> sdata=new FormDataToMainServletDataFunction(packageValue+".").apply(fdata);
 			Iterables.addAll(sdatas, sdata);
 			
 			List<FileNameAndText> mainServletFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToServletFileFunction());
@@ -230,7 +248,7 @@ public class WebAppsMaker implements EntryPoint {
 		
 		//admin use another mainbase
 		for(FormData fdata:datas){
-			List<ServletData> sdata=new FormDataToAdminServletDataFunction(getPackage()).apply(fdata);
+			List<ServletData> sdata=new FormDataToAdminServletDataFunction(packageValue+".").apply(fdata);
 			Iterables.addAll(sdatas, sdata);
 			
 			List<FileNameAndText> mainServletFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToServletFileFunction());
@@ -243,15 +261,15 @@ public class WebAppsMaker implements EntryPoint {
 			}
 		}
 		//sharedutils.java
-		files.add(FileNameAndTextGenerator.generateSharedUtils(getPackage()));
+		files.add(FileNameAndTextGenerator.generateSharedUtils(packageValue+"."));
 		
 		//Top
-		files.add(FileNameAndTextGenerator.generateTopServlet(getPackage()));
+		files.add(FileNameAndTextGenerator.generateTopServlet(packageValue+"."));
 		//template
 		files.add(FileNameAndTextGenerator.generateTopTemplate(datas));
 		
 		//AdminTop
-		files.add(FileNameAndTextGenerator.generateAdminTopServlet(getPackage()));
+		files.add(FileNameAndTextGenerator.generateAdminTopServlet(packageValue+"."));
 		//template
 		files.add(FileNameAndTextGenerator.generateAdminTopTemplate(datas));
 		
@@ -271,14 +289,14 @@ public class WebAppsMaker implements EntryPoint {
 		//add top
 		ServletWebXmlData topData=new ServletWebXmlData();
 		topData.setName("Top");
-		topData.setFullClassName(getPackage()+"main.TopServlet");
+		topData.setFullClassName(packageValue+"."+"main.TopServlet");
 		topData.setPath("/index.html");
 		xmlDatas.add(topData);
 		
 		//add admin top
 		ServletWebXmlData adminTopData=new ServletWebXmlData();
 		adminTopData.setName("AdminTop");
-		adminTopData.setFullClassName(getPackage()+"admin.AdminTopServlet");
+		adminTopData.setFullClassName(packageValue+"."+"admin.AdminTopServlet");
 		adminTopData.setPath("/admin/index.html");
 		xmlDatas.add(adminTopData);
 		
@@ -292,6 +310,7 @@ public class WebAppsMaker implements EntryPoint {
 		files.add(new FileNameAndText("web.xml",TemplateUtils.createAdvancedText(webXmlTemplate, map)));
 		
 		
+		//create test 
 		try{
 			for(FormData data:datas){
 				
@@ -303,9 +322,11 @@ public class WebAppsMaker implements EntryPoint {
 			}
 		
 		
+		
 		cellList.setRowData(0, files);
 		try {
-			storageControler.setValue("packageValue",packageBox.getText());
+			storageControler.setValue("packageValue",packageValue);
+			packageBox.setText(packageValue);
 			storageControler.setValue("inputCsv", input.getText());
 		} catch (StorageException e) {
 			LogUtils.log(e.getMessage());
@@ -335,6 +356,7 @@ public class WebAppsMaker implements EntryPoint {
 		
 		String text=JDOCsvConverter.convert(datas.get(0).getFormFieldDatas());
 		jdoCsv.setText(text);
+		
 	}
 	
 	private String createTestXmlFile(FormData data) throws InvalidCsvException{
