@@ -1,5 +1,6 @@
 package com.akjava.gwt.webappmaker.client;
 
+import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
 import com.akjava.lib.common.utils.ValuesUtils;
 
 public class DirectoryDetector {

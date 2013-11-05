@@ -1,10 +1,13 @@
 package com.akjava.gwt.webappmaker.client;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
+import com.akjava.gwt.html5.client.file.ui.FileNameAndTextCell;
 import com.akjava.gwt.lib.client.GWTHTMLUtils;
 import com.akjava.gwt.lib.client.LogUtils;
 import com.akjava.gwt.lib.client.StorageControler;
@@ -16,11 +19,12 @@ import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToMainServletDat
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.gwt.webtestmaker.client.InvalidCsvException;
 import com.akjava.gwt.webtestmaker.client.TestCommand;
+import com.akjava.gwt.webtestmaker.client.TestCommandDto;
 import com.akjava.gwt.webtestmaker.client.WebTestUtils;
+import com.akjava.gwt.webtestmaker.client.command.ClickLinkCommand;
 import com.akjava.gwt.webtestmaker.client.command.CompareTextCommand;
 import com.akjava.gwt.webtestmaker.client.command.CompareTitleCommand;
 import com.akjava.gwt.webtestmaker.client.command.OpenUrlCommand;
-import com.akjava.gwt.webtestmaker.client.command.SetInputValueCommand;
 import com.akjava.gwt.webtestmaker.client.command.SubmitCommand;
 import com.akjava.gwt.webtestmaker.client.command.TestInfoCommand;
 import com.akjava.lib.common.form.FormData;
@@ -34,7 +38,6 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -291,9 +294,9 @@ public class WebAppsMaker implements EntryPoint {
 		
 		try{
 			for(FormData data:datas){
-				LogUtils.log("test:"+data.getClassName().toLowerCase());
+				
 				String xmlText=createTestXmlFile(data);
-				files.add(new FileNameAndText("test_"+data.getClassName()+".xml", xmlText));
+				files.add(new FileNameAndText("test_"+data.getClassName().toLowerCase()+".xml", xmlText));
 			}
 			}catch (Exception e) {
 				LogUtils.log(e.getMessage());
@@ -337,7 +340,7 @@ public class WebAppsMaker implements EntryPoint {
 	private String createTestXmlFile(FormData data) throws InvalidCsvException{
 		
 		//TODO get base host info
-			String baseUrl="http://localhost:8888/"+data.getClassName().toLowerCase();
+			String baseUrl="http://localhost:8888/admin/"+data.getClassName().toLowerCase();
 			List<List<TestCommand>> testCommands=createStandardWebTest(data.getClassName().toLowerCase(),baseUrl,data);
 			
 		
@@ -353,8 +356,14 @@ public class WebAppsMaker implements EntryPoint {
 		testCommandsList.add(testCommands);
 		testCommands.add(new TestInfoCommand(keyName+"_add test",""));
 		testCommands.add(new OpenUrlCommand(ServletDataDto.URL_ADD));
-		//create inputs from formFieldDatas,use type filter & use function for convert
 		//TODO think how to international
+		
+		Collection<TestCommand> commands=Collections2.transform(
+				Collections2.filter(formFieldDatas, TestCommandDto.getAvaiableSetFormFieldDataFilter()),
+				TestCommandDto.getFormFieldDataToSimpleSetWebTest());
+		for(TestCommand command:commands){
+			testCommands.add(command);
+		}
 		
 		testCommands.add(new SubmitCommand());
 		testCommands.add(new CompareTitleCommand(formData.getName()+" 追加確認"));
@@ -364,8 +373,48 @@ public class WebAppsMaker implements EntryPoint {
 		testCommands.add(new CompareTitleCommand(formData.getName()+" 追加実行"));
 		testCommands.add(new CompareTextCommand("追加完了"));
 		//show test
+		testCommands=new ArrayList<TestCommand>();
+		testCommandsList.add(testCommands);
+		testCommands.add(new TestInfoCommand(keyName+"_show test","depdnds on passed add-test"));
+		testCommands.add(new OpenUrlCommand(""));
+		testCommands.add(new ClickLinkCommand("表示"));
+		testCommands.add(new CompareTitleCommand(formData.getName()+" 表示"));
+		
 		//edit test
+		testCommands=new ArrayList<TestCommand>();
+		testCommandsList.add(testCommands);
+		testCommands.add(new TestInfoCommand(keyName+"_edit test","depdnds on passed add-test"));
+		testCommands.add(new OpenUrlCommand(""));
+		testCommands.add(new ClickLinkCommand("編集"));
+		testCommands.add(new CompareTitleCommand(formData.getName()+" 編集"));
+		
+		commands=Collections2.transform(
+				Collections2.filter(formFieldDatas, TestCommandDto.getAvaiableSetFormFieldDataFilter()),
+				TestCommandDto.getFormFieldDataToSimpleEditWebTest());
+		for(TestCommand command:commands){
+			testCommands.add(command);
+		}
+		testCommands.add(new SubmitCommand());
+		testCommands.add(new CompareTitleCommand(formData.getName()+" 編集確認"));
+		testCommands.add(new CompareTextCommand("エラーがあります",true));
+		
+		testCommands.add(new SubmitCommand());
+		testCommands.add(new CompareTitleCommand(formData.getName()+" 編集実行"));
+		testCommands.add(new CompareTextCommand("編集完了"));
+		
 		//delete test
+		testCommands=new ArrayList<TestCommand>();
+		testCommandsList.add(testCommands);
+		testCommands.add(new TestInfoCommand(keyName+"_delete test","depdnds on passed add-test"));
+		testCommands.add(new OpenUrlCommand(""));
+		testCommands.add(new ClickLinkCommand("削除"));
+		testCommands.add(new CompareTitleCommand(formData.getName()+" 削除確認"));
+		
+		
+		testCommands.add(new SubmitCommand());
+		testCommands.add(new CompareTitleCommand(formData.getName()+" 削除実行"));
+		testCommands.add(new CompareTextCommand("削除完了"));
+		
 		return testCommandsList;
 	}
 }

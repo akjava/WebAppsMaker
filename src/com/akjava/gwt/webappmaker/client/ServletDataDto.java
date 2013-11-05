@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.akjava.gwt.lib.client.ValueUtils;
+import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormFieldData;
@@ -31,6 +31,12 @@ public class ServletDataDto {
 public static final String URL_ADD="add";
 public static final String URL_ADD_CONFIRM="add_confirm";
 public static final String URL_ADD_EXEC="add_exec";
+public static final String URL_SHOW = "show";
+public static final String URL_EDIT = "edit";
+public static final String URL_EDIT_CONFIRM = "edit_confirm";
+public static final String URL_EDIT_EXEC = "edit_exec";
+public static final String URL_DELETE_CONFIRM = "delete";
+public static final String URL_DELETE_EXEC = "delete_exec";
 private ServletDataDto(){}
 
 public static ServletDataToServletWebXmlFunction getServletDataToServletWebXmlFunction(){
