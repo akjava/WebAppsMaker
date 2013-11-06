@@ -63,8 +63,8 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 			${dataClassName}Entity entity=${dataClassName}EntityDto.mapToEntity(map);
 			
 			//add auto
-			entity.setCdate(System.currentTimeMillis());
-			
+			${cdate_action}
+			${cuser_action}
 			try{
 				new ${dataClassName}EntityDao(PMF.get().getPersistenceManager()).addData(entity);
 				}catch(Exception e){

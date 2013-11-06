@@ -160,6 +160,23 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			javaTemplate=Bundles.INSTANCE.add_confirm_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD_EXEC)){
 			javaTemplate=Bundles.INSTANCE.add_exec_servlet().getText();
+			
+			List<String> cdateActions=new ArrayList<String>();
+			for(FormFieldData field:data.getFormData().getFormFieldDatas()){
+				if(field.getType()==FormFieldData.TYPE_MODIFIED_DATE){
+					cdateActions.add(TemplateUtils.createText("entity.set${value}(System.currentTimeMillis());", ValuesUtils.toUpperCamel(field.getKey())));
+				}
+			}
+			map.put("cdate_action", Joiner.on("\n").join(cdateActions));
+			
+			List<String> cuserActions=new ArrayList<String>();
+			for(FormFieldData field:data.getFormData().getFormFieldDatas()){
+				if(field.getType()==FormFieldData.TYPE_MODIFIED_USER){
+					cuserActions.add(TemplateUtils.createText("entity.set${value}(SharedUtils.getUserId());", ValuesUtils.toUpperCamel(field.getKey())));
+				}
+			}
+			map.put("cuser_action", Joiner.on("\n").join(cuserActions));
+			
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT)){
 			javaTemplate=Bundles.INSTANCE.edit_servlet().getText();
 			
@@ -173,6 +190,21 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			javaTemplate=Bundles.INSTANCE.edit_exec_servlet().getText();
 			
 			//createOptionValues
+			List<String> mdateActions=new ArrayList<String>();
+			for(FormFieldData field:data.getFormData().getFormFieldDatas()){
+				if(field.getType()==FormFieldData.TYPE_MODIFIED_DATE){
+					mdateActions.add(TemplateUtils.createText("entity.set${value}(System.currentTimeMillis());", ValuesUtils.toUpperCamel(field.getKey())));
+				}
+			}
+			map.put("mdate_action", Joiner.on("\n").join(mdateActions));
+			
+			List<String> muserActions=new ArrayList<String>();
+			for(FormFieldData field:data.getFormData().getFormFieldDatas()){
+				if(field.getType()==FormFieldData.TYPE_MODIFIED_USER){
+					muserActions.add(TemplateUtils.createText("entity.set${value}(SharedUtils.getUserId());", ValuesUtils.toUpperCamel(field.getKey())));
+				}
+			}
+			map.put("muser_action", Joiner.on("\n").join(muserActions));
 		}else if(data.getServletType().equals(ServletData.TYPE_DELETE_CONFIRM)){
 			javaTemplate=Bundles.INSTANCE.delete_confirm_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_DELETE_EXEC)){

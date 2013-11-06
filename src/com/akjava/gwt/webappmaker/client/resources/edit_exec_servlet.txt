@@ -83,7 +83,8 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 			${dataClassName}EntityDto.copyToEntity(entity, map);
 			
 			//update auto
-			
+			${mdate_action}
+			${muser_action}
 			try{
 				dao.updateData(entity);
 				}catch(Exception e){
