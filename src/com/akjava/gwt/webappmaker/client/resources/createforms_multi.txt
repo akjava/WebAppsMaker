@@ -1,3 +1,4 @@
+//${value}
 List<LabelAndValue> lvalues_${value}=${dataClassName}Tools.getLabelAndValue("${value}");
 LabelAndValue.selectValues(lvalues_${value}, map.get("${value}"), "\t");
 map.put("form_${value}", TagBuilder.createSelect("${value}",lvalues_${value}, true).toString());

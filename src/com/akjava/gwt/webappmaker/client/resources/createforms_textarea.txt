@@ -1,1 +1,2 @@
-map.put("form_${key}", TagBuilder.createTextArea("${key}", SharedUtils.getMapValue(map,"${key}","")).toString());
+//${value}
+map.put("form_${value}", TagBuilder.createTextArea("${value}", SharedUtils.getMapValue(map,"${value}","")).toString());

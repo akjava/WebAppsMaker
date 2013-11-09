@@ -1,3 +1,4 @@
+//${value}
 long ${value}_long=ValuesUtils.toLong(SharedUtils.getMapValue(map,"${value}",""), 0);
 String ${value}_label=${value}_long==0?"":${dataClassName}Tools.dateFormat.format(new Date(${value}_long));
 map.put("form_${value}", TagBuilder.createHidden("${value}", SharedUtils.getMapValue(map,"${value}",""))+${value}_label);

@@ -223,7 +223,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			String methodText=Joiner.on("\n").skipNulls().join(methods);
 			
 			//map.put("createFormFields", methodText);
-			javaTemplate.replace("${createFormFields}", methodText);//because call another templa inside
+			javaTemplate=javaTemplate.replace("${createFormFields}", methodText);//because call another templa inside
 			
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_CONFIRM)){
 			javaTemplate=Bundles.INSTANCE.edit_confirm_servlet().getText();

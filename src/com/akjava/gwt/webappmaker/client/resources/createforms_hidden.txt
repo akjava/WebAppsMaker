@@ -1,1 +1,2 @@
+//${value}
 map.put("form_${value}", TagBuilder.createHidden("${value}", SharedUtils.getMapValue(map,"${value}",""))+SharedUtils.getMapValue(map,"${value}",""));
