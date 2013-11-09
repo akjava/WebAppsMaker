@@ -547,7 +547,7 @@ public static class TagToString implements Function<Tag,String>{
 	@Override
 	public String apply(Tag tag) {
 		if(tag.getName().equals("input") && tag.getAttributes().get("type").equals("text")){
-			tag.setAttribute("length", "40");
+			tag.setAttribute("size", "40");
 		}
 		return tag.toString();
 	}
