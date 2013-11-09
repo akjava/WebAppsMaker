@@ -114,7 +114,11 @@ public static class FormDataToAdminServletDataFunction implements Function<FormD
 }
 
 
-
+/**
+ * @deprecated no more used
+ * @author aki
+ *
+ */
 public static class FormDataToOptionValueFunction implements Function<FormFieldData,String>{
 
 	@Override
@@ -135,6 +139,41 @@ public static class FormDataToOptionValueFunction implements Function<FormFieldD
 			result=TemplateUtils.createText(Bundles.INSTANCE.createoptionvalue_single_select().getText(),map);
 		}
 		return result;
+	}
+
+	
+	
+}
+
+public static class FormDataToCreateFormFieldFunction implements Function<FormFieldData,String>{
+
+	@Override
+	public String apply(FormFieldData data) {
+		switch(data.getType()){
+		case FormFieldData.TYPE_TEXT_SHORT:
+			return TemplateUtils.createText(Bundles.INSTANCE.createforms_text().getText(),data.getKey());
+		case FormFieldData.TYPE_TEXT_LONG:
+			return TemplateUtils.createText(Bundles.INSTANCE.createforms_textarea().getText(),data.getKey());
+		case FormFieldData.TYPE_CHECK:
+			return TemplateUtils.createText(Bundles.INSTANCE.createforms_check().getText(),data.getKey());
+		case FormFieldData.TYPE_SELECT_SINGLE:
+			return TemplateUtils.createText(Bundles.INSTANCE.createforms_single().getText(),data.getKey());
+		case FormFieldData.TYPE_SELECT_MULTI:
+			return TemplateUtils.createText(Bundles.INSTANCE.createforms_multi().getText(),data.getKey());
+		case FormFieldData.TYPE_ID:
+		
+		case FormFieldData.TYPE_CREATE_USER:
+		
+		case FormFieldData.TYPE_MODIFIED_USER:
+			return TemplateUtils.createText(Bundles.INSTANCE.createforms_hidden().getText(),data.getKey());
+		case FormFieldData.TYPE_CREATE_DATE:
+		case FormFieldData.TYPE_MODIFIED_DATE:
+			return TemplateUtils.createText(Bundles.INSTANCE.createforms_date().getText(),data.getKey());
+		default:
+			return null;
+			
+		}
+		
 	}
 
 	
@@ -180,10 +219,12 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT)){
 			javaTemplate=Bundles.INSTANCE.edit_servlet().getText();
 			
-			Collection<String> methods=Collections2.transform(data.getFormData().getFormFieldDatas(), new FormDataToOptionValueFunction());
+			Collection<String> methods=Collections2.transform(data.getFormData().getFormFieldDatas(), new FormDataToCreateFormFieldFunction());
 			String methodText=Joiner.on("\n").skipNulls().join(methods);
 			
-			map.put("createOptionValues", methodText);
+			//map.put("createFormFields", methodText);
+			javaTemplate.replace("${createFormFields}", methodText);//because call another templa inside
+			
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_CONFIRM)){
 			javaTemplate=Bundles.INSTANCE.edit_confirm_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT_EXEC)){

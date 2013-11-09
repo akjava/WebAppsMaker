@@ -1,0 +1,6 @@
+String value_${value}=map.get("${value}");
+if(value_${value}!=null &&!value_${value}.isEmpty() && !value_${value}.equals("false")){
+	map.put("form_${value}", TagBuilder.createCheckbox("${value}","on", true).toString());
+}else{
+	map.put("form_${value}", TagBuilder.createCheckbox("${value}","on", false).toString());
+	}

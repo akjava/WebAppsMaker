@@ -69,4 +69,12 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	
 	TextResource createoptionvalue_check();
 	TextResource createoptionvalue_single_select();
+	
+	TextResource createforms_check();
+	TextResource createforms_hidden();
+	TextResource createforms_multi();
+	TextResource createforms_single();
+	TextResource createforms_text();
+	TextResource createforms_textarea();
+	TextResource createforms_date();
 }
