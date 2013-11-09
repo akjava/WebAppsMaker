@@ -30,6 +30,12 @@ public static Map<String,String> toLabelMap(${dataClassName}Entity entity){
 }
 */
 
+
+public static List<LabelAndValue> getLabelAndValue(String key){
+	${getLabelAndValue}
+	return null;
+}
+
 public static List<String> getKeyLists(){
 		List<String> list=new ArrayList<String>();
 ${getKeyLists}

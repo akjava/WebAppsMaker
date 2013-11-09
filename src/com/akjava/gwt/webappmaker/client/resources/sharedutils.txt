@@ -16,4 +16,12 @@ public class SharedUtils {
 		}
 		return null;
 	}
+		//TODO move commons
+	public static String getMapValue(Map<String,String> map,String key,String defaultValue){
+		if(map.get(key)!=null){
+			return map.get(key);
+		}else{
+			return map.get(defaultValue);
+		}
+	}
 }

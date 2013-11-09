@@ -1,5 +1,6 @@
 package com.akjava.gwt.webappmaker.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public ToolsGenerator(FormData formData,String packageString){
 	this.packageString=packageString;
 }
 public String generateToolsText(){
-Joiner joiner=Joiner.on("\n").skipNulls();
+Joiner nLineJoiner=Joiner.on("\n").skipNulls();
 String base=Bundles.INSTANCE.tools().getText();
 
 Map<String,String> map=new HashMap<String, String>();
@@ -46,10 +47,10 @@ if(formData.getFormFieldDatas()!=null){
 		  )
 		  );
 
-	map.put("isMultipleParameter",joiner.join(toIsMultiValueText));
+	map.put("isMultipleParameter",nLineJoiner.join(toIsMultiValueText));
 	
 
-//create toLabelMap
+
 	List<String> toLabelMapTexts=Lists.newArrayList(
 			Iterables.filter(
 				     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToToLabelMapFunction()),
@@ -57,9 +58,9 @@ if(formData.getFormFieldDatas()!=null){
 				  )
 				  );
 
-			map.put("toLabelMap",joiner.join(toLabelMapTexts));
+			map.put("toLabelMap",nLineJoiner.join(toLabelMapTexts));
 	
-//create toLabelValue	
+
 List<String> toLabelValueTexts=Lists.newArrayList(
 Iterables.filter(
 	     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToToLabelValueFunction()),
@@ -67,9 +68,9 @@ Iterables.filter(
 	  )
 	  );
 
-map.put("toLabelValue",joiner.join(toLabelValueTexts));
+map.put("toLabelValue",nLineJoiner.join(toLabelValueTexts));
 
-//create toLabelValue	
+
 List<String> toGetKeyListsTexts=Lists.newArrayList(
 Iterables.filter(
 	     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToGetKeyListsFunction()),
@@ -77,7 +78,18 @@ Iterables.filter(
 	  )
 	  );
 
-map.put("getKeyLists",joiner.join(toGetKeyListsTexts));
+map.put("getKeyLists",nLineJoiner.join(toGetKeyListsTexts));
+
+
+//create getLabelAndValue() for EditServlet or AddServlet
+List<String> getLabelAndValue=Lists.newArrayList(
+Iterables.filter(
+	     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToGetLabelAndValueFunction()),
+	     StringPredicates.getNotEmpty()
+	  )
+	  );
+
+map.put("getLabelAndValue",nLineJoiner.join(getLabelAndValue));
 }
 
 
@@ -110,7 +122,6 @@ public enum ServletDataToToolsGeneratorFunction implements Function<ServletData,
 }
 */
 
-
 public FormFieldDataToIsMultipleParameterpFunction getFormFieldDataToIsMultipleParameterpFunction(){
 	return FormFieldDataToIsMultipleParameterpFunction.INSTANCE;
 }
@@ -127,6 +138,42 @@ public enum FormFieldDataToIsMultipleParameterpFunction implements Function<Form
 		return TemplateUtils.createText(template, fdata.getKey());
 		}else{
 			return null;
+		}
+	}
+}
+
+
+public FormFieldDataToGetLabelAndValueFunction getFormFieldDataToGetLabelAndValueFunction(){
+	return FormFieldDataToGetLabelAndValueFunction.INSTANCE;
+}
+public enum FormFieldDataToGetLabelAndValueFunction implements Function<FormFieldData,String>{
+	INSTANCE
+	;
+	public static String add_label="lvalues.add(new LabelAndValue(${label}, \"${value}\",${selected}));";
+	public static String template="if(key.equals(\"${key}\")){\n" +
+			"\tList<LabelAndValue> lvalues=new ArrayList<LabelAndValue>();\n"+
+			"\t${options}\n"+
+			"\treturn lvalues;\n"+
+			"\t}" +
+			"\n";
+	
+	@Override
+	public String apply(FormFieldData fdata) {
+		if(fdata.getOptionValues()!=null && fdata.getOptionValues().size()>0){
+			Map<String,String> map=new HashMap<String, String>();
+			String options="";
+			for(LabelAndValue lv:fdata.getOptionValues()){
+					Map<String,String> tmp=new HashMap<String, String>();
+					tmp.put("label", lv.getLabel()!=null?"\""+lv.getLabel()+"\"":"null");
+					tmp.put("value", lv.getValue());
+					tmp.put("selected", ""+lv.isSelected());
+					options+=TemplateUtils.createText(add_label, tmp)+"\n";
+				}
+			map.put("key", fdata.getKey());
+			map.put("options", options);
+			return TemplateUtils.createText(template, map);
+		}else{
+			return "";
 		}
 	}
 }
