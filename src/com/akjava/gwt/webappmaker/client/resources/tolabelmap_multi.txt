@@ -5,8 +5,14 @@
 List<String> labels=new ArrayList<String>();
 String[] selections=value.split(MULTI_VALUE_SEPARATOR);				
 
+List<LabelAndValue> lvs=getLabelAndValue(key);
+
 for(String select:selections){
-${each_value}	}
+	for(LabelAndValue lv:lvs){
+		if(lv.getValue().equals(select)){
+			labels.add(lv.getPrintValue());
+		}
+	}
 	
 	return Joiner.on(MULTI_VALUE_SEPARATOR).join(labels);
 		}

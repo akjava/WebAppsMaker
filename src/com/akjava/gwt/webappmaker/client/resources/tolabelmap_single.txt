@@ -2,5 +2,11 @@
 			if(value==null||value.isEmpty()){
 				return "";
 				}
-${each_value}
+List<LabelAndValue> lvs=getLabelAndValue(key);
+
+	for(LabelAndValue lv:lvs){
+		if(lv.getValue().equals(value)){
+			return lv.getPrintValue();
+		}
+	
 		}
