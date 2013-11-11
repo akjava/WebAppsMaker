@@ -23,6 +23,9 @@ public class FileNameAndTextGenerator {
 		
 		String datas="";
 		for(FormData fdata:formdatas){
+			if(fdata.isAdminOnly()){
+				continue;//no need to show top
+			}
 			String path=fdata.getClassName().toLowerCase()+"/";
 			String title=fdata.getName();
 			Map<String,String> subMap=new HashMap<String, String>();
@@ -52,6 +55,9 @@ public class FileNameAndTextGenerator {
 		
 		String datas="";
 		for(FormData fdata:formdatas){
+			if(fdata.isAdminOnly()){
+				continue;//no need to link
+			}
 			String path="/"+fdata.getClassName().toLowerCase()+"/";
 			String title=fdata.getName();
 			

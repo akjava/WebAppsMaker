@@ -227,7 +227,9 @@ public class WebAppsMaker implements EntryPoint {
 			ValidatorGenerator validatorGenerator=new ValidatorGenerator(fdata,packageValue);
 			files.add(validatorGenerator.createFileNameAndText());
 			
-			
+			if(fdata.isAdminOnly()){//some data dont need to show users.
+				continue;
+			}
 			
 			List<ServletData> sdata=new FormDataToMainServletDataFunction(packageValue+".").apply(fdata);
 			Iterables.addAll(sdatas, sdata);
@@ -310,7 +312,7 @@ public class WebAppsMaker implements EntryPoint {
 		files.add(new FileNameAndText("web.xml",TemplateUtils.createAdvancedText(webXmlTemplate, map)));
 		
 		
-		//create test 
+		//create webtest xml files 
 		try{
 			for(FormData data:datas){
 				
