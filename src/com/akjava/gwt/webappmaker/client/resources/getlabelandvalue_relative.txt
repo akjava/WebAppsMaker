@@ -1,0 +1,13 @@
+//TODO cache
+		Parameter parameter=ParameterUtils.parse("${param}");
+		PersistenceManager manager=PMF.get().getPersistenceManager();
+		Query query =manager.newQuery(OptionEntity.class);
+		if(parameter.getRemain()!=null){
+			query.setOrdering(parameter.getRemain());
+		}
+		@SuppressWarnings("unchecked")
+		List<${dataClassName}Entity> result=(List<${dataClassName}Entity>) query.execute();
+		for(${dataClassName}Entity entity:result){
+			lvalues.add(new LabelAndValue(""+entity.get${u+label_name}(), ""+entity.get${u+value_name}()));
+		}
+		manager.close();//ok?

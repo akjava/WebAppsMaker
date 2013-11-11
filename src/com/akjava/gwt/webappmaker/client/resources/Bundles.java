@@ -77,4 +77,6 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource createforms_text();
 	TextResource createforms_textarea();
 	TextResource createforms_date();
+	
+	TextResource getlabelandvalue_relative();
 }

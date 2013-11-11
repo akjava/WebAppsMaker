@@ -87,6 +87,7 @@ Iterables.filter(
 map.put("getKeyLists",nLineJoiner.join(toGetKeyListsTexts));
 
 
+
 //create getLabelAndValue() for EditServlet or AddServlet
 List<String> getLabelAndValue=Lists.newArrayList(
 Iterables.filter(
@@ -178,8 +179,31 @@ public enum FormFieldDataToGetLabelAndValueFunction implements Function<FormFiel
 			Map<String,String> map=new HashMap<String, String>();
 			if(isSpecialRelative(fdata)){
 				Parameter parameter=toSpecialRelativeParam(fdata);
+				//TODO check error
+				if(parameter.size()==0){
+					return "//invalid parameter:"+fdata.getOptionText()+",usually @DATANAME(LABEL_COLUMN,VALUE_COLUMN)ORDER";
+				}
 				
-				return "";
+				String label=null;
+				String value=null;
+				if(parameter.size()==1){
+					label=parameter.get(0);
+					value=parameter.get(0);
+				}else if(parameter.size()==2){
+					label=parameter.get(0);
+					value=parameter.get(1);
+				}
+				
+				Map<String,String> pmap=new HashMap<String, String>();
+				pmap.put("label_name", label);
+				pmap.put("value_name", value);
+				pmap.put("param", fdata.getOptionText());
+				pmap.put("dataClassName", fdata.getParent().getClassName());
+				
+				
+				map.put("key", fdata.getKey());
+				map.put("options", TemplateUtils.createAdvancedText(Bundles.INSTANCE.getlabelandvalue_relative().getText(), pmap));
+				return TemplateUtils.createText(template, map);
 			}else{
 			
 			String options="";
