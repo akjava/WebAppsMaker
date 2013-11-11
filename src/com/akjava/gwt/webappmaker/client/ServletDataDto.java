@@ -361,14 +361,20 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			//create first td
 			Iterable<FormFieldData> datas=Iterables.filter(data.getFormData().getFormFieldDatas(), FormFieldDataPredicates.getNotAutoCreate());
 			Iterable<String> names=Iterables.transform(datas, FormFieldDataDto.getFormFieldToNameFunction());
+			
 			//create second td
-			Iterable<Tag> inputTags=Iterables.transform(datas,FormFieldDataDto.getFormFieldToInputTagFunction());
-			Iterable<String> tagString=Iterables.transform(inputTags, new TagToString());
+			Iterable<String> keys=Iterables.transform(datas, FormFieldDataDto.getFormFieldToKeyFunction());
+			
+			Iterable<String> inputTags=
+					Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("${form_","}"));
+			
+			//Iterable<Tag> inputTags=Iterables.transform(datas,FormFieldDataDto.getFormFieldToInputTagFunction());
+			//Iterable<String> tagString=Iterables.transform(inputTags, new TagToString());
 			
 			//create tr
 			List<List<String>> vs=new ArrayList<List<String>>();
 			vs.add(Lists.newArrayList(names));
-			vs.add(Lists.newArrayList(tagString));
+			vs.add(Lists.newArrayList(inputTags));
 			
 			map.put("add_input_trtd",
 			HtmlFunctions.getStringToTRTDFunction().apply(vs)

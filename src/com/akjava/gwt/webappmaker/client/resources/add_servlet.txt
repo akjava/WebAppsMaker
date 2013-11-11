@@ -37,6 +37,9 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 	}
 
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		dataMap=DataTools.requestToMap(request);
+		${dataClassName}Tools.insertFormField(dataMap);
+		
 		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);
 		return dataHtml;
 	}
