@@ -1,11 +1,13 @@
 package com.akjava.gwt.webappmaker.client;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
+import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToCreateFormFieldFunction;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormFieldData;
@@ -14,6 +16,7 @@ import com.akjava.lib.common.tag.LabelAndValue;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -90,6 +93,15 @@ Iterables.filter(
 	  );
 
 map.put("getLabelAndValue",nLineJoiner.join(getLabelAndValue));
+
+
+
+Collection<String> methods=Collections2.transform(formData.getFormFieldDatas(), new FormDataToCreateFormFieldFunction());
+String methodText=Joiner.on("\n").skipNulls().join(methods);
+
+//map.put("createFormFields", methodText);
+map.put("insertFormField", methodText);
+
 }
 
 

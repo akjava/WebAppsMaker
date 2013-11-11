@@ -30,6 +30,9 @@ public static Map<String,String> toLabelMap(${dataClassName}Entity entity){
 }
 */
 
+public static void insertFormField(Map<String,String> dataMap){
+${insertFormField}
+}
 
 public static List<LabelAndValue> getLabelAndValue(String key){
 	${getLabelAndValue}

@@ -41,9 +41,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 	}
 
 
-	private void createFormFields(Map<String,String> map){
-	${createFormFields}
-	}
+	
 
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		String id=request.getParameter("${firstKey}");
@@ -65,7 +63,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		}
 		if(entity!=null){
 			dataMap=${dataClassName}Tools.toValueAndLabelMap(entity);
-			createFormFields(dataMap);
+			${dataClassName}Tools.insertFormField(dataMap);
 		}else{
 			response.sendError(500, "${firstKey} not found");
 			return null;
