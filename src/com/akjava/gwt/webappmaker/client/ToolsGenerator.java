@@ -1,16 +1,19 @@
 package com.akjava.gwt.webappmaker.client;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.tools.ant.taskdefs.XSLTProcess.Param;
 
 import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
 import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToCreateFormFieldFunction;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormFieldData;
+import com.akjava.lib.common.param.Parameter;
+import com.akjava.lib.common.param.ParameterUtils;
 import com.akjava.lib.common.predicates.StringPredicates;
 import com.akjava.lib.common.tag.LabelAndValue;
 import com.akjava.lib.common.utils.TemplateUtils;
@@ -173,6 +176,12 @@ public enum FormFieldDataToGetLabelAndValueFunction implements Function<FormFiel
 	public String apply(FormFieldData fdata) {
 		if(fdata.getOptionValues()!=null && fdata.getOptionValues().size()>0){
 			Map<String,String> map=new HashMap<String, String>();
+			if(isSpecialRelative(fdata)){
+				Parameter parameter=toSpecialRelativeParam(fdata);
+				
+				return "";
+			}else{
+			
 			String options="";
 			for(LabelAndValue lv:fdata.getOptionValues()){
 					Map<String,String> tmp=new HashMap<String, String>();
@@ -184,10 +193,18 @@ public enum FormFieldDataToGetLabelAndValueFunction implements Function<FormFiel
 			map.put("key", fdata.getKey());
 			map.put("options", options);
 			return TemplateUtils.createText(template, map);
+			}
 		}else{
 			return "";
 		}
 	}
+	private Parameter toSpecialRelativeParam(FormFieldData fdata){
+		return ParameterUtils.parse(fdata.getOptionText().substring(1), ',');
+	}
+	private boolean isSpecialRelative(FormFieldData fdata){
+		return fdata.getOptionText()!=null && fdata.getOptionText().startsWith("@");
+	}
+	
 }
 
 public FormFieldDataToGetKeyListsFunction getFormFieldDataToGetKeyListsFunction(){

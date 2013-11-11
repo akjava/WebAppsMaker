@@ -1,4 +1,4 @@
 //${value}
 Tag tag_${value}=TagBuilder.createText("${value}", SharedUtils.getMapValue(map,"${value}",""));
-tag__${value}.setAttribute("size",40);//fixed
+tag_${value}.setAttribute("size","40");//fixed
 map.put("form_${value}", tag_${value}.toString());

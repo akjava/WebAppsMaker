@@ -23,7 +23,7 @@ public class ${dataClassName}Validator {
 	private static Validator less500words=Validators.maxStringSize(500);
 	private static Validator hiragana=StaticValidators.hiragana();
 	private static Validator ascii=StaticValidators.asciiNumberAndCharOnly();
-	
+	private static Validator number=StaticValidators.asciiNumberOnly();
 	
 	public static Map<String,String> createAddKeyLabelMap(){
 		Map<String,String> keyLabelMap=new LinkedHashMap<String, String>();
@@ -51,6 +51,7 @@ private static void initializeErrorTextMap(){
 		errorTextMap.put(less500words.getName(), "${value}は500文字以内");
 		errorTextMap.put(hiragana.getName(), "${value}は平仮名のみ");
 		errorTextMap.put(ascii.getName(), "${value}は半角英数字のみ");
+		errorTextMap.put(number.getName(), "${value}は数字のみ");
 		errorTextMap.put(less1Mbytes.getName(), "テキストの文字数オーバー ${value}は1Mbyte以内");
 	}
 }

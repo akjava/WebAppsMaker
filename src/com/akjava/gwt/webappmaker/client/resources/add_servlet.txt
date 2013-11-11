@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.akjava.servlet.AbstractSimpleTemplateServlet;
 import com.akjava.servlet.SimpleTemplateUtils;
-
+import ${basePackage}*;
 
 
 public class  ${className}  extends  AbstractSimpleTemplateServlet{
