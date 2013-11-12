@@ -198,7 +198,7 @@ public enum FormFieldDataToGetLabelAndValueFunction implements Function<FormFiel
 				pmap.put("label_name", label);
 				pmap.put("value_name", value);
 				pmap.put("param", fdata.getOptionText());
-				pmap.put("dataClassName", fdata.getParent().getClassName());
+				pmap.put("dataClassName", parameter.getName());
 				
 				
 				map.put("key", fdata.getKey());

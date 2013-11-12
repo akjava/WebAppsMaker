@@ -13,6 +13,7 @@ for(String select:selections){
 			labels.add(lv.getPrintValue());
 		}
 	}
+	}
 	
 	return Joiner.on(MULTI_VALUE_SEPARATOR).join(labels);
 		}
