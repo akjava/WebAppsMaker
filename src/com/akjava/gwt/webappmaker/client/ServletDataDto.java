@@ -24,6 +24,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
 
 public class ServletDataDto {
@@ -180,6 +181,48 @@ public static class FormDataToCreateFormFieldFunction implements Function<FormFi
 	
 }
 
+private static class ListOrder{
+	private String key;
+	private boolean asc;
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+	public boolean isAsc() {
+		return asc;
+	}
+	public void setAsc(boolean asc) {
+		this.asc = asc;
+	}
+	public ListOrder(String key,boolean asc){
+		this.key=key;
+		this.asc=asc;
+	}
+}
+private static ListOrder parseListOrder(String listOrder,FormData data){
+	if(listOrder==null){
+		String cdateKey=null;
+		for(FormFieldData fdata:data.getFormFieldDatas()){
+			if(fdata.getType()==FormFieldData.TYPE_CREATE_DATE){
+				cdateKey=fdata.getKey();
+				break;
+			}
+		}
+		String key=cdateKey==null?data.getFormFieldDatas().get(0).getKey():cdateKey;
+		return new ListOrder(key,false);
+	}else{
+		boolean asc=true;
+		if(listOrder.endsWith("asc")){
+			listOrder.subSequence(0, listOrder.length()-3);
+		}else if(listOrder.endsWith("desc")){
+			asc=false;
+			listOrder.subSequence(0, listOrder.length()-4);
+		}
+		return new ListOrder(listOrder.trim(),asc);
+	}
+}
 public static class ServletDataToServletFileFunction implements Function<ServletData,FileNameAndText>{
 
 	@Override
@@ -190,7 +233,21 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		file.setName(data.getServletClassName()+".java");
 		String javaTemplate=null;
 		if(data.getServletType().equals(ServletData.TYPE_LIST)){
+			
 			javaTemplate=Bundles.INSTANCE.list_servlet().getText();
+			if(data.getLastPackage().equals("admin")){
+				map.put("pageSize", ""+data.getFormData().getAdminPageSize());
+				GWT.log(data.getFormData().getAdminPageOrder());
+				ListOrder listOrder=parseListOrder(data.getFormData().getAdminPageOrder(), data.getFormData());
+				map.put("order_key", listOrder.getKey());
+				map.put("order_asc", ""+listOrder.isAsc());
+			}else{
+				map.put("pageSize", ""+data.getFormData().getPageSize());
+				ListOrder listOrder=parseListOrder(data.getFormData().getPageOrder(), data.getFormData());
+				map.put("order_key", listOrder.getKey());
+				map.put("order_asc", ""+listOrder.isAsc());
+			}
+			
 		}else if(data.getServletType().equals(ServletData.TYPE_SHOW)){
 			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD)){

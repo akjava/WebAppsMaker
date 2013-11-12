@@ -62,11 +62,11 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		${dataClassName}EntityDao dao=new ${dataClassName}EntityDao(manager);
 		
 		int page=ServletUtils.parsePageNumber(request, "page");
-		int pageSize=5;
+		int pageSize=${pageSize};
 		
 		int start=(page-1)*pageSize;
 		
-		List<${dataClassName}Entity> datas=dao.getDatas(start, pageSize, "id", false);
+		List<${dataClassName}Entity> datas=dao.getDatas(start, pageSize, "${order_key}", ${order_asc});
 		
 		StringBuffer rowHtmls=new StringBuffer();
 		String template=SimpleTemplateUtils.loadTextFromFile(getServletContext(),"${mainRowTemplate}");
