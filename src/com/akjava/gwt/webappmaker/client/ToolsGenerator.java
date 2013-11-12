@@ -181,7 +181,7 @@ public enum FormFieldDataToGetLabelAndValueFunction implements Function<FormFiel
 				Parameter parameter=toSpecialRelativeParam(fdata);
 				//TODO check error
 				if(parameter.size()==0){
-					return "//invalid parameter:"+fdata.getOptionText()+",usually @DATANAME(LABEL_COLUMN,VALUE_COLUMN)ORDER";
+					return "//invalid parameter:"+fdata.getOptionText()+",usually @DATANAME(LABEL_COLUMN:VALUE_COLUMN)ORDER";
 				}
 				
 				String label=null;
@@ -223,7 +223,7 @@ public enum FormFieldDataToGetLabelAndValueFunction implements Function<FormFiel
 		}
 	}
 	private Parameter toSpecialRelativeParam(FormFieldData fdata){
-		return ParameterUtils.parse(fdata.getOptionText().substring(1), ',');
+		return ParameterUtils.parse(fdata.getOptionText().substring(1), ':');
 	}
 	private boolean isSpecialRelative(FormFieldData fdata){
 		return fdata.getOptionText()!=null && fdata.getOptionText().startsWith("@");
