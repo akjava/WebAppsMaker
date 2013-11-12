@@ -259,7 +259,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			
 			List<String> cdateActions=new ArrayList<String>();
 			for(FormFieldData field:data.getFormData().getFormFieldDatas()){
-				if(field.getType()==FormFieldData.TYPE_MODIFIED_DATE){
+				if(field.getType()==FormFieldData.TYPE_CREATE_DATE){
 					cdateActions.add(TemplateUtils.createText("entity.set${value}(System.currentTimeMillis());", ValuesUtils.toUpperCamel(field.getKey())));
 				}
 			}
@@ -267,7 +267,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			
 			List<String> cuserActions=new ArrayList<String>();
 			for(FormFieldData field:data.getFormData().getFormFieldDatas()){
-				if(field.getType()==FormFieldData.TYPE_MODIFIED_USER){
+				if(field.getType()==FormFieldData.TYPE_CREATE_USER){
 					cuserActions.add(TemplateUtils.createText("entity.set${value}(SharedUtils.getUserId());", ValuesUtils.toUpperCamel(field.getKey())));
 				}
 			}
