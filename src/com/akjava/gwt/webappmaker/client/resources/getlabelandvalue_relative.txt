@@ -1,5 +1,7 @@
 //TODO cache
 		Parameter parameter=ParameterUtils.parse("${param}");
+		String labelAndValueText=${dataClassName}Tools.getCacheMap().get(parameter.toString());
+		if(labelAndValueText==null){
 		PersistenceManager manager=PMF.get().getPersistenceManager();
 		Query query =manager.newQuery(OptionEntity.class);
 		if(parameter.getRemain()!=null){
@@ -11,3 +13,8 @@
 			lvalues.add(new LabelAndValue(""+entity.get${u+label_name}(), ""+entity.get${u+value_name}()));
 		}
 		manager.close();//ok?
+		String lvtext=LabelAndValueDto.labelAndValueToString(lvalues);
+		${dataClassName}Tools.putCacheMapValue(parameter.toString(), lvtext);
+		}else{
+			lvalues=LabelAndValueDto.lineToLabelAndValues(labelAndValueText);
+		}
