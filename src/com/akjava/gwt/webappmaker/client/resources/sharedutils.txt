@@ -6,7 +6,12 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheFactory;
+import javax.cache.CacheManager;
+import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
+import java.util.HashMap;
 public class SharedUtils {
 	//simple get user
 	public static String getUserId(){

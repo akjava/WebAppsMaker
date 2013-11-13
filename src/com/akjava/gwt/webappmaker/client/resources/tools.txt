@@ -112,6 +112,6 @@ ${getKeyLists}
 
 	
 
-	public static String final CACHE_KEY="cache_map_${dataClassName}";
+	public static final String  CACHE_KEY="cache_map_${dataClassName}";
 	
 }
