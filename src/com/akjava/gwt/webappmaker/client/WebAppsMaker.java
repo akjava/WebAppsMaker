@@ -356,8 +356,12 @@ public class WebAppsMaker implements EntryPoint {
 		container.add(new SubmitButton("Download"));
 		downloadLinkContainer.add(form);
 		
-		String text=JDOCsvConverter.convert(datas.get(0).getFormFieldDatas());
-		jdoCsv.setText(text);
+		String jdoText="";
+		for(FormData data:datas){
+		String text=JDOCsvConverter.convert(data.getFormFieldDatas());
+		jdoText+=text+"\n";
+		}
+		jdoCsv.setText(jdoText);
 		
 	}
 	
