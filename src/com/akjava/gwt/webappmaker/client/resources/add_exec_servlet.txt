@@ -67,7 +67,8 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 			${cuser_action}
 			try{
 				new ${dataClassName}EntityDao(PMF.get().getPersistenceManager()).addData(entity);
-				${dataClassName}Tools.clearCacheMap();//refresh cache data
+				
+				SharedUtils.clearCacheMap(${dataClassName}Tools.CACHE_KEY);
 				}catch(Exception e){
 					//TODO system error
 					return "System error:"+e.getMessage();

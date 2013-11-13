@@ -26,4 +26,51 @@ public class SharedUtils {
 			return map.get(defaultValue);
 		}
 	}
+	
+	public static volatile Cache cache;
+	public static int DEFAULT_CACHE_AGE=60*60*24;//1day
+	@SuppressWarnings("unchecked")
+	private static void initCache() {
+		CacheFactory cacheFactory;
+		if(cache==null){//re create cache
+		try {
+			@SuppressWarnings("rawtypes")
+			Map props = new HashMap();
+			props.put(GCacheFactory.EXPIRATION_DELTA, DEFAULT_CACHE_AGE);// 3minute
+			cacheFactory = CacheManager.getInstance().getCacheFactory();
+			cache = cacheFactory.createCache(props);
+		} catch (CacheException e) {
+			e.printStackTrace();
+		}
+		}
+	}
+	
+	public static void clearCacheMap(String cache_key){
+		initCache();
+		if(cache!=null){
+		cache.remove(cache_key);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	public static void putCacheMapValue(String cache_key,String key,String value){
+		initCache();
+		if(cache!=null){
+		Map<String,String> map=((Map<String, String>) cache.get(cache_key));
+		if(map==null){
+			map=new HashMap<String, String>();
+		}
+		map.put(key, value);
+		cache.put(cache_key, map);
+		}
+	}
+	public static Map<String,String> getCacheMap(String cache_key){
+		initCache();
+		@SuppressWarnings("unchecked")
+		Map<String,String> map=((Map<String, String>) cache.get(cache_key));
+		if(map==null){
+			return new HashMap<String, String>();
+		}else{
+			return map;
+		}
+	}
 }

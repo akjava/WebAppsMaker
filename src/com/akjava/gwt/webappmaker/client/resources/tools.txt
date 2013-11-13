@@ -109,45 +109,9 @@ ${getKeyLists}
 		return values;
 	}
 
-@SuppressWarnings("unchecked")
-	private static void initCache() {
-		CacheFactory cacheFactory;
-		if(cache==null){//re create cache
-		try {
-			@SuppressWarnings("rawtypes")
-			Map props = new HashMap();
-			props.put(GCacheFactory.EXPIRATION_DELTA, DEFAULT_CACHE_AGE);// 3minute
-			cacheFactory = CacheManager.getInstance().getCacheFactory();
-			cache = cacheFactory.createCache(props);
-		} catch (CacheException e) {
-			e.printStackTrace();
-		}
-		}
-	}
+
 	
-public static volatile Cache cache;
-	public static int DEFAULT_CACHE_AGE=60*60*24;//1day
-	public static String CACHE_KEY="cache_map_${dataClassName}";
-	public static void clearCacheMap(){
-		cache.remove(CACHE_KEY);
-	}
-	@SuppressWarnings("unchecked")
-	public static void putCacheMapValue(String key,String value){
-		Map<String,String> map=((Map<String, String>) cache.get(CACHE_KEY));
-		if(map==null){
-			map=new HashMap<String, String>();
-		}
-		map.put(key, value);
-		cache.put(CACHE_KEY, map);
-	}
-	public static Map<String,String> getCacheMap(){
-		initCache();
-		@SuppressWarnings("unchecked")
-		Map<String,String> map=((Map<String, String>) cache.get(CACHE_KEY));
-		if(map==null){
-			return new HashMap<String, String>();
-		}else{
-			return map;
-		}
-	}
+
+	public static String final CACHE_KEY="cache_map_${dataClassName}";
+	
 }

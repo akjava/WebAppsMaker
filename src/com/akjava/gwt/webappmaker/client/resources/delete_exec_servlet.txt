@@ -62,7 +62,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 			dataMap=${dataClassName}Tools.toValueAndLabelMap(entity);
 			try {
 				dao.removeData(entity);
-				${dataClassName}Tools.clearCacheMap();//refresh cache data
+				SharedUtils.clearCacheMap(${dataClassName}Tools.CACHE_KEY);
 			} catch (Exception e) {
 				response.sendError(500, "Delete faild.busy or something, try later.");
 				return null;
