@@ -14,6 +14,7 @@ import com.akjava.lib.common.tag.Tag;
 import com.akjava.lib.common.tag.TagBuilder;
 
 import com.akjava.lib.common.form.Modifiers;
+import com.akjava.lib.common.functions.LabelAndValueDto;
 import com.akjava.lib.common.utils.HTMLUtils;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.lib.common.utils.ValuesUtils;
@@ -21,7 +22,11 @@ import com.google.common.base.Joiner;
 import javax.servlet.http.HttpServletRequest;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheFactory;
+import javax.cache.CacheManager;
+import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
 
 
 
@@ -104,6 +109,22 @@ ${getKeyLists}
 		return values;
 	}
 
+@SuppressWarnings("unchecked")
+	private static void initCache() {
+		CacheFactory cacheFactory;
+		if(cache==null){//re create cache
+		try {
+			@SuppressWarnings("rawtypes")
+			Map props = new HashMap();
+			props.put(GCacheFactory.EXPIRATION_DELTA, DEFAULT_CACHE_AGE);// 3minute
+			cacheFactory = CacheManager.getInstance().getCacheFactory();
+			cache = cacheFactory.createCache(props);
+		} catch (CacheException e) {
+			e.printStackTrace();
+		}
+		}
+	}
+	
 public static volatile Cache cache;
 	public static int DEFAULT_CACHE_AGE=60*60*24;//1day
 	public static String CACHE_KEY="cache_map_${dataClassName}";
