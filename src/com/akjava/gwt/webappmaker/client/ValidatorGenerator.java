@@ -119,6 +119,12 @@ public class ValidatorGenerator {
 					validatorTexts.add(TemplateUtils.createText(template,map));
 				}
 				}
+			else if(fdata.getType()==FormFieldData.TYPE_NUMBER){
+				if(!ValidatorTools.hasLimitValidator(fdata.getValidators())){
+					map.put("validator","asciiNumber");
+					validatorTexts.add(TemplateUtils.createText(template,map));
+				}
+				}
 			
 			return joiner.join(validatorTexts);
 		}

@@ -288,7 +288,7 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 			return TemplateUtils.createAdvancedText(template, map);
 			
 		}//special date TODO as support create_date & modified_date
-		else if(fdata.getKey().equals("cdate") || fdata.getKey().equals("mdate")){
+		else if(fdata.getType()==FormFieldData.TYPE_CREATE_DATE || fdata.getType()==FormFieldData.TYPE_MODIFIED_DATE){
 			Map<String,String> map=new HashMap<String, String>();
 			map.put("key", fdata.getKey());
 			

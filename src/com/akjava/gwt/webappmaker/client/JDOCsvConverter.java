@@ -28,6 +28,8 @@ public class JDOCsvConverter {
 			return "List<Integer>,";
 		}else if(type.equals("create_date")||type.equals("modified_date")){
 			return "Long,";
+		}else if(type.equals("number")){
+			return "Long,";
 		}else{
 			return "String,";
 		}

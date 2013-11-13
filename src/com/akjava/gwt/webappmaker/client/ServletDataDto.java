@@ -152,6 +152,7 @@ public static class FormDataToCreateFormFieldFunction implements Function<FormFi
 	public String apply(FormFieldData data) {
 		switch(data.getType()){
 		case FormFieldData.TYPE_TEXT_SHORT:
+		case FormFieldData.TYPE_NUMBER:
 			return TemplateUtils.createText(Bundles.INSTANCE.createforms_text().getText(),data.getKey());
 		case FormFieldData.TYPE_TEXT_LONG:
 			return TemplateUtils.createText(Bundles.INSTANCE.createforms_textarea().getText(),data.getKey());
