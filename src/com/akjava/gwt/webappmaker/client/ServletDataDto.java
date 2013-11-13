@@ -216,10 +216,10 @@ private static ListOrder parseListOrder(String listOrder,FormData data){
 	}else{
 		boolean asc=true;
 		if(listOrder.endsWith("asc")){
-			listOrder.subSequence(0, listOrder.length()-3);
+			listOrder=listOrder.substring(0, listOrder.length()-3);
 		}else if(listOrder.endsWith("desc")){
 			asc=false;
-			listOrder.subSequence(0, listOrder.length()-4);
+			listOrder=listOrder.substring(0, listOrder.length()-4);
 		}
 		return new ListOrder(listOrder.trim(),asc);
 	}
