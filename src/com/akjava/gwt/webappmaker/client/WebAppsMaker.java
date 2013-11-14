@@ -325,7 +325,7 @@ public class WebAppsMaker implements EntryPoint {
 				String xmlText=createTestXmlFile(data);
 				String name="test_"+data.getClassName().toLowerCase()+".xml";
 				files.add(new FileNameAndText(name, xmlText));
-				target.addChild(new Tag("antcall").attr("antfile", name));
+				target.addChild(new Tag("ant").attr("antfile", name));
 			}
 			}catch (Exception e) {
 				LogUtils.log(e.getMessage());
