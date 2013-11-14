@@ -104,6 +104,9 @@ public class FileNameAndTextGenerator {
 		datas+=TemplateUtils.createAdvancedText(sub, subMap2);
 		
 		for(FormData fdata:formdatas){
+			if(fdata.isAdminOnly()){
+				continue;
+			}
 			String path="/"+fdata.getClassName().toLowerCase()+"/";
 			String title=fdata.getName();
 			
