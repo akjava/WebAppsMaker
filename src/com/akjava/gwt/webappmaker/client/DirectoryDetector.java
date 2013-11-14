@@ -13,9 +13,10 @@ public class DirectoryDetector {
 		}
 		if(name.equals("web.xml")){
 			return "war/WEB-INF/"+name;
+		}else if(name.equals("allTests.xml")|| (name.startsWith("test_")&&name.endsWith(".xml"))){
+			return "webtest/"+name;
 		}
-		
-		if(name.endsWith(".html")){
+		else if(name.endsWith(".html")){
 			return "war/WEB-INF/template/"+name;
 		}else{//java
 			if(name.startsWith("Admin")){

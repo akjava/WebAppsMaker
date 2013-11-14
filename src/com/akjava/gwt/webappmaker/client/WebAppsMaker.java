@@ -32,6 +32,9 @@ import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormDataDto;
 import com.akjava.lib.common.form.FormFieldData;
 import com.akjava.lib.common.functions.MapToAdvancedTemplatedTextFunction;
+import com.akjava.lib.common.tag.Tag;
+import com.akjava.lib.common.tag.TagToStringConverter;
+import com.akjava.lib.common.utils.TagUtil;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.lib.common.utils.ValuesUtils;
 import com.google.common.base.Joiner;
@@ -313,16 +316,21 @@ public class WebAppsMaker implements EntryPoint {
 		
 		
 		//create webtest xml files 
+		Tag project=new Tag("project").attr("default", "test");
+		Tag target=new Tag("target").attr("name", "test");
+		project.addChild(target);
 		try{
 			for(FormData data:datas){
 				
 				String xmlText=createTestXmlFile(data);
-				files.add(new FileNameAndText("test_"+data.getClassName().toLowerCase()+".xml", xmlText));
+				String name="test_"+data.getClassName().toLowerCase()+".xml";
+				files.add(new FileNameAndText(name, xmlText));
+				target.addChild(new Tag("antcall").attr("antfile", name));
 			}
 			}catch (Exception e) {
 				LogUtils.log(e.getMessage());
 			}
-		
+			files.add(new FileNameAndText("allTests.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+TagToStringConverter.convert(project)));
 		
 		
 		cellList.setRowData(0, files);
