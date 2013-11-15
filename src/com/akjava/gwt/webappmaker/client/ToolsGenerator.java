@@ -1,17 +1,17 @@
 package com.akjava.gwt.webappmaker.client;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.tools.ant.taskdefs.XSLTProcess.Param;
 
 import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
 import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToCreateFormFieldFunction;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
 import com.akjava.lib.common.form.FormFieldData;
+import com.akjava.lib.common.form.FormFieldDataPredicates;
 import com.akjava.lib.common.param.Parameter;
 import com.akjava.lib.common.param.ParameterUtils;
 import com.akjava.lib.common.predicates.StringPredicates;
@@ -31,6 +31,7 @@ public ToolsGenerator(FormData formData,String packageString){
 	this.formData=formData;
 	this.packageString=packageString;
 }
+@SuppressWarnings("unchecked")
 public String generateToolsText(){
 Joiner nLineJoiner=Joiner.on("\n").skipNulls();
 String base=Bundles.INSTANCE.tools().getText();
@@ -89,9 +90,10 @@ map.put("getKeyLists",nLineJoiner.join(toGetKeyListsTexts));
 
 
 //create getLabelAndValue() for EditServlet or AddServlet
+@SuppressWarnings("rawtypes")
 List<String> getLabelAndValue=Lists.newArrayList(
 Iterables.filter(
-	     Lists.transform(formData.getFormFieldDatas(), getFormFieldDataToGetLabelAndValueFunction()),
+	     Lists.transform(new ArrayList(Collections2.filter(formData.getFormFieldDatas(), FormFieldDataPredicates.getHaveLabelAndValue())), getFormFieldDataToGetLabelAndValueFunction()),
 	     StringPredicates.getNotEmpty()
 	  )
 	  );
