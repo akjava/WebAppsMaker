@@ -67,6 +67,7 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource tolabelmap_cmdate();
 	TextResource tolabelmap_text_long();
 	
+	TextResource tolabelmap_number_relation();
 	TextResource createoptionvalue_check();
 	TextResource createoptionvalue_single_select();
 	
@@ -79,4 +80,6 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource createforms_date();
 	
 	TextResource getlabelandvalue_relative();
+	
+	TextResource list_where_number();
 }

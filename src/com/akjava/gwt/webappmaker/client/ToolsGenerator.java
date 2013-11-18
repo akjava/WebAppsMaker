@@ -337,6 +337,21 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 			
 			String template=Bundles.INSTANCE.tolabelmap_multi().getText();
 			return TemplateUtils.createAdvancedText(template, map);
+		}else if(fdata.getType()==FormFieldData.TYPE_NUMBER){
+			String v=fdata.getOptionText();
+			//relative version
+			if(v.startsWith("@")){
+				Parameter param=new Parameter(v.substring(1));
+				if(ParameterUtils.isClosedAndHaveParameter(param)){
+					Map<String,String> tmp=new HashMap<String, String>();
+					tmp.put("key", fdata.getKey());
+					tmp.put("refClass",param.getName());
+					tmp.put("refKey",param.get(0));
+					tmp.put("param", v.substring(1));
+					return TemplateUtils.createAdvancedText(Bundles.INSTANCE.tolabelmap_number_relation().getText(), tmp);
+				}
+			}
+			
 		}
 		return "";
 	}

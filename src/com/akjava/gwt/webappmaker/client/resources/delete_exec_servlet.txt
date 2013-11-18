@@ -37,12 +37,12 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 	}
 
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-		String id=request.getParameter("${firstKey}");
+		String id=request.getParameter("${keyId}");
 		if(id==null){
 			id="";
 		}
 		if(id.isEmpty()){
-			response.sendError(500, "empty ${firstKey}");
+			response.sendError(500, "empty ${keyId}");
 			return null;
 		}
 		try{

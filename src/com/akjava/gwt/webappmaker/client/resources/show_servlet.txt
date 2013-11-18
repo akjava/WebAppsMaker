@@ -47,12 +47,12 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		
-		String key=request.getParameter("${firstKey}");
+		String key=request.getParameter("${keyId}");
 		if(key==null){
 			key="";
 		}
 		if(key.isEmpty()){
-			response.sendError(500, "empty ${firstKey}");
+			response.sendError(500, "empty ${keyId}");
 			return null;
 		}
 		
@@ -61,7 +61,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 			Long keyValue=Long.parseLong(key);
 			entity = new ${dataClassName}EntityDao(PMF.get().getPersistenceManager()).getData(keyValue);
 		}catch (javax.jdo.JDOObjectNotFoundException e) {
-			response.sendError(500, "${firstKey}:"+key+" not found");
+			response.sendError(500, "${keyId}:"+key+" not found");
 			return null;
 		} catch (Exception e) {
 			response.sendError(500, "internal server error "+e.getMessage());
@@ -75,6 +75,8 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 			response.sendError(500, "internal server error2");
 			return null;
 		}
+		
+		${relationLists}
 		
 		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);
 		return dataHtml;

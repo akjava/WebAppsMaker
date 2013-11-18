@@ -1,7 +1,6 @@
 package com.akjava.gwt.webappmaker.client;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +12,7 @@ import com.akjava.lib.common.form.FormFieldData;
 import com.akjava.lib.common.form.FormFieldDataDto;
 import com.akjava.lib.common.form.FormFieldDataDto.FormFieldToHiddenTagWithValueFunction;
 import com.akjava.lib.common.form.FormFieldDataPredicates;
+import com.akjava.lib.common.form.Relation;
 import com.akjava.lib.common.functions.HtmlFunctions;
 import com.akjava.lib.common.functions.StringFunctions.RowListStringJoinFunction;
 import com.akjava.lib.common.tag.LabelAndValue;
@@ -21,7 +21,6 @@ import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.lib.common.utils.ValuesUtils;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.core.shared.GWT;
@@ -236,6 +235,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		if(data.getServletType().equals(ServletData.TYPE_LIST)){
 			
 			javaTemplate=Bundles.INSTANCE.list_servlet().getText();
+			
 			if(data.getLastPackage().equals("admin")){
 				map.put("pageSize", ""+data.getFormData().getAdminPageSize());
 				GWT.log(data.getFormData().getAdminPageOrder());
@@ -248,6 +248,26 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 				map.put("order_key", listOrder.getKey());
 				map.put("order_asc", ""+listOrder.isAsc());
 			}
+			
+			/*
+			 * whereValues is define parameters which get from request
+			 * you can list with filter.
+			 */
+			String where="";	
+			for(FormFieldData fdata:data.getFormData().getFormFieldDatas()){
+				if(fdata.isRelativeField()){
+					String whereTemplate=null;
+					if(fdata.getType()==FormFieldData.TYPE_NUMBER){
+						whereTemplate=Bundles.INSTANCE.list_where_number().getText();
+					}else{
+						throw new RuntimeException("not supported relation's invalid fieldtype:"+fdata);
+					}
+					Map<String,String> tmp=new HashMap<String, String>();
+					tmp.put("key", fdata.getKey());
+					where+=TemplateUtils.createText(whereTemplate, tmp);
+				}
+			}
+			map.put("whereValues", where);
 			
 		}else if(data.getServletType().equals(ServletData.TYPE_SHOW)){
 			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
@@ -339,7 +359,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		map.put("mainRowTemplate", mainTemplate.toLowerCase()+"_row"+".html");
 		map.put("dataClassName", data.getDataClassName());
 		
-		map.put("firstKey",data.getFormData().getFormFieldDatas().get(0).getKey());
+		map.put("keyId",data.getFormData().getIdFieldData().getKey());
 		
 		String phead="";
 		if(!data.getLastPackage().equals("main")){
@@ -590,7 +610,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			map.put("list_title", data.getFormData().getName()+" "+Internationals.getMessage("list"));
 		}else if(type.equals(ServletData.TYPE_DELETE_CONFIRM)){
 			htmlTemplate=Bundles.INSTANCE.delete_confirm_html().getText();
-			map.put("firstKey", data.getFormData().getFormFieldDatas().get(0).getKey());
+			map.put("keyId", data.getFormData().getIdFieldData().getKey());
 			//map.put("has_error_message", Internationals.getMessage("has_error"));
 			map.put("delete_exec_title", Internationals.getMessage("delete_exec"));
 		}else if(type.equals(ServletData.TYPE_DELETE_EXEC)){

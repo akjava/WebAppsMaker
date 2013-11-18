@@ -59,6 +59,11 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 			HttpServletResponse response) throws ServletException, IOException {
 			PersistenceManager manager=PMF.get().getPersistenceManager();
 		
+		String where="";
+		String optionQuery="";
+		${whereValues}
+			
+		
 		${dataClassName}EntityDao dao=new ${dataClassName}EntityDao(manager);
 		
 		int page=ServletUtils.parsePageNumber(request, "page");
@@ -66,7 +71,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		
 		int start=(page-1)*pageSize;
 		
-		List<${dataClassName}Entity> datas=dao.getDatas(start, pageSize, "${order_key}", ${order_asc});
+		List<${dataClassName}Entity> datas=dao.getDatas(start, pageSize,where, "${order_key}", ${order_asc});
 		
 		StringBuffer rowHtmls=new StringBuffer();
 		String template=SimpleTemplateUtils.loadTextFromFile(getServletContext(),"${mainRowTemplate}");
@@ -80,9 +85,9 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		
 		dataMap.put("data", rowHtmls.toString());
 		
-		long count=dao.count();
+		long count=dao.count(where);
 		
-		PageMenuHtmlMaker maker=new PageMenuHtmlMaker("${path}","");
+		PageMenuHtmlMaker maker=new PageMenuHtmlMaker("${path}",optionQuery);
 		String pageMenuHtml=maker.createPageMenuHtml(new PagingInfoImpl(page,count,pageSize));
 		dataMap.put("pagemenu", pageMenuHtml);
 		
