@@ -187,15 +187,11 @@ private static class ListOrder{
 	public String getKey() {
 		return key;
 	}
-	public void setKey(String key) {
-		this.key = key;
-	}
+
 	public boolean isAsc() {
 		return asc;
 	}
-	public void setAsc(boolean asc) {
-		this.asc = asc;
-	}
+
 	public ListOrder(String key,boolean asc){
 		this.key=key;
 		this.asc=asc;
@@ -238,7 +234,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			
 			if(data.getLastPackage().equals("admin")){
 				map.put("pageSize", ""+data.getFormData().getAdminPageSize());
-				GWT.log(data.getFormData().getAdminPageOrder());
+				//GWT.log(data.getFormData().getAdminPageOrder());
 				ListOrder listOrder=parseListOrder(data.getFormData().getAdminPageOrder(), data.getFormData());
 				map.put("order_key", listOrder.getKey());
 				map.put("order_asc", ""+listOrder.isAsc());
@@ -273,6 +269,10 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			map.put("whereValues", where);
 			
 		}else if(data.getServletType().equals(ServletData.TYPE_SHOW)){
+			boolean admin=false;
+			if(data.getLastPackage().equals("admin")){
+				admin=true;
+			}
 			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
 			
 			List<Relation> relations=data.getFormData().getChildrens();
@@ -306,6 +306,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 				tmp.put("quot", quot);
 				tmp.put("showNext", showNext);
 				tmp.put("parentClass", parentData.getClassName());
+				tmp.put("admin", admin?"admin_":"");
 				relationListMethods+=TemplateUtils.createAdvancedText(methodBase, tmp);
 				}
 				
@@ -459,14 +460,13 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		
 		
 		if(type.equals(ServletData.TYPE_LIST)){
-			
-			
-			
-			if(data.getLastPackage().equals("admin")){
-			htmlTemplate=Bundles.INSTANCE.admin_list_html().getText();	
-			}else{
-			htmlTemplate=Bundles.INSTANCE.list_html().getText();
+			if (data.getLastPackage().equals("admin")) {
+				htmlTemplate = Bundles.INSTANCE.admin_list_html().getText();
+				
+			} else {
+				htmlTemplate = Bundles.INSTANCE.list_html().getText();
 			}
+			
 			
 			FileNameAndText file2=new FileNameAndText();
 			file2.setName(head+data.getDataClassName().toLowerCase()+"_"+type.toLowerCase()+"_row.html");
@@ -491,7 +491,20 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 				
 				String relationLists="";
 				
+				//has children
 				if(relations.size()!=0){
+					boolean admin=false;
+					String relation_rowTemplate=null;
+					
+					if(data.getLastPackage().equals("admin")){
+					relation_rowTemplate=Bundles.INSTANCE.admin_list_row_relation_html().getText();
+					admin=true;
+					}else{
+					relation_rowTemplate=Bundles.INSTANCE.list_row_relation_html().getText();
+					}
+					
+					//create list row file
+					
 					String base=Bundles.INSTANCE.show_sub_list_html().getText();
 					for(Relation relation:relations){
 						FormData children=relation.getData();
@@ -516,6 +529,20 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 						tmp.put("add_title", add_title);
 						tmp.put("table_headers", table_headers);
 						relationLists+=TemplateUtils.createAdvancedText(base, tmp);
+						
+						//create row file
+						String rowFileName=parent.getClassName().toLowerCase()+"_"+"list_"+children.getClassName().toLowerCase()+"_"+relation.getKey()+"_row.html";
+						if(admin){
+							rowFileName="admin_"+rowFileName;
+						}
+						//columns 
+						Iterable<String> keys=Iterables.transform(children.getFormFieldDatas(), FormFieldDataDto.getFormFieldToKeyFunction());
+						Iterable<String> keyParams=
+								Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("<td>${label_","}</td>"));
+						String rowText=relation_rowTemplate.replace("${CHILD_COLUMNS}", Joiner.on("\n").join(keyParams));
+						rowText=rowText.replace("${DIRNAME}", children.getClassName().toLowerCase());
+						files.add(new FileNameAndText(rowFileName,rowText));
+						
 					}
 				}
 				map.put("relationLists", relationLists);
@@ -746,6 +773,9 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		map.put("reset_title", Internationals.getMessage("reset"));
 		
 		for(FileNameAndText fileText:files){
+			if(fileText.getText()==null){
+				throw new RuntimeException("empty body:"+fileText.getName());
+			}
 			String text=TemplateUtils.createAdvancedText(fileText.getText(), map);
 			fileText.setText(text);
 		}

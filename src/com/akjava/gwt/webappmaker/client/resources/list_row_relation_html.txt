@@ -1,0 +1,7 @@
+<tr>
+<td>
+<a href="../${DIRNAME}/show?id=${value_id}"><button class='btn btn-info'>${show_title}</button></a>
+</td>
+${CHILD_COLUMNS}
+
+</tr>

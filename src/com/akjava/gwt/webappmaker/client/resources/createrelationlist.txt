@@ -6,7 +6,7 @@
 		List<RelationEntity> datas=dao.getDatas(0, pageSize,where, "${orderKey}", ${orderAsc});
 		
 		StringBuffer rowHtmls=new StringBuffer();
-		String template=SimpleTemplateUtils.loadTextFromFile(getServletContext(),"admin_relation_list_${l+parentClass}_row.html");
+		String template=SimpleTemplateUtils.loadTextFromFile(getServletContext(),"${admin}${l+parentClass}_list_${l+childClass}_${refKey}_row.html");
 		
 		for(${childClass}Entity data:datas){
 			Map<String,String> map=${childClass}Tools.toValueAndLabelMap(data);

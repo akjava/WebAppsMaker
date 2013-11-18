@@ -22,6 +22,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.gwt.core.shared.GWT;
 
 
 public class ToolsGenerator {
@@ -339,16 +340,20 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 			return TemplateUtils.createAdvancedText(template, map);
 		}else if(fdata.getType()==FormFieldData.TYPE_NUMBER){
 			String v=fdata.getOptionText();
+			
 			//relative version
 			if(v!=null && v.startsWith("@")){
-				Parameter param=new Parameter(v.substring(1));
+				Parameter param=ParameterUtils.parse(v.substring(1));
 				if(ParameterUtils.isClosedAndHaveParameter(param)){
+					GWT.log("have:"+v);
 					Map<String,String> tmp=new HashMap<String, String>();
 					tmp.put("key", fdata.getKey());
 					tmp.put("refClass",param.getName());
 					tmp.put("refKey",param.get(0));
 					tmp.put("param", v.substring(1));
 					return TemplateUtils.createAdvancedText(Bundles.INSTANCE.tolabelmap_number_relation().getText(), tmp);
+				}else{
+					GWT.log("invalid parameter:"+v);
 				}
 			}
 			

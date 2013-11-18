@@ -42,6 +42,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -243,6 +244,7 @@ public class WebAppsMaker implements EntryPoint {
 			
 			List<List<FileNameAndText>> templateFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToTemplateFileFunction());
 			for(List<FileNameAndText> templates:templateFiles){
+				
 				Iterables.addAll(files, templates);
 			}
 			//TODO list always contain add link,however usually not need it.
