@@ -1,0 +1,23 @@
+if(key.equals(${key})){
+			String param="${param}";
+			String cache_name="param_"+param+value;
+			long dataNumber=ValuesUtils.toLong(value, 0);
+			String labelValue=SharedUtils.getCacheMap(${refClass}Tools.CACHE_KEY).get(cache_name);
+			if(labelValue==null){
+			try {
+				${refClass}Entity parent=new ${refClass}EntityDao(PMF.get().getPersistenceManager()).getData(dataNumber);
+				String label=${refClass}Tools.toLabelValue("${refKey}", parent.getText());
+				String url="../${l+refClass}/show?id="+value;
+				Tag atag=new Tag("a").attr("href", url).attr("target", "_self");
+				atag.setText(label);
+				labelValue= atag.toString();
+				SharedUtils.putCacheMapValue(${refClass}Tools.CACHE_KEY, cache_name, labelValue);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "INVALID ID:maybe deleted?";
+			}
+			}else{
+				return labelValue;
+			}
+		}

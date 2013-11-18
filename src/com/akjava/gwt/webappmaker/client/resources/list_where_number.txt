@@ -1,0 +1,11 @@
+if(request.getParameter("${key}")!=null){
+				if(!where.isEmpty()){
+					where+=" ";
+				}
+				where="${key}=="+request.getParameter("${key}")+"";//type id
+				
+				if(!optionQuery.isEmpty()){
+					optionQuery+="&";
+				}
+				optionQuery+="${key}="+request.getParameter("${key}");//TODO encode
+			}
