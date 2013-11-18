@@ -18,3 +18,4 @@ edit_complete	Complete edit
 delete_confirm	Confirm Delete
 delete_exec	Exec Delete
 delete_complete	Complete delete
+show_next	show next

@@ -340,7 +340,7 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 		}else if(fdata.getType()==FormFieldData.TYPE_NUMBER){
 			String v=fdata.getOptionText();
 			//relative version
-			if(v.startsWith("@")){
+			if(v!=null && v.startsWith("@")){
 				Parameter param=new Parameter(v.substring(1));
 				if(ParameterUtils.isClosedAndHaveParameter(param)){
 					Map<String,String> tmp=new HashMap<String, String>();

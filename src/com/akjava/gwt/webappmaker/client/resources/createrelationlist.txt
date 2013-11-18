@@ -1,0 +1,28 @@
+
+	public void create${parentClass}${u+refKey}List(PersistenceManager manager,${parentClass}Entity entity){
+		RelationEntityDao dao=new RelationEntityDao(manager);
+		int pageSize=${pageSize};
+		String where="${refKey}=="+"${quot}"+entity.get${u+keyId}()+"${quot}";
+		List<RelationEntity> datas=dao.getDatas(0, pageSize,where, "${orderKey}", ${orderAsc});
+		
+		StringBuffer rowHtmls=new StringBuffer();
+		String template=SimpleTemplateUtils.loadTextFromFile(getServletContext(),"admin_relation_list_${l+parentClass}_row.html");
+		
+		for(${childClass}Entity data:datas){
+			Map<String,String> map=${childClass}Tools.toValueAndLabelMap(data);
+			
+			String html=TemplateUtils.createAdvancedText(template, map);
+			rowHtmls.append(html);
+		}
+		
+		dataMap.put("data_${childClass}", rowHtmls.toString());
+		
+		long count=dao.count(where);
+		if(count>pageSize){
+			//TODO bootstrap button?
+			dataMap.put("menu_${childClass}",new Tag("a").attr("href","../${l+childClass}/?page=2&data="+entity.get${u+keyId}()).text("[>>${showNext}]").toString());	
+		}else{
+		dataMap.put("menu_${childClass}","");
+		}
+	}
+	

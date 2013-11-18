@@ -82,4 +82,6 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource getlabelandvalue_relative();
 	
 	TextResource list_where_number();
+	TextResource createrelationlist();
+	TextResource show_sub_list_html();
 }

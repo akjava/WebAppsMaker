@@ -259,7 +259,10 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 					String whereTemplate=null;
 					if(fdata.getType()==FormFieldData.TYPE_NUMBER){
 						whereTemplate=Bundles.INSTANCE.list_where_number().getText();
-					}else{
+					}else if(fdata.getType()==FormFieldData.TYPE_SELECT_SINGLE||fdata.getType()==FormFieldData.TYPE_SELECT_SINGLE){
+						continue;
+					}
+					else{
 						throw new RuntimeException("not supported relation's invalid fieldtype:"+fdata);
 					}
 					Map<String,String> tmp=new HashMap<String, String>();
@@ -271,6 +274,54 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			
 		}else if(data.getServletType().equals(ServletData.TYPE_SHOW)){
 			javaTemplate=Bundles.INSTANCE.show_servlet().getText();
+			
+			List<Relation> relations=data.getFormData().getChildrens();
+			String relationListMethods="";
+			String relationLists="";
+			
+			if(relations.size()!=0){
+				FormData parentData=data.getFormData();
+				
+				String keyId=parentData.getIdFieldData().getKey();
+				String quot="";
+				if(parentData.getIdFieldData().getType()!=FormFieldData.TYPE_ID){
+					quot="'";//future string case
+				}
+				String showNext=Internationals.getMessage("show_next");
+				
+				
+				String methodBase=Bundles.INSTANCE.createrelationlist().getText();
+				for(Relation relation:relations){
+					Map<String,String> tmp=new HashMap<String, String>();
+					FormData childData=relation.getData();
+					//get order
+					ListOrder listOrder=parseListOrder(childData.getSubPageOrder(), childData);
+					tmp.put("pageSize", ""+childData.getSubPageSize());
+					tmp.put("orderKey", listOrder.getKey());
+					tmp.put("orderAsc", ""+listOrder.isAsc());
+					
+				tmp.put("childClass", childData.getClassName());
+				tmp.put("refKey", relation.getKey());
+				tmp.put("keyId", keyId);
+				tmp.put("quot", quot);
+				tmp.put("showNext", showNext);
+				tmp.put("parentClass", parentData.getClassName());
+				relationListMethods+=TemplateUtils.createAdvancedText(methodBase, tmp);
+				}
+				
+				relationLists+="PersistenceManager manager=PMF.get().getPersistenceManager();\n";
+				String callBase="create${parentClass}${u+refKey}List(manager,entity);\n";
+				for(Relation relation:relations){
+					
+					Map<String,String> tmp=new HashMap<String, String>();
+					tmp.put("refKey", relation.getKey());
+					tmp.put("parentClass", parentData.getClassName());
+					relationLists+=TemplateUtils.createAdvancedText(callBase, tmp);
+					}
+			}
+			
+			map.put("relationListMethods", relationListMethods);
+			map.put("relationLists", relationLists);
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD)){
 			javaTemplate=Bundles.INSTANCE.add_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD_CONFIRM)){
@@ -427,12 +478,47 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			}
 			
 			} else if (type.equals(ServletData.TYPE_SHOW)) {
+				
 				if (data.getLastPackage().equals("admin")) {
 					//TODO admin
 					htmlTemplate = Bundles.INSTANCE.show_html().getText();
+					
 				} else {
 					htmlTemplate = Bundles.INSTANCE.show_html().getText();
 				}
+				
+				List<Relation> relations=data.getFormData().getChildrens();
+				
+				String relationLists="";
+				
+				if(relations.size()!=0){
+					String base=Bundles.INSTANCE.show_sub_list_html().getText();
+					for(Relation relation:relations){
+						FormData children=relation.getData();
+						FormData parent=data.getFormData();
+						
+						String columnName=children.getFieldData(relation.getKey()).getName();//TODO error check
+						String columnKey=relation.getKey();
+						String dirName=children.getClassName().toLowerCase();
+						String title=children.getName()+"("+columnName+") "+Internationals.getMessage("list");
+						String add_link="../"+dirName+"/add?"+columnKey+"=${value_id}";
+						String add_title=children.getName()+" "+Internationals.getMessage("add");
+						
+						List<String> names=Lists.transform(children.getFormFieldDatas(), FormFieldDataDto.getFormFieldToNameFunction());
+						List<String> ths=Lists.transform(names
+								, HtmlFunctions.getStringToTHFunction());
+						String table_headers=Joiner.on("\n").join(ths);
+						
+						Map<String,String> tmp=new HashMap<String, String>();
+						//data_Relation & menu_Relation use other template
+						tmp.put("title", title);
+						tmp.put("add_link", add_link);
+						tmp.put("add_title", add_title);
+						tmp.put("table_headers", table_headers);
+						relationLists+=TemplateUtils.createAdvancedText(base, tmp);
+					}
+				}
+				map.put("relationLists", relationLists);
 
 		}else if(type.equals(ServletData.TYPE_ADD)){
 			htmlTemplate=Bundles.INSTANCE.add_html().getText();

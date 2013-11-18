@@ -1,0 +1,7 @@
+<h3>${title}</h3>
+<p><a href='${add_link}'><button class='btn btn-success'>${add_title}</button></a></p>
+<table class="table">
+${table_headers}
+${data_Relation}
+</table>
+${menu_Relation}

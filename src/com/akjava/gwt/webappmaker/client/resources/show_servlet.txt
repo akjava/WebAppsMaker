@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.servlet.AbstractSimpleTemplateServlet;
 import com.akjava.servlet.SimpleTemplateUtils;
-
+import com.akjava.lib.common.tag.Tag;
 import ${basePackage}*;
 
 
@@ -81,4 +81,6 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);
 		return dataHtml;
 	}
+	
+	${relationListMethods}
 }

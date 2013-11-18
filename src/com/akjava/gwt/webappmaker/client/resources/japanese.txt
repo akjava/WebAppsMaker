@@ -18,3 +18,4 @@ edit_complete	編集完了しました
 delete_confirm	削除確認
 delete_exec	削除実行
 delete_complete	削除完了
+show_next	次を表示
