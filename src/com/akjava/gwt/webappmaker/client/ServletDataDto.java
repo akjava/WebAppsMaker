@@ -770,6 +770,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		HtmlFunctions.getStringToTRTDFunction().apply(vs)
 		);
 		
+		map.put("data_name", data.getFormData().getName());
 		map.put("show_title", Internationals.getMessage("show"));
 		map.put("add_title", Internationals.getMessage("add"));
 		map.put("edit_title", Internationals.getMessage("edit"));

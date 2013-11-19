@@ -3,7 +3,7 @@
 ${name_key_trtd}
 </table>
 <p>
-<a href="edit?id=${value_id}"><button class='btn btn-warning'>${edit_title}</button></a>
-<a href="delete?id=${value_id}"><button class='btn btn-danger'>${delete_title}</button></a>
+<a href="edit?id=${value_id}"><button class='btn btn-warning'>${data_name} ${edit_title}</button></a>
+<a href="delete?id=${value_id}"><button class='btn btn-danger'>${data_name} ${delete_title}</button></a>
 </p>
 ${relationLists}
