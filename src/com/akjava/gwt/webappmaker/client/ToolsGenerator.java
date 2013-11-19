@@ -345,7 +345,7 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 			if(v!=null && v.startsWith("@")){
 				Parameter param=ParameterUtils.parse(v.substring(1));
 				if(ParameterUtils.isClosedAndHaveParameter(param)){
-					GWT.log("have:"+v);
+					
 					Map<String,String> tmp=new HashMap<String, String>();
 					tmp.put("key", fdata.getKey());
 					tmp.put("refClass",param.getName());

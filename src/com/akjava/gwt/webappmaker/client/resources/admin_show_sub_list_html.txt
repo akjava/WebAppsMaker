@@ -1,4 +1,5 @@
 <h3>${title}</h3>
+<p><a href='${add_link}'><button class='btn btn-success'>${add_title}</button></a></p>
 <table class="table">
 <tr>
 ${table_headers}

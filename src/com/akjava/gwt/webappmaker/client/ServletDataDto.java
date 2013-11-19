@@ -504,7 +504,9 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 					
 					//create list row file
 					
-					String base=Bundles.INSTANCE.show_sub_list_html().getText();
+					String base=admin?Bundles.INSTANCE.admin_show_sub_list_html().getText():
+							Bundles.INSTANCE.show_sub_list_html().getText();
+					
 					for(Relation relation:relations){
 						FormData children=relation.getData();
 						FormData parent=data.getFormData();
@@ -519,7 +521,10 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 						List<String> names=Lists.transform(children.getFormFieldDatas(), FormFieldDataDto.getFormFieldToNameFunction());
 						List<String> ths=Lists.transform(names
 								, HtmlFunctions.getStringToTHFunction());
-						String table_headers=Joiner.on("\n").join(ths);
+						String table_headers="<th></th>\n"+Joiner.on("\n").join(ths);
+						if(admin){
+							table_headers+="\n<th></th><th></th>";
+						}
 						
 						Map<String,String> tmp=new HashMap<String, String>();
 						//data_Relation & menu_Relation use other template

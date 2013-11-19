@@ -1,4 +1,4 @@
-if(key.equals(${key})){
+if(key.equals("${key}")){
 			String param="${param}";
 			String cache_name="param_"+param+value;
 			long dataNumber=ValuesUtils.toLong(value, 0);

@@ -1,6 +1,6 @@
 <div>
 <form method="post" action="delete_exec">
-<table class="table">
+<table class="table" style='background: pink'>
 <input type="hidden" name="${keyId}" value="${value_${keyId}}">
 ${name_key_trtd}
 
