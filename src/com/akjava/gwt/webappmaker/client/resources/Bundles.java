@@ -24,6 +24,7 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	TextResource list_html();
 	TextResource list_row_html();
 	TextResource show_html();
+	TextResource admin_show_html();
 	
 	TextResource add_html();
 	TextResource add_confirm_html();

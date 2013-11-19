@@ -480,8 +480,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 			} else if (type.equals(ServletData.TYPE_SHOW)) {
 				
 				if (data.getLastPackage().equals("admin")) {
-					//TODO admin
-					htmlTemplate = Bundles.INSTANCE.show_html().getText();
+					htmlTemplate = Bundles.INSTANCE.admin_show_html().getText();
 					
 				} else {
 					htmlTemplate = Bundles.INSTANCE.show_html().getText();
