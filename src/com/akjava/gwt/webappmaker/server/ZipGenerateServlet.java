@@ -10,9 +10,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @deprecated
+ * use com.akjava.servlet
+ * @author aki
+ *
+ */
 public class ZipGenerateServlet extends HttpServlet{
 /**
 	 * 
+	 * 
+* sample form
+<form action="tozip" method="post">
+<input name="filenumber" value="2" type="hidden">
+<input name="path1" value="file1.txt">
+<input name="text1" value="Hello">
+<br/>
+<input name="path2" value="test/file2.txt">
+<input name="text2" value="World.">
+<br/>
+<input type="submit">
+</form>
 	 */
 	private static final long serialVersionUID = 1L;
 public static final String KEY_FILE_NUMBER="filenumber";
