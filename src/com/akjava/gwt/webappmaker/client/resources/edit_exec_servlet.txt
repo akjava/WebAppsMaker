@@ -67,14 +67,14 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 			${dataClassName}Entity entity=null;
 			${dataClassName}EntityDao dao=new ${dataClassName}EntityDao(PMF.get().getPersistenceManager());
 			try {
-				Long keyValue=Long.parseLong(id);
+				${PARSE_KEY_VALUE}
 				entity = dao.getData(keyValue);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
 			if(entity==null){
-				response.sendError(500, "${firstKey}:"+id+"is not found");
+				response.sendError(500, "${keyId}:"+id+"is not found,invalid id or trying edit?(not support yet)");
 				return null;
 			}
 			

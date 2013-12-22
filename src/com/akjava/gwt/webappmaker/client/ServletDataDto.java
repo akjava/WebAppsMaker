@@ -222,6 +222,8 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 
 	@Override
 	public FileNameAndText apply(ServletData data) {
+		FormFieldData keyFieldData=data.getFormData().getIdFieldData();//TODO before check call this method.
+		
 		Map<String,String> map=new HashMap<String,String>();
 		
 		FileNameAndText file=new FileNameAndText();
@@ -391,6 +393,13 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 		}else{
 			map.put("useCache","false");
 		}
+		
+		//TODO remove id ,because in future number support  minus or small values.
+				if(keyFieldData.getType()==FormFieldData.TYPE_ID||keyFieldData.getType()==FormFieldData.TYPE_NUMBER){
+					map.put("PARSE_KEY_VALUE", "Long keyValue=Long.parseLong(id);");
+				}else{//type must be text
+					map.put("PARSE_KEY_VALUE", "String keyValue=id;");
+				}
 		
 		
 		map.put("className", data.getServletClassName());
@@ -780,6 +789,12 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		
 		//usually value_id is setted,but sometime id field-key name other,should set it.
 		map.put("VALUE_ID_KEY", "${value_"+keyFieldData.getKey()+"}");
+		
+		//usually set id,but sometime different.
+		map.put("ID_KEY", ""+keyFieldData.getKey());
+		
+		
+		
 		
 		for(FileNameAndText fileText:files){
 			if(fileText.getText()==null){

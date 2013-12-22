@@ -49,7 +49,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		try{
 		${dataClassName}Entity q=null;
 		try {
-			Long keyValue=Long.parseLong(id);//TODO switch by type
+			${PARSE_KEY_VALUE}
 			q = new ${dataClassName}EntityDao(PMF.get().getPersistenceManager()).getData(keyValue);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

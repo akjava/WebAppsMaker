@@ -1,12 +1,12 @@
 <tr>
 <td>
-<a href="../${DIRNAME}/show?id=${VALUE_ID_KEY}"><button class='btn btn-info'>${show_title}</button></a>
+<a href="../${DIRNAME}/show?${ID_KEY}=${VALUE_ID_KEY}"><button class='btn btn-info'>${show_title}</button></a>
 </td>
 ${CHILD_COLUMNS}
 <td>
-<a href="../${DIRNAME}/edit?id=${VALUE_ID_KEY}"><button class='btn btn-warning'>${edit_title}</button></a>
+<a href="../${DIRNAME}/edit?${ID_KEY}=${VALUE_ID_KEY}"><button class='btn btn-warning'>${edit_title}</button></a>
 </td>
 <td>
-<a href="../${DIRNAME}/delete?id=${VALUE_ID_KEY}"><button class='btn btn-danger'>${delete_title}</button></a>
+<a href="../${DIRNAME}/delete?${ID_KEY}=${VALUE_ID_KEY}"><button class='btn btn-danger'>${delete_title}</button></a>
 </td>
 </tr>

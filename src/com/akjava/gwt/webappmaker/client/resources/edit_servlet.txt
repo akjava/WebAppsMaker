@@ -56,7 +56,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 		try{
 		${dataClassName}Entity entity=null;
 		try {
-			Long keyValue=Long.parseLong(id);//TODO switch by type
+			${PARSE_KEY_VALUE}
 			entity = new ${dataClassName}EntityDao(PMF.get().getPersistenceManager()).getData(keyValue);
 		} catch (Exception e) {
 			e.printStackTrace();
