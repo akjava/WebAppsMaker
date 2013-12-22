@@ -255,7 +255,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 					String whereTemplate=null;
 					if(fdata.getType()==FormFieldData.TYPE_NUMBER){
 						whereTemplate=Bundles.INSTANCE.list_where_number().getText();
-					}else if(fdata.getType()==FormFieldData.TYPE_SELECT_SINGLE||fdata.getType()==FormFieldData.TYPE_SELECT_SINGLE){
+					}else if(fdata.getType()==FormFieldData.TYPE_SELECT_SINGLE||fdata.getType()==FormFieldData.TYPE_SELECT_MULTI){
 						continue;
 					}
 					else{
