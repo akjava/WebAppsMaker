@@ -23,7 +23,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
 
 public class ServletDataDto {
@@ -445,6 +444,8 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 	public List<FileNameAndText> apply(ServletData data) {
 		Map<String,String> map=new HashMap<String,String>();
 		
+		FormFieldData keyFieldData=data.getFormData().getIdFieldData();//TODO before check call this method.
+		
 		List<FileNameAndText> files=new ArrayList<FileNameAndText>();
 		String type=data.getServletType();
 		
@@ -515,7 +516,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 						String columnKey=relation.getKey();
 						String dirName=children.getClassName().toLowerCase();
 						String title=children.getName()+"("+columnName+") "+Internationals.getMessage("list");
-						String add_link="../"+dirName+"/add?"+columnKey+"=${value_id}";
+						String add_link="../"+dirName+"/add?"+columnKey+"=${value_"+keyFieldData.getKey()+"}";
 						String add_title=children.getName()+" "+Internationals.getMessage("add");
 						
 						List<String> names=Lists.transform(children.getFormFieldDatas(), FormFieldDataDto.getFormFieldToNameFunction());
@@ -776,6 +777,9 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		map.put("edit_title", Internationals.getMessage("edit"));
 		map.put("delete_title", Internationals.getMessage("delete"));
 		map.put("reset_title", Internationals.getMessage("reset"));
+		
+		//usually value_id is setted,but sometime id field-key name other,should set it.
+		map.put("VALUE_ID_KEY", "${value_"+keyFieldData.getKey()+"}");
 		
 		for(FileNameAndText fileText:files){
 			if(fileText.getText()==null){
