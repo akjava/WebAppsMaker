@@ -1,4 +1,6 @@
 [Tips]
 number type need add asciiNumber validator by yourself so far.
 
+To use text as id ,set it first and not set any id-type in fieldList.but this text can't edit right now(error occuer)
 
+To use any number as id,set it first and not set any id-type in fieldList.but this number can't edit right now(error occuer)
