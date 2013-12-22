@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
+import com.akjava.gwt.lib.client.LogUtils;
 import com.akjava.gwt.webappmaker.client.ServletDataDto.FormDataToCreateFormFieldFunction;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
@@ -185,6 +186,12 @@ public enum FormFieldDataToGetLabelAndValueFunction implements Function<FormFiel
 				//TODO check error
 				if(parameter.size()==0){
 					return "//invalid parameter:"+fdata.getOptionText()+",usually @DATANAME(LABEL_COLUMN:VALUE_COLUMN)ORDER";
+				}
+				
+				if(parameter.size()==1){
+					
+					LogUtils.log("parameter size is 1(first one is label,second is id-column-name), are you sure?if first param is not id,it would faild to get value after added");
+					
 				}
 				
 				String label=null;
