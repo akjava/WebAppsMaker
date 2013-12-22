@@ -18,6 +18,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.gwt.core.client.GWT;
 
 public class ValidatorGenerator {
 	private FormData formData;
@@ -95,6 +96,7 @@ public class ValidatorGenerator {
 		public static String template="validators.put(\"${key}\", ValidatorTools.getValidator(\"${validator}\"));";
 		@Override
 		public String apply(FormFieldData fdata) {
+			GWT.log("CreateDataValidatorFunction");
 			if(fdata.getValidators()==null || fdata.getValidators().size()==0){
 				return null;
 			}
@@ -120,10 +122,10 @@ public class ValidatorGenerator {
 				}
 				}
 			else if(fdata.getType()==FormFieldData.TYPE_NUMBER){
-				if(!ValidatorTools.hasLimitValidator(fdata.getValidators())){
+				//GWT.log(fdata.getName()+","+ValidatorTools.hasLimitValidator(fdata.getValidators()));
 					map.put("validator","asciiNumber");
 					validatorTexts.add(TemplateUtils.createText(template,map));
-				}
+				
 				}
 			
 			return joiner.join(validatorTexts);
