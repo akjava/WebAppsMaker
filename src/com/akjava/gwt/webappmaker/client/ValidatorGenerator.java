@@ -96,7 +96,7 @@ public class ValidatorGenerator {
 		public static String template="validators.put(\"${key}\", ValidatorTools.getValidator(\"${validator}\"));";
 		@Override
 		public String apply(FormFieldData fdata) {
-			GWT.log("CreateDataValidatorFunction");
+			
 			if(fdata.getValidators()==null || fdata.getValidators().size()==0){
 				return null;
 			}
@@ -122,10 +122,8 @@ public class ValidatorGenerator {
 				}
 				}
 			else if(fdata.getType()==FormFieldData.TYPE_NUMBER){
-				//GWT.log(fdata.getName()+","+ValidatorTools.hasLimitValidator(fdata.getValidators()));
 					map.put("validator","asciiNumber");
 					validatorTexts.add(TemplateUtils.createText(template,map));
-				
 				}
 			
 			return joiner.join(validatorTexts);
