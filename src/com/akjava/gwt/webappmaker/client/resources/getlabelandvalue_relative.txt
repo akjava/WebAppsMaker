@@ -3,7 +3,7 @@
 		String labelAndValueText=SharedUtils.getCacheMap(${dataClassName}Tools.CACHE_KEY).get(parameter.toString());
 		if(labelAndValueText==null){
 		PersistenceManager manager=PMF.get().getPersistenceManager();
-		Query query =manager.newQuery(OptionEntity.class);
+		Query query =manager.newQuery(${dataClassName}Entity.class);
 		if(parameter.getRemain()!=null){
 			query.setOrdering(parameter.getRemain());
 		}
