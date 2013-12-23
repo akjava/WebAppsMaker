@@ -78,6 +78,7 @@ public class WebAppsMaker implements EntryPoint {
 	private SingleSelectionModel<FileNameAndText> selectionModel;
 	private VerticalPanel downloadLinkContainer=new VerticalPanel();
 	private TextArea jdoCsv;
+	static Map<String,FormData> formDataMaps=new HashMap<String, FormData>();
 	public void onModuleLoad() {
 		
 		String lang=GWTHTMLUtils.getInputValueById("gwtlang", "en");
@@ -195,6 +196,12 @@ public class WebAppsMaker implements EntryPoint {
 		String packageValue=getFixedPackage();
 		cellList.getSelectionModel().setSelected(selectionModel.getSelectedObject(), false);
 		List<FormData> datas=FormDataDto.linesToFormData(input.getText());
+		
+		formDataMaps.clear();
+		for(FormData data:datas){
+			formDataMaps.put(data.getClassName(), data);
+		}
+		
 		//debug text
 		String out="";
 		for(FormData data:datas){

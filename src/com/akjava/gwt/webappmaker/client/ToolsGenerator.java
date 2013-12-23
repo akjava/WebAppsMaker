@@ -303,6 +303,7 @@ public enum FormFieldDataToToSetDefaultValues implements Function<FormFieldData,
 				LogUtils.log("some kind invalid CookieParam:"+param.getName());
 				return null;
 			}
+			
 			//TODO support multi
 			if(param.size()>1){//first 1 is cookie targetname,skip it
 				map.put("value", param.get(1));
