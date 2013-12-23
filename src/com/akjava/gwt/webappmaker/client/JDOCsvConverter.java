@@ -23,9 +23,9 @@ public class JDOCsvConverter {
 		}else if(type.equals("check")){
 			return "Boolean,";
 		}else if(type.equals("select_single")||type.equals("select")){
-			return "Integer,";
+			return "Long,";
 		}else if(type.equals("select_multi")){
-			return "List<Integer>,";
+			return "List<Long>,";
 		}else if(type.equals("create_date")||type.equals("modified_date")){
 			return "Long,";
 		}else if(type.equals("number")){
