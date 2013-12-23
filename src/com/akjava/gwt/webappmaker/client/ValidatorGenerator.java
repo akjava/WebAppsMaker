@@ -122,7 +122,10 @@ public class ValidatorGenerator {
 				}
 				}
 			else if(fdata.getType()==FormFieldData.TYPE_NUMBER){
-					map.put("validator","asciiNumber");
+					if(!ValidatorTools.hasNumberValidator(fdata.getValidators())){
+						map.put("validator","IntegerNumber");//at least set it,or error occur when execute
+					}
+					
 					validatorTexts.add(TemplateUtils.createText(template,map));
 				}
 			
