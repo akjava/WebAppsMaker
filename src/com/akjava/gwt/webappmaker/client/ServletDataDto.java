@@ -554,6 +554,7 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 						
 						Map<String,String> tmp=new HashMap<String, String>();
 						//data_Relation & menu_Relation use other template
+						tmp.put("childrenClass", children.getClassName());
 						tmp.put("title", title);
 						tmp.put("add_link", add_link);
 						tmp.put("add_title", add_title);

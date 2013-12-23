@@ -4,6 +4,6 @@
 <tr>
 ${table_headers}
 </tr>
-${data_Relation}
+${data_${childrenClass}}
 </table>
-${menu_Relation}
+${menu_${childrenClass}}
