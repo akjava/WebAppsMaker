@@ -6,7 +6,7 @@ if(key.equals("${key}")){
 			if(labelValue==null){
 			try {
 				${refClass}Entity parent=new ${refClass}EntityDao(PMF.get().getPersistenceManager()).getData(dataNumber);
-				String label=${refClass}Tools.toLabelValue("${refKey}", parent.getText());
+				String label=${refClass}Tools.toLabelValue("${refKey}", parent.get${u+refKey}());
 				String url="../${l+refClass}/show?id="+value;
 				Tag atag=new Tag("a").attr("href", url).attr("target", "_self");
 				atag.setText(label);
