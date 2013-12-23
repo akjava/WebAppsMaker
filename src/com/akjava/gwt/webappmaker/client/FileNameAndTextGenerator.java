@@ -103,6 +103,8 @@ public class FileNameAndTextGenerator {
 		subMap2.put("title",Internationals.getMessage("top"));
 		datas+=TemplateUtils.createAdvancedText(sub, subMap2);
 		
+		//remove links 
+		/*
 		for(FormData fdata:formdatas){
 			if(fdata.isAdminOnly()){
 				continue;
@@ -114,7 +116,7 @@ public class FileNameAndTextGenerator {
 			subMap.put("path",path);
 			subMap.put("title",title);
 			datas+=TemplateUtils.createAdvancedText(sub, subMap);
-		}
+		}*/
 		
 		baseMap.put("top_links",datas);
 		String text=TemplateUtils.createAdvancedText(base, baseMap);
