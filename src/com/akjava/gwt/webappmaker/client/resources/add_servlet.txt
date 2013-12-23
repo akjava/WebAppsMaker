@@ -38,6 +38,7 @@ public class  ${className}  extends  AbstractSimpleTemplateServlet{
 
 	protected String createMainHtml(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		dataMap=${dataClassName}Tools.requestToMap(request);
+		${dataClassName}Tools.setDefaultValues(dataMap,request);
 		${dataClassName}Tools.insertFormField(dataMap);
 		
 		String dataHtml=SimpleTemplateUtils.createTextFromFile(getServletContext(), mainTemplateHtmlName, dataMap);

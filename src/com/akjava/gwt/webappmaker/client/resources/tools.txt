@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-
+import javax.servlet.http.Cookie;
 import com.akjava.lib.common.param.Parameter;
 import com.akjava.lib.common.param.ParameterUtils;
 import com.akjava.lib.common.tag.LabelAndValue;
@@ -110,6 +110,12 @@ ${getKeyLists}
 	}
 
 
+	public static void setDefaultValues(Map<String, String> dataMap,HttpServletRequest request) {
+	if(request.getCookies()!=null){
+${setDefaultValues_cookies}
+	}
+${setDefaultValues_defaults}
+	}
 	
 
 	public static final String  CACHE_KEY="cache_map_${dataClassName}";

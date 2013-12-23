@@ -1,0 +1,7 @@
+	if(dataMap.get("${value}")==null){
+				for(Cookie cookie:request.getCookies()){
+					if(cookie.getName().equals("${value}")){
+						dataMap.put("${value}", cookie.getValue());
+					}
+				}
+			}

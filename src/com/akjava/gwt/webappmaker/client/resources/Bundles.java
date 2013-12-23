@@ -89,4 +89,8 @@ public static Bundles INSTANCE=GWT.create(Bundles.class);
 	
 	TextResource admin_list_row_relation_html();
 	TextResource list_row_relation_html();
+	
+	TextResource set_default_values_cookie_text();
+	TextResource set_default_values_cookie_number();
+	TextResource set_default_values_default();
 }

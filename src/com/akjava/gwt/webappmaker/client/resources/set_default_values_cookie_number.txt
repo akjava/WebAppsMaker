@@ -1,0 +1,8 @@
+	if(dataMap.get("${name}")==null){
+				for(Cookie cookie:request.getCookies()){
+					if(cookie.getName().equals("${name}")){
+						int numValue=ValuesUtils.toInt(cookie.getValue(), 0)${calculate};
+						dataMap.put("${name}",""+numValue);
+					}
+				}
+			}

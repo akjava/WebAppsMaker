@@ -112,9 +112,22 @@ map.put("insertFormField", methodText);
 
 }
 
+/**
+ * 
+ * get value from DefaultValue column
+ * text or @COOKIE(name,<defaultValue>);
+ * name can write name,name+1,name+4 or name-1
+ * 
+ * this cookie setted at AddExec setted at Class Option column
+ */
+//generate setDefaultValues inside
+Collection<String> cookies=Collections2.transform(formData.getFormFieldDatas(), getFormFieldDataToToSetDefaultValuesCookie());
+String cookieText=Joiner.on("\n").skipNulls().join(cookies);
+map.put("setDefaultValues_cookies", cookieText);
 
-
-
+Collection<String> defaults=Collections2.transform(formData.getFormFieldDatas(), getFormFieldDataToToSetDefaultValues());
+String defaultText=Joiner.on("\n").skipNulls().join(defaults);
+map.put("setDefaultValues_defaults", defaultText);
 
 return TemplateUtils.createAdvancedText(base, map);
 }
@@ -221,7 +234,7 @@ public enum FormFieldDataToGetLabelAndValueFunction implements Function<FormFiel
 					Map<String,String> tmp=new HashMap<String, String>();
 					tmp.put("label", lv.getLabel()!=null?"\""+lv.getLabel()+"\"":"null");
 					tmp.put("value", lv.getValue());
-					tmp.put("selected", ""+lv.isSelected());
+					tmp.put("selected", "false");// getLabelAndValue no need selection anymore
 					options+=TemplateUtils.createText(add_label, tmp)+"\n";
 				}
 			map.put("key", fdata.getKey());
@@ -268,6 +281,109 @@ public enum FormFieldDataToToLabelMapFunction implements Function<FormFieldData,
 	}
 }
 
+
+
+
+public FormFieldDataToToSetDefaultValues getFormFieldDataToToSetDefaultValues(){
+	return FormFieldDataToToSetDefaultValues.INSTANCE;
+}
+public enum FormFieldDataToToSetDefaultValues implements Function<FormFieldData,String>{
+	INSTANCE
+	;
+	@Override
+	public String apply(FormFieldData fdata) {
+		if(fdata.getDefaultValue()==null||fdata.getDefaultValue().isEmpty() ){
+			return null;
+		}
+		Map<String,String> map=new HashMap<String, String>();
+		map.put("name", fdata.getKey());
+		if(fdata.getDefaultValue().startsWith("@COOKIE")){
+			Parameter param=ParameterUtils.parse(fdata.getDefaultValue().substring(1));//skip first@
+			if(!param.getName().equals("COOKIE")){
+				LogUtils.log("some kind invalid CookieParam:"+param.getName());
+				return null;
+			}
+			//TODO support multi
+			if(param.size()>1){//first 1 is cookie targetname,skip it
+				map.put("value", param.get(1));
+				return TemplateUtils.createText(Bundles.INSTANCE.set_default_values_default().getText(), map);
+			}
+		}else{
+			
+			//type selection,value must be valid otherwise not selected correctly
+			if(FormFieldData.isSelectionType(fdata.getType())){
+				List<String> converted=new ArrayList<String>();
+				String[] vs=fdata.getDefaultValue().split(",");//this make little difficulty
+				for(String v:vs){
+					for(LabelAndValue lv:fdata.getOptionValues()){
+						if(lv.getPrintValue().equals(v)){
+							converted.add(lv.getValue());
+						}
+					}
+				}
+				//why tab,because tab usually never used in option value,conma and : is sometime used in city name or something.
+				//actually csv base conma is used for splitter that is future task.
+				map.put("value",Joiner.on("\t").join(converted));
+			}else if(fdata.getType()==FormFieldData.TYPE_CHECK){
+				String value=fdata.getDefaultValue();
+				for(LabelAndValue lv:fdata.getOptionValues()){
+					if(lv.getPrintValue().equals(value)){
+						value=lv.getValue();
+					}
+					
+				}
+				map.put("value", value);
+			}
+			else{
+				map.put("value", fdata.getDefaultValue());
+			}
+			
+			
+			return TemplateUtils.createText(Bundles.INSTANCE.set_default_values_default().getText(), map);
+		}
+		return null;
+	}
+}
+
+
+public FormFieldDataToToSetDefaultValuesCookie getFormFieldDataToToSetDefaultValuesCookie(){
+	return FormFieldDataToToSetDefaultValuesCookie.INSTANCE;
+}
+public enum FormFieldDataToToSetDefaultValuesCookie implements Function<FormFieldData,String>{
+	INSTANCE
+	;
+	@Override
+	public String apply(FormFieldData fdata) {
+		if(fdata.getDefaultValue()!=null && fdata.getDefaultValue().startsWith("@COOKIE")){
+			Parameter param=ParameterUtils.parse(fdata.getDefaultValue().substring(1));
+			if(!param.getName().equals("COOKIE")){
+				LogUtils.log("some kind invalid CookieParam:"+param);
+				return null;
+			}
+			if(param.size()>0){
+				int lastIndex=-1;
+				String param1=param.get(0);
+				
+				if(param1.indexOf("+")!=-1){
+					lastIndex=param1.indexOf("+");
+				}else if(param1.indexOf("-")!=-1){
+					lastIndex=param1.indexOf("-");
+				}
+				
+				if(lastIndex!=-1){//number type
+					Map<String,String> map=new HashMap<String, String>();
+					map.put("name",param1.substring(0,lastIndex));
+					map.put("calculate",param1.substring(lastIndex));
+					return TemplateUtils.createText(Bundles.INSTANCE.set_default_values_cookie_number().getText(), map);
+				}else{
+					
+					return TemplateUtils.createText(Bundles.INSTANCE.set_default_values_cookie_text().getText(), param1);
+				}
+			}
+		}
+		return null;
+	}
+}
 
 
 public FormFieldDataToToLabelValueFunction getFormFieldDataToToLabelValueFunction(){

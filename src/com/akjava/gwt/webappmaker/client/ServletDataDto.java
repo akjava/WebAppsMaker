@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+
 import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
 import com.akjava.gwt.webappmaker.client.resources.Bundles;
 import com.akjava.lib.common.form.FormData;
@@ -326,6 +328,9 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			map.put("relationLists", relationLists);
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD)){
 			javaTemplate=Bundles.INSTANCE.add_servlet().getText();
+			
+			//
+			
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD_CONFIRM)){
 			javaTemplate=Bundles.INSTANCE.add_confirm_servlet().getText();
 		}else if(data.getServletType().equals(ServletData.TYPE_ADD_EXEC)){
@@ -346,6 +351,15 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 				}
 			}
 			map.put("cuser_action", Joiner.on("\n").join(cuserActions));
+			
+			//create cookie inserting method,which value get from Class Options cookie(name1:name2:etc)
+			String insertCookies="";
+			String cookieTemplate="\t\t\t\tif(map.get(\"${value}\")!=null){response.addCookie(new Cookie(\"${value}\",map.get(\"${value}\")));}\n";
+			for(String cname:data.getFormData().getSupportCookies()){
+				//TODO check valid
+				insertCookies+=TemplateUtils.createText(cookieTemplate, cname);
+			}
+			map.put("insertCookies",insertCookies);
 			
 		}else if(data.getServletType().equals(ServletData.TYPE_EDIT)){
 			javaTemplate=Bundles.INSTANCE.edit_servlet().getText();

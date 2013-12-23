@@ -1,0 +1,3 @@
+	if(dataMap.get("${name}")==null){//if not set by request and cookie
+			dataMap.put("${name}", "${value}");
+		}
