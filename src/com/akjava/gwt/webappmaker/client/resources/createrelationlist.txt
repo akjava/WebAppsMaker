@@ -1,9 +1,9 @@
 
-	public void create${parentClass}${u+refKey}List(PersistenceManager manager,${parentClass}Entity entity){
-		${parentClass}EntityDao dao=new ${parentClass}EntityDao(manager);
+	public void create${parentClass}${childClass}${u+refKey}List(PersistenceManager manager,${parentClass}Entity entity){
+		${childClass}EntityDao dao=new ${childClass}EntityDao(manager);
 		int pageSize=${pageSize};
 		String where="${refKey}=="+"${quot}"+entity.get${u+keyId}()+"${quot}";
-		List<${parentClass}Entity> datas=dao.getDatas(0, pageSize,where, "${orderKey}", ${orderAsc});
+		List<${childClass}Entity> datas=dao.getDatas(0, pageSize,where, "${orderKey}", ${orderAsc});
 		
 		StringBuffer rowHtmls=new StringBuffer();
 		String template=SimpleTemplateUtils.loadTextFromFile(getServletContext(),"${admin}${l+parentClass}_list_${l+childClass}_${refKey}_row.html");

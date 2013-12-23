@@ -309,17 +309,19 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 				tmp.put("quot", quot);
 				tmp.put("showNext", showNext);
 				tmp.put("parentClass", parentData.getClassName());
+				
 				tmp.put("admin", admin?"admin_":"");
 				relationListMethods+=TemplateUtils.createAdvancedText(methodBase, tmp);
 				}
 				
 				relationLists+="PersistenceManager manager=PMF.get().getPersistenceManager();\n";
-				String callBase="create${parentClass}${u+refKey}List(manager,entity);\n";
+				String callBase="create${parentClass}${childClass}${u+refKey}List(manager,entity);\n";
 				for(Relation relation:relations){
-					
+					FormData childData=relation.getData();
 					Map<String,String> tmp=new HashMap<String, String>();
 					tmp.put("refKey", relation.getKey());
 					tmp.put("parentClass", parentData.getClassName());
+					tmp.put("childClass", childData.getClassName());
 					relationLists+=TemplateUtils.createAdvancedText(callBase, tmp);
 					}
 			}
