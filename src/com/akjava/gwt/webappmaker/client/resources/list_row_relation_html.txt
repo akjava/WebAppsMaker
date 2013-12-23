@@ -1,6 +1,6 @@
 <tr>
 <td>
-<a href="../${DIRNAME}/show?${ID_KEY}=${VALUE_ID_KEY}"><button class='btn btn-info'>${show_title}</button></a>
+<a href="../${DIRNAME}/show?${ID_KEY_SUB}=${VALUE_ID_KEY_SUB}"><button class='btn btn-info'>${show_title}</button></a>
 </td>
 ${CHILD_COLUMNS}
 

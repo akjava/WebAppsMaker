@@ -287,7 +287,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 				
 				String keyId=parentData.getIdFieldData().getKey();
 				String quot="";
-				if(parentData.getIdFieldData().getType()!=FormFieldData.TYPE_ID){
+				if(parentData.getIdFieldData().getType()!=FormFieldData.TYPE_ID && parentData.getIdFieldData().getType()!=FormFieldData.TYPE_NUMBER){
 					quot="'";//future string case
 				}
 				String showNext=Internationals.getMessage("show_next");
@@ -566,12 +566,19 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 						if(admin){
 							rowFileName="admin_"+rowFileName;
 						}
+						
+						
+						
 						//columns 
 						Iterable<String> keys=Iterables.transform(children.getFormFieldDatas(), FormFieldDataDto.getFormFieldToKeyFunction());
 						Iterable<String> keyParams=
 								Iterables.transform(keys,new HtmlFunctions.StringToPreFixAndSuffix("<td>${label_","}</td>"));
 						String rowText=relation_rowTemplate.replace("${CHILD_COLUMNS}", Joiner.on("\n").join(keyParams));
 						rowText=rowText.replace("${DIRNAME}", children.getClassName().toLowerCase());
+						String keyName=children.getIdFieldData().getKey();
+						rowText=rowText.replace("${ID_KEY_SUB}",keyName);
+						rowText=rowText.replace("${VALUE_ID_KEY_SUB}","${value_"+keyName+"}");
+						
 						files.add(new FileNameAndText(rowFileName,rowText));
 						
 					}
