@@ -1,5 +1,6 @@
 <div>
 <div>
+<p><a href='add'><button class='btn btn-success'>${add_title}</button></a></p>
 <table class="table">
 <tr>
 <th></th>
@@ -15,5 +16,5 @@ ${pagemenu}
 </p>
 </blockquote>
 </div>
-<p><a href='add'><button class='btn btn-success'>${add_title}</button></a></p>
+
 </div>
