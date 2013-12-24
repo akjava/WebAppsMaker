@@ -21,6 +21,7 @@ import com.akjava.lib.common.tag.LabelAndValue;
 import com.akjava.lib.common.tag.Tag;
 import com.akjava.lib.common.utils.TemplateUtils;
 import com.akjava.lib.common.utils.ValuesUtils;
+
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
@@ -356,7 +357,7 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 			
 			//create cookie inserting method,which value get from Class Options cookie(name1:name2:etc)
 			String insertCookies="";
-			String cookieTemplate="\t\t\t\tif(map.get(\"${value}\")!=null){response.addCookie(new Cookie(\"${value}\",map.get(\"${value}\")));}\n";
+			String cookieTemplate="\t\t\t\tif(map.get(\"${value}\")!=null){Cookie c=new Cookie(\"${value}\",map.get(\"${value}\"));c.setMaxAge(SharedUtils.COOKIE_AGE);response.addCookie(c);}\n";
 			for(String cname:data.getFormData().getSupportCookies()){
 				//TODO check valid
 				insertCookies+=TemplateUtils.createText(cookieTemplate, cname);
