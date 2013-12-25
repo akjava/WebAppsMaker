@@ -428,7 +428,27 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 			
 			String template=Bundles.INSTANCE.tolabelmap_text_long().getText();
 			return TemplateUtils.createAdvancedText(template, map);
-		}else if(fdata.getType()==FormFieldData.TYPE_SELECT_SINGLE){
+		}else if(hasRelativeOption(fdata)){
+			String v=fdata.getOptionText();
+			//relative version
+			if(v!=null && v.startsWith("@")){
+				Parameter param=ParameterUtils.parse(v.substring(1));
+				if(ParameterUtils.isClosedAndHaveParameter(param)){
+					
+					Map<String,String> tmp=new HashMap<String, String>();
+					tmp.put("key", fdata.getKey());
+					tmp.put("refClass",param.getName());
+					tmp.put("refKey",param.get(0));//which label to show
+					tmp.put("refId",param.get(1));//which key is id
+					tmp.put("param", v.substring(1));//sedond Reference Option usually id-keyname,
+					return TemplateUtils.createAdvancedText(Bundles.INSTANCE.tolabelmap_number_relation().getText(), tmp);
+				}else{
+					GWT.log("invalid parameter:"+v);
+				}
+			}
+			LogUtils.log("invalid relative parameter hasRelativeOption must parsed:"+fdata);
+		}
+		else if(fdata.getType()==FormFieldData.TYPE_SELECT_SINGLE){
 			Map<String,String> map=new HashMap<String, String>();
 			map.put("key", fdata.getKey());
 			
@@ -483,6 +503,21 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 			
 		}
 		return "";
+	}
+	private boolean hasRelativeOption(FormFieldData fdata){
+		String v=fdata.getOptionText();
+		if(fdata.getType()==FormFieldData.TYPE_SELECT_MULTI){
+			//now not support yet
+			return false;
+		}
+		//relative version
+		if(v!=null && v.startsWith("@")){
+			Parameter param=ParameterUtils.parse(v.substring(1));
+			if(ParameterUtils.isClosedAndHaveParameter(param)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }
