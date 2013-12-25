@@ -1,4 +1,5 @@
 if(key.equals("${key}")){
+/*
 			String param="${param}";
 			String cache_name="param_"+param+value;
 			long dataNumber=ValuesUtils.toLong(value, 0);
@@ -21,4 +22,44 @@ if(key.equals("${key}")){
 			}else{
 				return labelValue;
 			}
+			
+			if(value==null || value.isEmpty()){
+				return "";//no selection;
+			}
+			*/
+			String param="${param}";
+			String cache_name="param_"+param+value;
+			String labelValue=SharedUtils.getCacheMap(${refClass}Tools.CACHE_KEY).get(cache_name);
+			
+			if(labelValue==null){//support multiple values
+				//at first split values ,because multiple value joined with tab
+				String[] vs=value.split("\t");//TODO use static value
+				List<String> labels=new ArrayList<String>();
+				for(String v:vs){
+					if(v.isEmpty()){
+						continue;
+					}
+				
+					String addLabel=null;
+					long id=ValuesUtils.toLong(v, 0);//TODO support string type?
+					try {
+					${refClass}Entity parent=new ${refClass}EntityDao(PMF.get().getPersistenceManager()).getData(id);
+					String label=${refClass}Tools.toLabelValue("${refKey}", parent.get${u+refKey}());
+					String url="../${l+refClass}/show?${refId}="+id;
+					Tag atag=new Tag("a").attr("href", url).attr("target", "_self");
+					atag.setText(label);
+					
+					addLabel=atag.toString();
+					} catch (Exception e) {
+						e.printStackTrace();
+						addLabel="INVALID ID:maybe deleted?id="+v;
+					}
+					
+					labels.add(addLabel);
+					
+					}
+				labelValue=Joiner.on("&nbsp;&nbsp;&nbsp;").join(labels);//multiple label joined with space
+				SharedUtils.putCacheMapValue(${refClass}Tools.CACHE_KEY, cache_name, labelValue);
+				return labelValue;
+				}
 		}
