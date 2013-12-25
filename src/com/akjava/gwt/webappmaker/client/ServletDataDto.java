@@ -287,10 +287,12 @@ public static class ServletDataToServletFileFunction implements Function<Servlet
 				FormData parentData=data.getFormData();
 				
 				String keyId=parentData.getIdFieldData().getKey();
+				//TODO replace it,now time to support IN
 				String quot="";
 				if(parentData.getIdFieldData().getType()!=FormFieldData.TYPE_ID && parentData.getIdFieldData().getType()!=FormFieldData.TYPE_NUMBER){
 					quot="'";//future string case
 				}
+				
 				String showNext=Internationals.getMessage("show_next");
 				
 				

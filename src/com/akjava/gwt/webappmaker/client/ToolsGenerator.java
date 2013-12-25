@@ -507,7 +507,7 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 	private boolean hasRelativeOption(FormFieldData fdata){
 		String v=fdata.getOptionText();
 		if(fdata.getType()==FormFieldData.TYPE_SELECT_MULTI){
-			//now not support yet
+			//now not support yet//TODO support this
 			return false;
 		}
 		//relative version
