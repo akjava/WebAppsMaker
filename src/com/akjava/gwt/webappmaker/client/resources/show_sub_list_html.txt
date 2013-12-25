@@ -3,6 +3,6 @@
 <tr>
 ${table_headers}
 </tr>
-${data_${childrenClass}}
+${data_${fieldName}_${childrenClass}}
 </table>
-${menu_${childrenClass}}
+${menu_${fieldName}_${childrenClass}}

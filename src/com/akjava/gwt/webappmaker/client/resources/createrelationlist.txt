@@ -15,14 +15,14 @@
 			rowHtmls.append(html);
 		}
 		
-		dataMap.put("data_${childClass}", rowHtmls.toString());
+		dataMap.put("data_${refKey}_${childClass}", rowHtmls.toString());
 		
 		long count=dao.count(where);
 		if(count>pageSize){
 			//TODO bootstrap button?
-			dataMap.put("menu_${childClass}",new Tag("a").attr("href","../${l+childClass}/?page=2&data="+entity.get${u+keyId}()).text("[>>${showNext}]").toString());	
+			dataMap.put("menu_${refKey}_${childClass}",new Tag("a").attr("href","../${l+childClass}/?page=2&data="+entity.get${u+keyId}()).text("[>>${showNext}]").toString());	
 		}else{
-		dataMap.put("menu_${childClass}","");
+		dataMap.put("menu_${refKey}_${childClass}","");
 		}
 	}
 	
