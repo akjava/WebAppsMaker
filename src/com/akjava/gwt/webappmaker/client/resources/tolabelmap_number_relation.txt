@@ -12,6 +12,7 @@ if(key.equals("${key}")){
 				atag.setText(label);
 				labelValue= atag.toString();
 				SharedUtils.putCacheMapValue(${refClass}Tools.CACHE_KEY, cache_name, labelValue);
+				return labelValue;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

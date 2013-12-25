@@ -508,7 +508,7 @@ public enum FormFieldDataToToLabelValueFunction implements Function<FormFieldDat
 		String v=fdata.getOptionText();
 		if(fdata.getType()==FormFieldData.TYPE_SELECT_MULTI){
 			//now not support yet//TODO support this
-			return false;
+			//return false;
 		}
 		//relative version
 		if(v!=null && v.startsWith("@")){
