@@ -61,5 +61,7 @@ if(key.equals("${key}")){
 				labelValue=Joiner.on("&nbsp;&nbsp;&nbsp;").join(labels);//multiple label joined with space
 				SharedUtils.putCacheMapValue(${refClass}Tools.CACHE_KEY, cache_name, labelValue);
 				return labelValue;
+				}else{
+					return labelValue;
 				}
 		}

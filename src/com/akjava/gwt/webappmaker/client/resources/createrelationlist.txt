@@ -7,7 +7,11 @@
 		
 		StringBuffer rowHtmls=new StringBuffer();
 		String template=SimpleTemplateUtils.loadTextFromFile(getServletContext(),"${admin}${l+parentClass}_list_${l+childClass}_${refKey}_row.html");
-		
+		if(datas.size()==0){
+			dataMap.put("display_style_${refKey}_${childrClass}","display:none");
+		}else{
+			dataMap.put("display_style_${refKey}_${childrClass}","");
+			}
 		for(${childClass}Entity data:datas){
 			Map<String,String> map=${childClass}Tools.toValueAndLabelMap(data);
 			

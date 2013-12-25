@@ -1,3 +1,4 @@
+<div style="${display_style_${fieldName}_${childrenClass}}">
 <h3>${title}</h3>
 <table class="table">
 <tr>
@@ -6,3 +7,4 @@ ${table_headers}
 ${data_${fieldName}_${childrenClass}}
 </table>
 ${menu_${fieldName}_${childrenClass}}
+</div>
