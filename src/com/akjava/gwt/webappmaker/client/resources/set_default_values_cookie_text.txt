@@ -1,7 +1,7 @@
-	if(dataMap.get("${value}")==null){
+	if(dataMap.get("${setname}")==null){
 				for(Cookie cookie:request.getCookies()){
-					if(cookie.getName().equals("${value}")){
-						dataMap.put("${value}", cookie.getValue());
+					if(cookie.getName().equals("${getname}")){
+						dataMap.put("${setname}", cookie.getValue());
 					}
 				}
 			}

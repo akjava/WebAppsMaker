@@ -373,12 +373,15 @@ public enum FormFieldDataToToSetDefaultValuesCookie implements Function<FormFiel
 				
 				if(lastIndex!=-1){//number type
 					Map<String,String> map=new HashMap<String, String>();
-					map.put("name",param1.substring(0,lastIndex));
+					map.put("setname", fdata.getKey());
+					map.put("getname",param1.substring(0,lastIndex));
 					map.put("calculate",param1.substring(lastIndex));
 					return TemplateUtils.createText(Bundles.INSTANCE.set_default_values_cookie_number().getText(), map);
 				}else{
-					
-					return TemplateUtils.createText(Bundles.INSTANCE.set_default_values_cookie_text().getText(), param1);
+					Map<String,String> map=new HashMap<String, String>();
+					map.put("setname", fdata.getKey());
+					map.put("getname",param1);
+					return TemplateUtils.createText(Bundles.INSTANCE.set_default_values_cookie_text().getText(), map);
 				}
 			}
 		}

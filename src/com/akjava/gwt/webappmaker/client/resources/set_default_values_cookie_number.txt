@@ -1,8 +1,8 @@
-	if(dataMap.get("${name}")==null){
+	if(dataMap.get("${setname}")==null){
 				for(Cookie cookie:request.getCookies()){
-					if(cookie.getName().equals("${name}")){
+					if(cookie.getName().equals("${getname}")){
 						int numValue=ValuesUtils.toInt(cookie.getValue(), 0)${calculate};
-						dataMap.put("${name}",""+numValue);
+						dataMap.put("${setname}",""+numValue);
 					}
 				}
 			}

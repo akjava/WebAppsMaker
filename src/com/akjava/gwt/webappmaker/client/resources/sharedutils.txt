@@ -13,6 +13,7 @@ import javax.cache.CacheManager;
 import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
 import java.util.HashMap;
 public class SharedUtils {
+public static  String COOKIE_PATH="/";
 public static final int COOKIE_AGE=60*60*24*7;//a week
 	//simple get user
 	public static String getUserId(){
