@@ -4,6 +4,7 @@ import com.akjava.gwt.html5.client.file.ui.FileNameAndText;
 import com.google.common.base.Function;
 
 /**
+ * TODO move to commons
  * .settings/org.eclipse.core.resources.prefs
  * force set file encoding
  * @author aki
