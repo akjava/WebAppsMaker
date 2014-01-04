@@ -211,6 +211,7 @@ public class WebAppsMaker implements EntryPoint {
 		output.setText(out);
 		
 		List<FileNameAndText> files=new ArrayList<FileNameAndText>();
+		List<FileNameAndText> htmlFiles=new ArrayList<FileNameAndText>();
 		List<ServletData> sdatas=Lists.newArrayList();
 		
 		//create jdo classes
@@ -253,6 +254,7 @@ public class WebAppsMaker implements EntryPoint {
 			for(List<FileNameAndText> templates:templateFiles){
 				
 				Iterables.addAll(files, templates);
+				Iterables.addAll(htmlFiles, templates);
 			}
 			//TODO list always contain add link,however usually not need it.
 			//TODO option allow add,edit delete
@@ -272,6 +274,7 @@ public class WebAppsMaker implements EntryPoint {
 			List<List<FileNameAndText>> templateFiles=Lists.transform(sdata, new ServletDataDto.ServletDataToTemplateFileFunction());
 			for(List<FileNameAndText> templates:templateFiles){
 				Iterables.addAll(files, templates);
+				Iterables.addAll(htmlFiles, templates);
 			}
 		}
 		//sharedutils.java
@@ -279,19 +282,32 @@ public class WebAppsMaker implements EntryPoint {
 		
 		//Top
 		files.add(FileNameAndTextGenerator.generateTopServlet(packageValue+"."));
+		
+		
 		//template
-		files.add(FileNameAndTextGenerator.generateTopTemplate(datas));
+		FileNameAndText topTemplate=FileNameAndTextGenerator.generateTopTemplate(datas); 
+		files.add(topTemplate);
+		htmlFiles.add(topTemplate);
 		
 		//AdminTop
 		files.add(FileNameAndTextGenerator.generateAdminTopServlet(packageValue+"."));
 		//template
-		files.add(FileNameAndTextGenerator.generateAdminTopTemplate(datas));
-		
+		FileNameAndText adminTopTemplate=FileNameAndTextGenerator.generateAdminTopTemplate(datas);
+		files.add(adminTopTemplate);
+		htmlFiles.add(adminTopTemplate);
 		
 		//mainBase
-		files.add(FileNameAndTextGenerator.generateMainBase(datas));
+		FileNameAndText mainBase=FileNameAndTextGenerator.generateMainBase(datas);
+		files.add(mainBase);
+		htmlFiles.add(mainBase);
 		//adminBase
-		files.add(FileNameAndTextGenerator.generateAdminBase(datas));
+		FileNameAndText adminMainBase=FileNameAndTextGenerator.generateAdminBase(datas);
+		files.add(adminMainBase);
+		htmlFiles.add(adminMainBase);
+		
+		Collection<String> encodeLines=Collections2.transform(htmlFiles, new FileToEncodingFunction("war/WEB-INF/template/", "UTF-8"));
+		String pref=Joiner.on("\r\n").join(encodeLines);
+		files.add(new FileNameAndText("resources.prefs.txt",pref));
 		
 		
 		//web.xml

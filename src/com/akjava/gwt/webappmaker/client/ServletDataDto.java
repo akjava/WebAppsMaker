@@ -24,6 +24,7 @@ import com.akjava.lib.common.utils.ValuesUtils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.user.client.Window;
@@ -786,9 +787,18 @@ public static class ServletDataToTemplateFileFunction implements Function<Servle
 		
 		//headers
 		List<String> names=Lists.transform(data.getFormData().getFormFieldDatas(), FormFieldDataDto.getFormFieldToNameFunction());
-		
 		List<String> ths=Lists.transform(names
 				, HtmlFunctions.getStringToTHFunction());
+		/**
+		 * work fine if more complex version
+		 */
+		List<String> tmpList=FluentIterable
+				.from(data.getFormData().getFormFieldDatas())
+				.transform(FormFieldDataDto.getFormFieldToNameFunction())
+				.transform(HtmlFunctions.getStringToTHFunction())
+				.toList();
+		
+		
 		map.put("headers", Joiner.on("\n").join(ths));
 		//columns
 		List<String> keys=Lists.transform(data.getFormData().getFormFieldDatas(), FormFieldDataDto.getFormFieldToKeyFunction());
