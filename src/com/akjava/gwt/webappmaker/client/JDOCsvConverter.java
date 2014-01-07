@@ -30,6 +30,8 @@ public class JDOCsvConverter {
 			return "Long,";
 		}else if(type.equals("number")){
 			return "Long,";
+		}else if(type.equals("int")){
+			return "Long,";
 		}else{
 			return "String,";
 		}
