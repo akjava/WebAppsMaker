@@ -155,6 +155,8 @@ public static class FormDataToCreateFormFieldFunction implements Function<FormFi
 		switch(data.getType()){
 		case FormFieldData.TYPE_TEXT_SHORT:
 		case FormFieldData.TYPE_NUMBER:
+		case FormFieldData.TYPE_INTEGER:
+		case FormFieldData.TYPE_POINT:	
 			return TemplateUtils.createText(Bundles.INSTANCE.createforms_text().getText(),data.getKey());
 		case FormFieldData.TYPE_TEXT_LONG:
 			return TemplateUtils.createText(Bundles.INSTANCE.createforms_textarea().getText(),data.getKey());
@@ -167,8 +169,8 @@ public static class FormDataToCreateFormFieldFunction implements Function<FormFi
 		case FormFieldData.TYPE_ID:
 		
 		case FormFieldData.TYPE_CREATE_USER:
-		
 		case FormFieldData.TYPE_MODIFIED_USER:
+		case FormFieldData.TYPE_HIDDEN:	
 			return TemplateUtils.createText(Bundles.INSTANCE.createforms_hidden().getText(),data.getKey());
 		case FormFieldData.TYPE_CREATE_DATE:
 		case FormFieldData.TYPE_MODIFIED_DATE:

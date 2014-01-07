@@ -18,21 +18,24 @@ public class JDOCsvConverter {
 	public static String getTypeAndOption(String type){
 		if(type.equals("id")){
 			return "Long,valueStrategy=IdGeneratorStrategy.IDENTITY";
-		}else if(type.equals("text_long")){
+		}else if(type.equals(FormFieldData.VALUE_TYPE_TEXT_LONG)||type.equals(FormFieldData.VALUE_TYPE_HIDDEN)){
 			return "Text,";
-		}else if(type.equals("check")){
+		}else if(type.equals(FormFieldData.VALUE_TYPE_CHECK)){
 			return "Boolean,";
-		}else if(type.equals("select_single")||type.equals("select")){
+		}else if(type.equals(FormFieldData.VALUE_TYPE_SELECT_SINGLE)||type.equals("select_single")){
 			return "Long,";
-		}else if(type.equals("select_multi")){
+		}else if(type.equals(FormFieldData.VALUE_TYPE_SELECT_MULTI)){
 			return "List<Long>,";
-		}else if(type.equals("create_date")||type.equals("modified_date")){
+		}else if(type.equals(FormFieldData.VALUE_TYPE_CREATE_DATE)||type.equals(FormFieldData.VALUE_TYPE_MODIFIED_DATE)){
 			return "Long,";
-		}else if(type.equals("number")){
+		}else if(type.equals(FormFieldData.VALUE_TYPE_NUMBER)||type.equals("long")){
 			return "Long,";
-		}else if(type.equals("int")){
-			return "Long,";
-		}else{
+		}else if(type.equals(FormFieldData.VALUE_TYPE_INTEGER)){
+			return "Integer,";
+		}else if(type.equals(FormFieldData.VALUE_TYPE_POINT)||type.equals("double")){
+			return "Double,";
+		}else{//text,create_user,modified_user
+			
 			return "String,";
 		}
 	}
